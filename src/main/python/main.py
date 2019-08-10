@@ -1,12 +1,33 @@
-from fbs_runtime.application_context.PyQt5 import ApplicationContext
-from PyQt5.QtWidgets import QMainWindow
-
+# https://www.learnpyqt.com/courses/adanced-ui-features/system-tray-mac-menu-bar-applications-pyqt/
 import sys
 
-if __name__ == '__main__':
-    appctxt = ApplicationContext()       # 1. Instantiate ApplicationContext
-    window = QMainWindow()
-    window.resize(250, 150)
-    window.show()
-    exit_code = appctxt.app.exec_()      # 2. Invoke appctxt.app.exec_()
-    sys.exit(exit_code)
+from PyQt5.QtGui import *
+from PyQt5.QtWidgets import *
+
+
+def Exit():
+    sys.exit()
+
+
+app = QApplication([])
+app.setQuitOnLastWindowClosed(False)
+
+# Create the icon
+icon = QIcon("./src/res/Small.PNG")
+
+# Create the tray
+tray = QSystemTrayIcon()
+tray.setIcon(icon)
+tray.setVisible(True)
+
+# Create the menu
+menu = QMenu()
+action = QAction('Exit')
+action.triggered.connect(Exit)
+
+menu.addAction(action)
+
+# Add the menu to the tray
+tray.setContextMenu(menu)
+
+app.exec_()
