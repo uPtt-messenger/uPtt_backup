@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 # Form implementation generated from reading ui file 'about.ui'
 #
 # Created by: PyQt5 UI code generator 5.9.2
@@ -24,7 +26,7 @@ class Ui(object):
             QtWidgets.QDialogButtonBox.Cancel | QtWidgets.QDialogButtonBox.Ok)
         self.buttonBox.setObjectName("buttonBox")
         self.verticalLayoutWidget = QtWidgets.QWidget(Dialog)
-        self.verticalLayoutWidget.setGeometry(QtCore.QRect(10, 10, 131, 231))
+        self.verticalLayoutWidget.setGeometry(QtCore.QRect(10, 10, 151, 71))
         self.verticalLayoutWidget.setObjectName("verticalLayoutWidget")
         self.verticalLayout = QtWidgets.QVBoxLayout(self.verticalLayoutWidget)
         self.verticalLayout.setContentsMargins(0, 0, 0, 0)
@@ -38,12 +40,12 @@ class Ui(object):
         self.Issue = QtWidgets.QLabel(self.verticalLayoutWidget)
         self.Issue.setObjectName("Issue")
         self.verticalLayout.addWidget(self.Issue)
-        self.Say = QtWidgets.QLabel(self.verticalLayoutWidget)
-        self.Say.setObjectName("Say")
-        self.verticalLayout.addWidget(self.Say)
         self.IconDisplay = QtWidgets.QLabel(Dialog)
         self.IconDisplay.setGeometry(QtCore.QRect(220, 50, 150, 150))
         self.IconDisplay.setObjectName("IconDisplay")
+        self.Say = QtWidgets.QLabel(Dialog)
+        self.Say.setGeometry(QtCore.QRect(10, 120, 149, 53))
+        self.Say.setObjectName("Say")
 
         self.retranslateUi(Dialog)
         self.buttonBox.accepted.connect(Dialog.accept)
@@ -59,6 +61,10 @@ class Ui(object):
         self.Issue.setText(_translate("Dialog", "回報問題"))
         self.Say.setText(_translate("Dialog", "僅獻給各位鄉民"))
         self.IconDisplay.setText(_translate("Dialog", "TextLabel"))
+        
+        IconImage = QPixmap('./src/res/OriginIcon.PNG')
+        IconImage = IconImage.scaled(150, 150, QtCore.Qt.KeepAspectRatio)
+        self.IconDisplay.setPixmap(IconImage)
 
 
 def start(app):
@@ -78,3 +84,4 @@ if __name__ == "__main__":
     ui.setupUi(Dialog)
     Dialog.show()
     sys.exit(app.exec_())
+
