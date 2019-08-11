@@ -24,7 +24,7 @@ class Ui(object):
         self.buttonBox.setStandardButtons(QtWidgets.QDialogButtonBox.Ok)
         self.buttonBox.setObjectName("buttonBox")
         self.verticalLayoutWidget = QtWidgets.QWidget(Dialog)
-        self.verticalLayoutWidget.setGeometry(QtCore.QRect(200, 10, 151, 121))
+        self.verticalLayoutWidget.setGeometry(QtCore.QRect(200, 20, 151, 111))
         self.verticalLayoutWidget.setObjectName("verticalLayoutWidget")
         self.verticalLayout = QtWidgets.QVBoxLayout(self.verticalLayoutWidget)
         self.verticalLayout.setContentsMargins(0, 0, 0, 0)
@@ -54,14 +54,19 @@ class Ui(object):
 
     def retranslateUi(self, Dialog):
         _translate = QtCore.QCoreApplication.translate
+        Dialog.setWindowIcon(QIcon('./src/res/Small.PNG'))
         Dialog.setWindowTitle(_translate("Dialog", " 關於 PTT Postman"))
         self.Version.setText(_translate("Dialog", "PTT Postman v " + Ver.V))
         self.Developer.setText(_translate(
             "Dialog", "Developer: PTT CodingMan"))
-        self.Issue.setText(_translate("Dialog", "回報問題"))
-        self.SourceCode.setText(_translate("Dialog", "原始碼"))
+        self.Issue.setText(_translate(
+            "Dialog", "<a href=\"https://github.com/Truth0906/PTTPostman/issues/new\">回報問題</a>"))
+        self.Issue.setOpenExternalLinks(True)
+        self.SourceCode.setText(_translate(
+            "Dialog", "<a href=\"https://github.com/Truth0906/PTTPostman\">原始碼</a>"))
+        self.SourceCode.setOpenExternalLinks(True)
         self.IconDisplay.setText(_translate("Dialog", "TextLabel"))
-        
+
         IconImage = QPixmap('./src/res/OriginIcon.PNG')
         IconImage = IconImage.scaled(150, 150, QtCore.Qt.KeepAspectRatio)
         self.IconDisplay.setPixmap(IconImage)
@@ -84,4 +89,3 @@ if __name__ == "__main__":
     ui.setupUi(Dialog)
     Dialog.show()
     sys.exit(app.exec_())
-
