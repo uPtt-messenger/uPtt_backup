@@ -12,9 +12,9 @@ import Config
 class Ui(object):
     def setupUi(self, Dialog):
         Dialog.setObjectName("Dialog")
-        Dialog.resize(480, 281)
+        Dialog.resize(271, 220)
         self.verticalLayoutWidget = QtWidgets.QWidget(Dialog)
-        self.verticalLayoutWidget.setGeometry(QtCore.QRect(60, 40, 341, 181))
+        self.verticalLayoutWidget.setGeometry(QtCore.QRect(20, 20, 231, 181))
         self.verticalLayoutWidget.setObjectName("verticalLayoutWidget")
         self.verticalLayout = QtWidgets.QVBoxLayout(self.verticalLayoutWidget)
         self.verticalLayout.setContentsMargins(0, 0, 0, 0)
