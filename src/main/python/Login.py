@@ -9,8 +9,9 @@ from PyQt5.QtGui import *
 
 import Config
 
+
 class Ui(object):
-    def setupUi(self, Dialog):
+    def setupUi(self, Dialog, FinishFunc):
         Dialog.setObjectName("Dialog")
         Dialog.resize(271, 220)
         self.verticalLayoutWidget = QtWidgets.QWidget(Dialog)
@@ -43,10 +44,10 @@ class Ui(object):
         self.Login.setObjectName("Login")
         self.verticalLayout.addWidget(self.Login)
 
-        self.retranslateUi(Dialog)
+        self.retranslateUi(Dialog, FinishFunc)
         QtCore.QMetaObject.connectSlotsByName(Dialog)
 
-    def retranslateUi(self, Dialog):
+    def retranslateUi(self, Dialog, FinishFunc):
         _translate = QtCore.QCoreApplication.translate
         Dialog.setWindowTitle(_translate("Dialog", "PTT Postman - 登入"))
         Dialog.setWindowIcon(QIcon('./src/res/Small.PNG'))
@@ -57,17 +58,36 @@ class Ui(object):
         self.RemberID.setText(_translate("Dialog", "記住密碼"))
         self.Login.setText(_translate("Dialog", "登入"))
         self.Login.setFont(Config.BasicFont)
+        self.Login.clicked.connect(FinishFunc)
 
     def getIDPW(self):
-        return self.ID.getText(), self.PW.getText()
+        return self.ID.text(), self.PW.text()
+
+
+PressLogin = False
 
 
 def start():
+
+    global PressLogin
+    PressLogin = False
+
     Dialog = QtWidgets.QDialog()
     ui = Ui()
-    ui.setupUi(Dialog)
+
+    def finish():
+        global PressLogin
+        PressLogin = True
+        print('Login finish')
+        Dialog.close()
+
+    ui.setupUi(Dialog, finish)
     Dialog.show()
     Dialog.exec()
+
+    if PressLogin:
+        return ui.getIDPW()
+    return None, None
 
 
 if __name__ == "__main__":
@@ -78,4 +98,3 @@ if __name__ == "__main__":
     ui.setupUi(Dialog)
     Dialog.show()
     sys.exit(app.exec_())
-

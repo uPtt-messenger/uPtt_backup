@@ -10,6 +10,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtGui import *
 
 import Ver
+import Config
 
 
 class Ui(object):
@@ -60,28 +61,25 @@ class Ui(object):
         Dialog.setWindowIcon(QIcon('./src/res/Small.PNG'))
         Dialog.setWindowTitle(_translate("Dialog", " 關於 PTT Postman"))
 
-        FirstFont = QtGui.QFont('微軟正黑體', 20, QtGui.QFont.Bold)
-        Font = QtGui.QFont('微軟正黑體', 14, QtGui.QFont.Bold)
-
         self.Name.setText(_translate("Dialog", "PTT Postman"))
-        self.Name.setFont(FirstFont)
+        self.Name.setFont(Config.TitleFont)
 
         self.Version.setText(_translate("Dialog", "版本: " + Ver.V))
-        self.Version.setFont(Font)
+        self.Version.setFont(Config.BasicFont)
 
         self.Developer.setText(_translate(
             "Dialog", "開發: CodingMan"))
-        self.Developer.setFont(Font)
+        self.Developer.setFont(Config.BasicFont)
 
         self.Issue.setText(_translate(
             "Dialog", "<a href=\"https://github.com/Truth0906/PTTPostman/issues/new\">回報問題</a>"))
         self.Issue.setOpenExternalLinks(True)
-        self.Issue.setFont(Font)
+        self.Issue.setFont(Config.BasicFont)
 
         self.SourceCode.setText(_translate(
             "Dialog", "<a href=\"https://github.com/Truth0906/PTTPostman\">原始碼</a>"))
         self.SourceCode.setOpenExternalLinks(True)
-        self.SourceCode.setFont(Font)
+        self.SourceCode.setFont(Config.BasicFont)
 
         self.IconDisplay.setText(_translate("Dialog", "TextLabel"))
 
@@ -90,7 +88,7 @@ class Ui(object):
         self.IconDisplay.setPixmap(IconImage)
 
 
-def start(app):
+def start():
 
     Dialog = QtWidgets.QDialog()
     ui = Ui()
