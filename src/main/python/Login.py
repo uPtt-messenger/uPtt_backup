@@ -8,12 +8,13 @@
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 
+
 class Ui(object):
-    def setupUi(self, Form):
-        Form.setObjectName("Form")
-        Form.resize(442, 290)
-        self.verticalLayoutWidget = QtWidgets.QWidget(Form)
-        self.verticalLayoutWidget.setGeometry(QtCore.QRect(50, 20, 341, 181))
+    def setupUi(self, Dialog):
+        Dialog.setObjectName("Dialog")
+        Dialog.resize(480, 281)
+        self.verticalLayoutWidget = QtWidgets.QWidget(Dialog)
+        self.verticalLayoutWidget.setGeometry(QtCore.QRect(60, 40, 341, 181))
         self.verticalLayoutWidget.setObjectName("verticalLayoutWidget")
         self.verticalLayout = QtWidgets.QVBoxLayout(self.verticalLayoutWidget)
         self.verticalLayout.setContentsMargins(0, 0, 0, 0)
@@ -38,36 +39,34 @@ class Ui(object):
         self.Login.setObjectName("Login")
         self.verticalLayout.addWidget(self.Login)
 
-        self.retranslateUi(Form)
-        QtCore.QMetaObject.connectSlotsByName(Form)
+        self.retranslateUi(Dialog)
+        QtCore.QMetaObject.connectSlotsByName(Dialog)
 
-    def retranslateUi(self, Form):
+    def retranslateUi(self, Dialog):
         _translate = QtCore.QCoreApplication.translate
-        Form.setWindowTitle(_translate("Form", "Form"))
-        self.InputID.setText(_translate("Form", "TextLabel"))
-        self.InputPW.setText(_translate("Form", "TextLabel"))
-        self.RemberID.setText(_translate("Form", "CheckBox"))
-        self.Login.setText(_translate("Form", "PushButton"))
-    
+        Dialog.setWindowTitle(_translate("Dialog", "Dialog"))
+        self.InputID.setText(_translate("Dialog", "TextLabel"))
+        self.InputPW.setText(_translate("Dialog", "TextLabel"))
+        self.RemberID.setText(_translate("Dialog", "CheckBox"))
+        self.Login.setText(_translate("Dialog", "PushButton"))
+
     def getIDPW(self):
         return self.ID.getText(), self.PW.getText()
 
 
 def start():
-    Form = QtWidgets.QWidget()
+    Dialog = QtWidgets.QDialog()
     ui = Ui()
-    ui.setupUi(Form)
-    Form.show()
-    Form.exec()
+    ui.setupUi(Dialog)
+    Dialog.show()
+    Dialog.exec()
 
-    return ui.getIDPW()
 
 if __name__ == "__main__":
     import sys
     app = QtWidgets.QApplication(sys.argv)
-    Form = QtWidgets.QWidget()
+    Dialog = QtWidgets.QDialog()
     ui = Ui()
-    ui.setupUi(Form)
-    Form.show()
+    ui.setupUi(Dialog)
+    Dialog.show()
     sys.exit(app.exec_())
-
