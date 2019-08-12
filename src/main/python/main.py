@@ -9,6 +9,7 @@ from PTTLibrary import PTT
 
 import About
 import Login
+import Notification
 
 LoginStatus = False
 PTTBot = None
@@ -16,6 +17,18 @@ SystemTray = None
 
 Menu_Login = None
 Menu_Logout = None
+
+
+def genMenu():
+
+    global LoginStatus
+    global Menu_Logout
+    global Menu_Login
+
+    if LoginStatus:
+        SystemTray.setContextMenu(Menu_Login)
+    else:
+        SystemTray.setContextMenu(Menu_Logout)
 
 
 def LoginFunc():
@@ -27,6 +40,10 @@ def LoginFunc():
     ID, PW = Login.start()
 
     if ID is None or PW is None:
+        Notification.throw('PTT Postman', '取消登入')
+        return
+    if len(ID) < 3 or len(PW) == 0:
+        Notification.throw('PTT Postman', '取消登入')
         return
 
     print('ID: ' + ID)
@@ -40,7 +57,9 @@ def LoginFunc():
         return
 
     PTTBot.log('登入成功')
+    Notification.throw('PTT Postman', '登入成功')
     LoginStatus = True
+    genMenu()
 
 
 def LogoutFunc():
@@ -49,6 +68,7 @@ def LogoutFunc():
 
     LoginStatus = False
     PTTBot.logout()
+    Notification.throw('PTT Postman', '登出成功')
 
 
 def AboutFunc():
@@ -57,13 +77,10 @@ def AboutFunc():
 
 
 def ExitFunc():
+
+    LogoutFunc()
     print('Exit')
     sys.exit()
-
-
-def genMenu():
-
-    SystemTray.setContextMenu(Menu_Login)
 
 
 app = QApplication([])
@@ -100,6 +117,5 @@ Menu_Logout.addAction(action_About)
 Menu_Logout.addSeparator()
 Menu_Logout.addAction(action_Exit)
 
-# SystemTray.setContextMenu(Menu_Logout)
 genMenu()
 app.exec_()
