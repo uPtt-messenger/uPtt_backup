@@ -24,11 +24,14 @@ class Ui(object):
         self.buttonBox.setStandardButtons(QtWidgets.QDialogButtonBox.Ok)
         self.buttonBox.setObjectName("buttonBox")
         self.verticalLayoutWidget = QtWidgets.QWidget(Dialog)
-        self.verticalLayoutWidget.setGeometry(QtCore.QRect(350, 20, 221, 121))
+        self.verticalLayoutWidget.setGeometry(QtCore.QRect(350, 20, 221, 171))
         self.verticalLayoutWidget.setObjectName("verticalLayoutWidget")
         self.verticalLayout = QtWidgets.QVBoxLayout(self.verticalLayoutWidget)
         self.verticalLayout.setContentsMargins(0, 0, 0, 0)
         self.verticalLayout.setObjectName("verticalLayout")
+        self.Name = QtWidgets.QLabel(self.verticalLayoutWidget)
+        self.Name.setObjectName("Name")
+        self.verticalLayout.addWidget(self.Name)
         self.Version = QtWidgets.QLabel(self.verticalLayoutWidget)
         self.Version.setObjectName("Version")
         self.verticalLayout.addWidget(self.Version)
@@ -57,13 +60,17 @@ class Ui(object):
         Dialog.setWindowIcon(QIcon('./src/res/Small.PNG'))
         Dialog.setWindowTitle(_translate("Dialog", " 關於 PTT Postman"))
 
-        Font = QtGui.QFont('微軟正黑體', 14, QtGui.QFont.Bold) 
+        FirstFont = QtGui.QFont('微軟正黑體', 20, QtGui.QFont.Bold)
+        Font = QtGui.QFont('微軟正黑體', 14, QtGui.QFont.Bold)
 
-        self.Version.setText(_translate("Dialog", "PTT Postman v " + Ver.V))
+        self.Name.setText(_translate("Dialog", "PTT Postman"))
+        self.Name.setFont(FirstFont)
+
+        self.Version.setText(_translate("Dialog", "版本: " + Ver.V))
         self.Version.setFont(Font)
 
         self.Developer.setText(_translate(
-            "Dialog", "Developer: CodingMan"))
+            "Dialog", "開發: CodingMan"))
         self.Developer.setFont(Font)
 
         self.Issue.setText(_translate(
@@ -82,8 +89,6 @@ class Ui(object):
         IconImage = IconImage.scaled(300, 300, QtCore.Qt.KeepAspectRatio)
         self.IconDisplay.setPixmap(IconImage)
 
-        
-        
 
 def start(app):
 
@@ -102,4 +107,3 @@ if __name__ == "__main__":
     ui.setupUi(Dialog)
     Dialog.show()
     sys.exit(app.exec_())
-
