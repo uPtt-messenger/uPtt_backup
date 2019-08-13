@@ -5,6 +5,8 @@
 # Created by: PyQt5 UI code generator 5.9.2
 #
 # WARNING! All changes made in this file will be lost!
+import os
+import json
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtGui import *
@@ -58,6 +60,22 @@ class Ui(object):
         def setLoginFocus():
             self.Login.setFocus()
             print('設定關注到登入按鈕')
+        
+        RecordFileName = 'PTTPostman.txt'
+        if os.name == 'nt':
+            print('Windows')
+            RecordPath = 'C:/ProgramData/PTTPostman/'
+        print(RecordFileName)
+        print(RecordPath)
+        if not os.path.exists(RecordPath):
+            os.makedirs(RecordPath)
+
+        try:
+            with open(RecordPath + RecordFileName, encoding='utf8') as File:
+                PostmanData = json.load(File)
+                self.ID.setText(PostmanData['ID'])
+        except Exception as e:
+            pass
 
         _translate = QtCore.QCoreApplication.translate
         Dialog.setWindowTitle(_translate("Dialog", "PTT Postman - 登入"))
@@ -74,9 +92,10 @@ class Ui(object):
         self.ID.returnPressed.connect(setPWFocus)
         self.PW.returnPressed.connect(setLoginFocus)
         self.PW.editingFinished.connect(setLoginFocus)
+        # self.RemberID.stateChanged.connect(RemberID_StateChanged)
 
     def getIDPW(self):
-        return self.ID.text(), self.PW.text()
+        return self.ID.text(), self.PW.text(), self.RemberID.isChecked()
 
 
 PressLogin = False
@@ -102,7 +121,7 @@ def start():
 
     if PressLogin:
         return ui.getIDPW()
-    return None, None
+    return None, None, None
 
 
 if __name__ == "__main__":

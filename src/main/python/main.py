@@ -1,8 +1,10 @@
 # https://www.learnpyqt.com/courses/adanced-ui-features/system-tray-mac-menu-bar-applications-pyqt/
 import sys
+import os
 import time
 import threading
-import asyncio
+import json
+import traceback
 
 from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
@@ -52,12 +54,12 @@ def checkMailFunc(ID, PW):
         PTTBot.login(ID, PW)
     except PTT.Exceptions.LoginError:
         PTTBot.log('登入失敗')
-        Notification.throw('PTT Postman', '登入失敗')
+        Notification.throw(SystemTray, 'PTT Postman', '登入失敗')
         PTTBot = None
         return
 
     PTTBot.log('登入成功')
-    Notification.throw('PTT Postman', '登入成功')
+    Notification.throw(SystemTray, 'PTT Postman', '登入成功')
     LoginStatus = True
     genMenu()
 
@@ -68,7 +70,7 @@ def checkMailFunc(ID, PW):
         if PTTBot.hasNewMail():
             if not ShowNewMail:
                 print('收到新信!!')
-                Notification.throw('PTT Postman', '你有新信件')
+                Notification.throw(SystemTray, 'PTT Postman', '你有新信件')
                 SystemTray.setToolTip('PTT Postman - 你有新信件')
             ShowNewMail = True
         else:
@@ -78,23 +80,51 @@ def checkMailFunc(ID, PW):
 
     PTTBot.logout()
     PTTBot = None
+    Notification.throw(SystemTray, 'PTT Postman', '登出成功')
 
 
 def LoginFunc():
     global LoginStatus
     global PTTBot
     global ThreadRun
+    global SystemTray
 
     LoginStatus = False
 
-    ID, PW = Login.start()
+    ID, PW, SaveID = Login.start()
 
     if ID is None or PW is None:
-        Notification.throw('PTT Postman', '登入取消')
+        Notification.throw(SystemTray, 'PTT Postman', '登入取消')
         return
+    print('len(ID)', len(ID))
+    print('len(PW)', len(PW))
     if len(ID) < 3 or len(PW) == 0:
-        Notification.throw('PTT Postman', '登入取消')
+        Notification.throw(SystemTray, 'PTT Postman', '登入取消')
         return
+    if SaveID:
+        RecordFileName = 'PTTPostman.txt'
+        if os.name == 'nt':
+            print('Windows')
+            RecordPath = 'C:/ProgramData/PTTPostman/'
+        print(RecordFileName)
+        print(RecordPath)
+        if not os.path.exists(RecordPath):
+            os.makedirs(RecordPath)
+
+        PostmanData = dict()
+        try:
+            with open(RecordPath + RecordFileName, encoding='utf8') as File:
+                PostmanData = json.load(File)
+        except Exception as e:
+            pass
+
+        PostmanData['ID'] = ID
+
+        try:
+            with open(RecordPath + RecordFileName, 'w', encoding='utf8') as File:
+                json.dump(PostmanData, File, indent=4, ensure_ascii=False)
+        except Exception as e:
+            Notification.throw(SystemTray, 'PTT Postman', '儲存密碼失敗')
 
     print('ID: ' + ID)
     print('PW: ' + PW)
@@ -112,10 +142,9 @@ def LogoutFunc():
 
     LoginStatus = False
     ThreadRun = False
+
     while PTTBot is not None:
         time.sleep(0.2)
-
-    Notification.throw('PTT Postman', '登出成功')
 
     genMenu()
 

@@ -1,11 +1,13 @@
-from plyer import notification
+
+from PyQt5.QtGui import *
 import Config
 
-def throw(Title, Message, Timeout=3):
 
-    notification.notify(
-        title=Title,
-        message=Message,
-        app_icon=Config.SmallIcon,
-        timeout=Timeout,
+def throw(SystemTray, Title, Message):
+
+    SystemTray.showMessage(
+        Title,
+        Message,
+        QIcon(Config.SmallImage),
+        3000
     )
