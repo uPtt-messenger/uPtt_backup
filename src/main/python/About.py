@@ -58,7 +58,7 @@ class Ui(object):
 
     def retranslateUi(self, Dialog):
         _translate = QtCore.QCoreApplication.translate
-        Dialog.setWindowIcon(QIcon('./src/res/Small.PNG'))
+        Dialog.setWindowIcon(QIcon(Config.SmallImage))
         Dialog.setWindowTitle(_translate("Dialog", " 關於 PTT Postman"))
 
         self.Name.setText(_translate("Dialog", "PTT Postman"))
@@ -83,7 +83,7 @@ class Ui(object):
 
         self.IconDisplay.setText(_translate("Dialog", "TextLabel"))
 
-        IconImage = QPixmap('./src/res/OriginIcon.PNG')
+        IconImage = QPixmap(Config.OriImage)
         IconImage = IconImage.scaled(300, 300, QtCore.Qt.KeepAspectRatio)
         self.IconDisplay.setPixmap(IconImage)
 

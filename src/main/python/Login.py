@@ -50,12 +50,12 @@ class Ui(object):
     def retranslateUi(self, Dialog, FinishFunc):
         _translate = QtCore.QCoreApplication.translate
         Dialog.setWindowTitle(_translate("Dialog", "PTT Postman - 登入"))
-        Dialog.setWindowIcon(QIcon('./src/res/Small.PNG'))
+        Dialog.setWindowIcon(QIcon(Config.SmallImage))
         self.InputID.setText(_translate("Dialog", "請輸入帳號"))
         self.InputID.setFont(Config.BasicFont)
         self.InputPW.setText(_translate("Dialog", "請輸入密碼"))
         self.InputPW.setFont(Config.BasicFont)
-        self.RemberID.setText(_translate("Dialog", "記住密碼"))
+        self.RemberID.setText(_translate("Dialog", "記住帳號"))
         self.Login.setText(_translate("Dialog", "登入"))
         self.Login.setFont(Config.BasicFont)
         self.Login.clicked.connect(FinishFunc)
