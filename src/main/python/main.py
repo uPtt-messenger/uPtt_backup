@@ -1,6 +1,8 @@
 # https://www.learnpyqt.com/courses/adanced-ui-features/system-tray-mac-menu-bar-applications-pyqt/
 import sys
 import time
+import threading
+import asyncio
 
 from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
@@ -29,30 +31,59 @@ def genMenu():
     global LoginStatus
     global Menu_Logout
     global Menu_Login
+    global SystemTray
 
     if LoginStatus:
+        print('Menu_Login is None: ' + str(Menu_Login is None))
         SystemTray.setContextMenu(Menu_Login)
     else:
+        print('Menu_Logout is None: ' + str(Menu_Logout is None))
         SystemTray.setContextMenu(Menu_Logout)
 
 
-def checkMailFunc():
+def checkMailFunc(ID, PW):
     global PTTBot
     global ThreadRun
+    global LoginStatus
+    global SystemTray
 
+    PTTBot = PTT.Library()
+    try:
+        PTTBot.login(ID, PW)
+    except PTT.Exceptions.LoginError:
+        PTTBot.log('登入失敗')
+        Notification.throw('PTT Postman', '登入失敗')
+        PTTBot = None
+        return
+
+    PTTBot.log('登入成功')
+    Notification.throw('PTT Postman', '登入成功')
+    LoginStatus = True
+    genMenu()
+
+    ShowNewMail = False
     while ThreadRun:
+        if PTTBot is None:
+            break
         if PTTBot.hasNewMail():
-            QMessageBox.information(
-                self,
-                'Ttile',
-                'Msg',
-                QMessageBox.Yes
-            )
+            if not ShowNewMail:
+                print('收到新信!!')
+                Notification.throw('PTT Postman', '你有新信件')
+                SystemTray.setToolTip('PTT Postman - 你有新信件')
+            ShowNewMail = True
+        else:
+            SystemTray.setToolTip('PTT Postman - 無新信件')
+            ShowNewMail = False
+        time.sleep(2)
+
+    PTTBot.logout()
+    PTTBot = None
 
 
 def LoginFunc():
     global LoginStatus
     global PTTBot
+    global ThreadRun
 
     LoginStatus = False
 
@@ -68,31 +99,25 @@ def LoginFunc():
     print('ID: ' + ID)
     print('PW: ' + PW)
 
-    PTTBot = PTT.Library()
-    try:
-        PTTBot.login(ID, PW)
-    except PTT.Exceptions.LoginError:
-        PTTBot.log('登入失敗')
-        return
-
-    PTTBot.log('登入成功')
-    Notification.throw('PTT Postman', '登入成功')
-    LoginStatus = True
-    genMenu()
-
     ThreadRun = True
+
+    t = threading.Thread(target=checkMailFunc, args=(ID, PW))
+    t.start()
 
 
 def LogoutFunc():
     global LoginStatus
     global PTTBot
+    global ThreadRun
 
     LoginStatus = False
+    ThreadRun = False
+    while PTTBot is not None:
+        time.sleep(0.2)
 
-    if PTTBot is not None:
-        PTTBot.logout()
-        PTTBot = None
-        Notification.throw('PTT Postman', '登出成功')
+    Notification.throw('PTT Postman', '登出成功')
+
+    genMenu()
 
 
 def AboutFunc():
@@ -142,16 +167,6 @@ Menu_Logout.addSeparator()
 Menu_Logout.addAction(action_Exit)
 
 genMenu()
-
-# msg = QMessageBox()
-# # msg.setIcon(QMessageBox.Information)
-# msg.setText("This is a message box")
-# msg.setWindowTitle("MessageBox demo")
-# msg.setWindowIcon(QIcon(Config.SmallImage))
-# # msg.setInformativeText("This is additional information")
-# # msg.setDetailedText("The details are as follows:")
-# msg.exec_()
-
-NewMail.start()
+LoginFunc()
 
 app.exec_()

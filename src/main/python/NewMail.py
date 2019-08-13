@@ -20,10 +20,14 @@ class Ui(object):
         self.verticalLayout = QtWidgets.QVBoxLayout(self.verticalLayoutWidget)
         self.verticalLayout.setContentsMargins(0, 0, 0, 0)
         self.verticalLayout.setObjectName("verticalLayout")
+        spacerItem = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
+        self.verticalLayout.addItem(spacerItem)
         self.NewMailText = QtWidgets.QLabel(self.verticalLayoutWidget)
         self.NewMailText.setAlignment(QtCore.Qt.AlignCenter)
         self.NewMailText.setObjectName("NewMailText")
         self.verticalLayout.addWidget(self.NewMailText)
+        spacerItem1 = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
+        self.verticalLayout.addItem(spacerItem1)
         self.buttonBox = QtWidgets.QDialogButtonBox(self.verticalLayoutWidget)
         self.buttonBox.setLayoutDirection(QtCore.Qt.LeftToRight)
         self.buttonBox.setOrientation(QtCore.Qt.Horizontal)
@@ -42,7 +46,7 @@ class Ui(object):
         Dialog.setWindowIcon(QIcon(Config.SmallImage))
         _translate = QtCore.QCoreApplication.translate
         Dialog.setWindowTitle(_translate("Dialog", "PTT Postman"))
-        self.NewMailText.setText(_translate("Dialog", "有新信件還沒看"))
+        self.NewMailText.setText(_translate("Dialog", "你有新信件"))
         self.NewMailText.setFont(Config.TitleFont)
 
         pe = QPalette()
@@ -68,3 +72,4 @@ if __name__ == "__main__":
     ui.setupUi(Dialog)
     Dialog.show()
     sys.exit(app.exec_())
+

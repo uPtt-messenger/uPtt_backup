@@ -27,7 +27,6 @@ class Ui(object):
         self.InputID.setObjectName("InputID")
         self.verticalLayout.addWidget(self.InputID)
         self.ID = QtWidgets.QLineEdit(self.verticalLayoutWidget)
-        self.ID.setFocusPolicy(QtCore.Qt.StrongFocus)
         self.ID.setAlignment(QtCore.Qt.AlignCenter)
         self.ID.setObjectName("ID")
         self.verticalLayout.addWidget(self.ID)
@@ -44,7 +43,7 @@ class Ui(object):
         self.RemberID.setObjectName("RemberID")
         self.verticalLayout.addWidget(self.RemberID)
         self.Login = QtWidgets.QPushButton(self.verticalLayoutWidget)
-        self.Login.setFocusPolicy(QtCore.Qt.TabFocus)
+        self.Login.setFocusPolicy(QtCore.Qt.NoFocus)
         self.Login.setObjectName("Login")
         self.verticalLayout.addWidget(self.Login)
 
@@ -53,8 +52,12 @@ class Ui(object):
 
     def retranslateUi(self, Dialog, FinishFunc):
         def setPWFocus():
-            self.InputPW.setFocus()
-            print('QQ!!!!')
+            self.PW.setFocus()
+            print('設定關注到密碼視窗')
+
+        def setLoginFocus():
+            self.Login.setFocus()
+            print('設定關注到登入按鈕')
 
         _translate = QtCore.QCoreApplication.translate
         Dialog.setWindowTitle(_translate("Dialog", "PTT Postman - 登入"))
@@ -62,13 +65,16 @@ class Ui(object):
         self.InputID.setText(_translate("Dialog", "請輸入帳號"))
         self.InputID.setFont(Config.BasicFont)
         self.InputPW.setText(_translate("Dialog", "請輸入密碼"))
-        self.ID.returnPressed.connect(setPWFocus)
         self.InputPW.setFont(Config.BasicFont)
         self.RemberID.setText(_translate("Dialog", "記住帳號"))
         self.Login.setText(_translate("Dialog", "登入"))
         self.Login.setFont(Config.BasicFont)
         self.Login.clicked.connect(FinishFunc)
-    
+
+        self.ID.returnPressed.connect(setPWFocus)
+        self.PW.returnPressed.connect(setLoginFocus)
+        self.PW.editingFinished.connect(setLoginFocus)
+
     def getIDPW(self):
         return self.ID.text(), self.PW.text()
 
@@ -107,4 +113,3 @@ if __name__ == "__main__":
     ui.setupUi(Dialog)
     Dialog.show()
     sys.exit(app.exec_())
-
