@@ -16,8 +16,8 @@
 ## 回報問題
 #### 請開 [issue](https://github.com/Truth0906/PTTPostman/issues) 也可以在 gitter 上問我 [![Gitter](https://badges.gitter.im/PTTPostman/TalkingRoom.svg)](https://gitter.im/PTTPostman/TalkingRoom?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
 
-## 需求
-#### 感恩的心
+## 編譯
+#### 下次再寫
 
 ## 贊助
 #### 在這個 github 的小園地，用熱血的心為您打造在 PTT 翱翔的翅膀。
