@@ -15,7 +15,7 @@ import Config
 
 
 class Ui(object):
-    def setupUi(self, Dialog, FinishFunc):
+    def setupUi(self, Dialog, ConfigObj, FinishFunc):
         Dialog.setObjectName("Dialog")
         Dialog.resize(271, 220)
         self.verticalLayoutWidget = QtWidgets.QWidget(Dialog)
@@ -49,10 +49,10 @@ class Ui(object):
         self.Login.setObjectName("Login")
         self.verticalLayout.addWidget(self.Login)
 
-        self.retranslateUi(Dialog, FinishFunc)
+        self.retranslateUi(Dialog, ConfigObj, FinishFunc)
         QtCore.QMetaObject.connectSlotsByName(Dialog)
 
-    def retranslateUi(self, Dialog, FinishFunc):
+    def retranslateUi(self, Dialog, ConfigObj, FinishFunc):
         def setPWFocus():
             self.PW.setFocus()
             print('設定關注到密碼視窗')
@@ -60,26 +60,17 @@ class Ui(object):
         def setLoginFocus():
             self.Login.setFocus()
             print('設定關注到登入按鈕')
-        
-        RecordFileName = 'PTTPostman.txt'
-        if os.name == 'nt':
-            print('Windows')
-            RecordPath = 'C:/ProgramData/PTTPostman/'
-        print(RecordFileName)
-        print(RecordPath)
-        if not os.path.exists(RecordPath):
-            os.makedirs(RecordPath)
 
-        try:
-            with open(RecordPath + RecordFileName, encoding='utf8') as File:
-                PostmanData = json.load(File)
-                self.ID.setText(PostmanData['ID'])
-        except Exception as e:
-            pass
+        ID = ConfigObj.getValue(Config.Key_ID)
+        if ID is not None:
+            self.ID.setText(ID)
+            self.RemberID.setChecked(True)
 
         _translate = QtCore.QCoreApplication.translate
         Dialog.setWindowTitle(_translate("Dialog", "PTT Postman - 登入"))
         Dialog.setWindowIcon(QIcon(Config.SmallImage))
+        Dialog.setWindowFlags(QtCore.Qt.WindowStaysOnTopHint)
+        
         self.InputID.setText(_translate("Dialog", "請輸入帳號"))
         self.InputID.setFont(Config.BasicFont)
         self.InputPW.setText(_translate("Dialog", "請輸入密碼"))
@@ -101,7 +92,7 @@ class Ui(object):
 PressLogin = False
 
 
-def start():
+def start(ConfigObj):
 
     global PressLogin
     PressLogin = False
@@ -115,7 +106,7 @@ def start():
         print('Login finish')
         Dialog.close()
 
-    ui.setupUi(Dialog, finish)
+    ui.setupUi(Dialog, ConfigObj, finish)
     Dialog.show()
     Dialog.exec()
 

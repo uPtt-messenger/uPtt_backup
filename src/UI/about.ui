@@ -73,14 +73,25 @@
      </widget>
     </item>
     <item>
-     <widget class="QLabel" name="Issue">
-      <property name="text">
-       <string>回報問題</string>
-      </property>
-      <property name="textFormat">
-       <enum>Qt::AutoText</enum>
-      </property>
-     </widget>
+     <layout class="QHBoxLayout" name="horizontalLayout">
+      <item>
+       <widget class="QLabel" name="Issue">
+        <property name="text">
+         <string>回報問題</string>
+        </property>
+        <property name="textFormat">
+         <enum>Qt::AutoText</enum>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="Gitter">
+        <property name="text">
+         <string>Gitter</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
     </item>
     <item>
      <widget class="QLabel" name="SourceCode">

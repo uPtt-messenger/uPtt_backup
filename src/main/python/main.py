@@ -26,6 +26,7 @@ Menu_Login = None
 Menu_Logout = None
 
 ThreadRun = False
+ConfigObj = None
 
 
 def genMenu():
@@ -88,43 +89,23 @@ def LoginFunc():
     global PTTBot
     global ThreadRun
     global SystemTray
+    global ConfigObj
 
     LoginStatus = False
 
-    ID, PW, SaveID = Login.start()
+    ID, PW, SaveID = Login.start(ConfigObj)
 
     if ID is None or PW is None:
         Notification.throw(SystemTray, 'PTT Postman', '登入取消')
         return
-    print('len(ID)', len(ID))
-    print('len(PW)', len(PW))
+
     if len(ID) < 3 or len(PW) == 0:
         Notification.throw(SystemTray, 'PTT Postman', '登入取消')
         return
     if SaveID:
-        RecordFileName = 'PTTPostman.txt'
-        if os.name == 'nt':
-            print('Windows')
-            RecordPath = 'C:/ProgramData/PTTPostman/'
-        print(RecordFileName)
-        print(RecordPath)
-        if not os.path.exists(RecordPath):
-            os.makedirs(RecordPath)
-
-        PostmanData = dict()
-        try:
-            with open(RecordPath + RecordFileName, encoding='utf8') as File:
-                PostmanData = json.load(File)
-        except Exception as e:
-            pass
-
-        PostmanData['ID'] = ID
-
-        try:
-            with open(RecordPath + RecordFileName, 'w', encoding='utf8') as File:
-                json.dump(PostmanData, File, indent=4, ensure_ascii=False)
-        except Exception as e:
-            Notification.throw(SystemTray, 'PTT Postman', '儲存密碼失敗')
+        ConfigObj.setValue(Config.Key_ID, ID)
+    else:
+        ConfigObj.setValue(Config.Key_ID, None)
 
     print('ID: ' + ID)
     print('PW: ' + PW)
@@ -156,10 +137,15 @@ def AboutFunc():
 
 def ExitFunc():
 
+    global SystemTray
+
     LogoutFunc()
+    SystemTray.hide()
     print('Exit')
     sys.exit()
 
+
+ConfigObj = Config.Config()
 
 app = QApplication([])
 app.setQuitOnLastWindowClosed(False)

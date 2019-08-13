@@ -39,10 +39,16 @@ class Ui(object):
         self.Developer = QtWidgets.QLabel(self.verticalLayoutWidget)
         self.Developer.setObjectName("Developer")
         self.verticalLayout.addWidget(self.Developer)
+        self.horizontalLayout = QtWidgets.QHBoxLayout()
+        self.horizontalLayout.setObjectName("horizontalLayout")
         self.Issue = QtWidgets.QLabel(self.verticalLayoutWidget)
         self.Issue.setTextFormat(QtCore.Qt.AutoText)
         self.Issue.setObjectName("Issue")
-        self.verticalLayout.addWidget(self.Issue)
+        self.horizontalLayout.addWidget(self.Issue)
+        self.Gitter = QtWidgets.QLabel(self.verticalLayoutWidget)
+        self.Gitter.setObjectName("Gitter")
+        self.horizontalLayout.addWidget(self.Gitter)
+        self.verticalLayout.addLayout(self.horizontalLayout)
         self.SourceCode = QtWidgets.QLabel(self.verticalLayoutWidget)
         self.SourceCode.setTextFormat(QtCore.Qt.AutoText)
         self.SourceCode.setObjectName("SourceCode")
@@ -60,6 +66,7 @@ class Ui(object):
         _translate = QtCore.QCoreApplication.translate
         Dialog.setWindowIcon(QIcon(Config.SmallImage))
         Dialog.setWindowTitle(_translate("Dialog", " 關於 PTT Postman"))
+        Dialog.setWindowFlags(QtCore.Qt.WindowStaysOnTopHint)
 
         self.Name.setText(_translate("Dialog", "PTT Postman"))
         self.Name.setFont(Config.TitleFont)
@@ -72,9 +79,14 @@ class Ui(object):
         self.Developer.setFont(Config.BasicFont)
 
         self.Issue.setText(_translate(
-            "Dialog", "<a href=\"https://github.com/Truth0906/PTTPostman/issues/new\">回報問題</a>"))
+            "Dialog", "<a href=\"https://github.com/Truth0906/PTTPostman/issues/new\">填寫問題單</a>"))
         self.Issue.setOpenExternalLinks(True)
         self.Issue.setFont(Config.BasicFont)
+
+        self.Gitter.setText(_translate(
+            "Dialog", "<a href=\"https://gitter.im/PTTPostman/TalkingRoom\">線上找我</a>"))
+        self.Gitter.setOpenExternalLinks(True)
+        self.Gitter.setFont(Config.BasicFont)
 
         self.SourceCode.setText(_translate(
             "Dialog", "<a href=\"https://github.com/Truth0906/PTTPostman\">原始碼</a>"))
@@ -101,7 +113,8 @@ if __name__ == "__main__":
     import sys
     app = QtWidgets.QApplication(sys.argv)
     Dialog = QtWidgets.QDialog()
-    ui = Ui()
+    ui = Ui_Dialog()
     ui.setupUi(Dialog)
     Dialog.show()
     sys.exit(app.exec_())
+
