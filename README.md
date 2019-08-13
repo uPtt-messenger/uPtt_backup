@@ -9,3 +9,22 @@
 
 ## 版本
 #### 0.0.1 beta
+
+## 取得
+#### 近期釋出安裝包
+
+## 回報問題
+#### 請開 [issue](https://github.com/Truth0906/PTTPostman/issues) 也可以在 gitter 上問我 [![Gitter](https://badges.gitter.im/PTTPostman/TalkingRoom.svg)](https://gitter.im/PTTPostman/TalkingRoom?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
+
+## 需求
+#### 感恩的心
+
+## 贊助
+#### 在這個 github 的小園地，用熱血的心為您打造在 PTT 翱翔的翅膀。
+#### 希望您可以贊助這雙翅膀，讓我們一起飛得更遠，
+####
+#### Paypal
+#### [贊助連結](http://paypal.me/CodingMan)
+####
+#### XMR
+#### 448CUe2q4Ecf9tx6rwanrqM9kfCwqpNbhJ5jtrTf9FHqHNq7Lvv9uBoQ74SEaAu9FFceNBr6p3W1yhqPcxPPSSTv2ctufnQ
