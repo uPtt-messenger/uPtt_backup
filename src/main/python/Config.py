@@ -6,16 +6,24 @@ from PyQt5 import QtCore, QtGui
 TitleFont = QtGui.QFont('微軟正黑體', 14, QtGui.QFont.Bold)
 BasicFont = QtGui.QFont('微軟正黑體', 14, QtGui.QFont.Bold)
 
-OriImage = './res/OriginIcon.PNG'
-SmallImage = './res/Small.PNG'
-SmallIcon = './res/Small.ico'
+OriImage = None
+SmallImage = None
+SmallIcon = None
 
 Key_ID = 'ID'
 
 
 class Config(object):
 
-    def __init__(self):
+    def __init__(self, Appctxt):
+
+        global OriImage
+        global SmallImage
+        global SmallIcon
+
+        OriImage = Appctxt.get_resource('OriginIcon.png')
+        SmallImage = Appctxt.get_resource('Small.png')
+        SmallIcon = Appctxt.get_resource('Small.ico')
 
         self.ConfigFileName = 'PTTPostman.txt'
         self.ConfigPath = None

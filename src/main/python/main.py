@@ -164,44 +164,47 @@ def ExitFunc():
     print('Exit')
     sys.exit()
 
+if __name__ == '__main__':
+    Appctxt = ApplicationContext()
 
-ConfigObj = Config.Config()
+    ConfigObj = Config.Config(Appctxt)
 
-app = QApplication([])
-app.setQuitOnLastWindowClosed(False)
-icon = QIcon(Config.SmallImage)
+    app = QApplication([])
+    app.setQuitOnLastWindowClosed(False)
+    icon = QIcon(Config.SmallImage)
 
-SystemTray = QSystemTrayIcon(app)
-SystemTray.setIcon(icon)
-SystemTray.setVisible(True)
-SystemTray.setToolTip('PTT Postman')
+    SystemTray = QSystemTrayIcon(app)
+    SystemTray.setIcon(icon)
+    SystemTray.setVisible(True)
+    SystemTray.setToolTip('PTT Postman')
 
-Menu_Login = QMenu()
-Menu_Logout = QMenu()
+    Menu_Login = QMenu()
+    Menu_Logout = QMenu()
 
-action_Login = QAction('登入')
-action_Login.triggered.connect(LoginFunc)
+    action_Login = QAction('登入')
+    action_Login.triggered.connect(LoginFunc)
 
-action_Logout = QAction('登出')
-action_Logout.triggered.connect(LogoutFunc)
+    action_Logout = QAction('登出')
+    action_Logout.triggered.connect(LogoutFunc)
 
-action_About = QAction('關於')
-action_About.triggered.connect(AboutFunc)
+    action_About = QAction('關於')
+    action_About.triggered.connect(AboutFunc)
 
-action_Exit = QAction('離開')
-action_Exit.triggered.connect(ExitFunc)
+    action_Exit = QAction('離開')
+    action_Exit.triggered.connect(ExitFunc)
 
-Menu_Login.addAction(action_Logout)
-Menu_Login.addAction(action_About)
-Menu_Login.addSeparator()
-Menu_Login.addAction(action_Exit)
+    Menu_Login.addAction(action_Logout)
+    Menu_Login.addAction(action_About)
+    Menu_Login.addSeparator()
+    Menu_Login.addAction(action_Exit)
 
-Menu_Logout.addAction(action_Login)
-Menu_Logout.addAction(action_About)
-Menu_Logout.addSeparator()
-Menu_Logout.addAction(action_Exit)
+    Menu_Logout.addAction(action_Login)
+    Menu_Logout.addAction(action_About)
+    Menu_Logout.addSeparator()
+    Menu_Logout.addAction(action_Exit)
 
-genMenu()
-LoginFunc()
+    genMenu()
+    LoginFunc()
 
-app.exec_()
+    exit_code = Appctxt.app.exec_()
+    sys.exit(exit_code)
