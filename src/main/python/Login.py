@@ -67,7 +67,7 @@ class Ui(object):
             self.RemberID.setChecked(True)
 
         _translate = QtCore.QCoreApplication.translate
-        Dialog.setWindowTitle(_translate("Dialog", "PTT Postman - 登入"))
+        Dialog.setWindowTitle(_translate("Dialog", "PTT Postman 登入"))
         Dialog.setWindowIcon(QIcon(Config.SmallImage))
         Dialog.setWindowFlags(QtCore.Qt.WindowStaysOnTopHint)
         

@@ -50,37 +50,56 @@ def checkMailFunc(ID, PW):
     global LoginStatus
     global SystemTray
 
-    PTTBot = PTT.Library()
-    try:
-        PTTBot.login(ID, PW)
-    except PTT.Exceptions.LoginError:
-        PTTBot.log('登入失敗')
-        Notification.throw(SystemTray, 'PTT Postman', '登入失敗')
-        PTTBot = None
-        return
-
-    PTTBot.log('登入成功')
-    Notification.throw(SystemTray, 'PTT Postman', '登入成功')
-    LoginStatus = True
-    genMenu()
-
-    ShowNewMail = False
+    Recover = False
     while ThreadRun:
-        if PTTBot is None:
-            break
-        if PTTBot.hasNewMail():
-            if not ShowNewMail:
-                print('收到新信!!')
-                Notification.throw(SystemTray, 'PTT Postman', '你有新信件')
-                SystemTray.setToolTip('PTT Postman - 你有新信件')
-            ShowNewMail = True
-        else:
-            SystemTray.setToolTip('PTT Postman - 無新信件')
-            ShowNewMail = False
-        time.sleep(2)
 
-    PTTBot.logout()
-    PTTBot = None
+        PTTBot = PTT.Library()
+        try:
+            PTTBot.login(ID, PW)
+        except PTT.Exceptions.LoginError:
+            PTTBot.log('登入失敗')
+            if Recover:
+                Notification.throw(SystemTray, 'PTT Postman', '重新登入失敗')
+            else:
+                Notification.throw(SystemTray, 'PTT Postman', '登入失敗')
+            PTTBot = None
+            LoginStatus = False
+            return
+
+        if Recover:
+            PTTBot.log('重新登入成功')
+            Notification.throw(SystemTray, 'PTT Postman', '重新登入成功')
+        else:
+            PTTBot.log('登入成功')
+            Notification.throw(SystemTray, 'PTT Postman', '登入成功')
+
+        Recover = False
+        LoginStatus = True
+        genMenu()
+
+        ShowNewMail = False
+        try:
+            while ThreadRun:
+                if PTTBot is None:
+                    break
+                if PTTBot.hasNewMail():
+                    if not ShowNewMail:
+                        print('收到新信!!')
+                        Notification.throw(SystemTray, 'PTT Postman', '你有新信件')
+                        SystemTray.setToolTip('PTT Postman - 你有新信件')
+                    ShowNewMail = True
+                else:
+                    SystemTray.setToolTip('PTT Postman - 無新信件')
+                    ShowNewMail = False
+                time.sleep(2)
+            PTTBot.logout()
+        except:
+            Recover = True
+            for s in range(5):
+                print(f'發生錯誤! {5 - s} 秒後啟動恢復機制')
+                time.sleep(1)
+
+        PTTBot = None
     Notification.throw(SystemTray, 'PTT Postman', '登出成功')
 
 
