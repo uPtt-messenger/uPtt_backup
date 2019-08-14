@@ -39,12 +39,25 @@ class Ui(object):
         self.Developer = QtWidgets.QLabel(self.verticalLayoutWidget)
         self.Developer.setObjectName("Developer")
         self.verticalLayout.addWidget(self.Developer)
+        spacerItem = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
+        self.verticalLayout.addItem(spacerItem)
+        self.IfhasQuestion = QtWidgets.QLabel(self.verticalLayoutWidget)
+        self.IfhasQuestion.setObjectName("IfhasQuestion")
+        self.verticalLayout.addWidget(self.IfhasQuestion)
         self.horizontalLayout = QtWidgets.QHBoxLayout()
         self.horizontalLayout.setObjectName("horizontalLayout")
+        self.OneQuestion = QtWidgets.QLabel(self.verticalLayoutWidget)
+        self.OneQuestion.setObjectName("OneQuestion")
+        self.horizontalLayout.addWidget(self.OneQuestion)
         self.Issue = QtWidgets.QLabel(self.verticalLayoutWidget)
         self.Issue.setTextFormat(QtCore.Qt.AutoText)
         self.Issue.setObjectName("Issue")
         self.horizontalLayout.addWidget(self.Issue)
+        spacerItem1 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        self.horizontalLayout.addItem(spacerItem1)
+        self.TwoQuestion = QtWidgets.QLabel(self.verticalLayoutWidget)
+        self.TwoQuestion.setObjectName("TwoQuestion")
+        self.horizontalLayout.addWidget(self.TwoQuestion)
         self.Gitter = QtWidgets.QLabel(self.verticalLayoutWidget)
         self.Gitter.setObjectName("Gitter")
         self.horizontalLayout.addWidget(self.Gitter)
@@ -77,6 +90,18 @@ class Ui(object):
         self.Developer.setText(_translate(
             "Dialog", "開發: CodingMan"))
         self.Developer.setFont(Config.BasicFont)
+
+        self.IfhasQuestion.setText(_translate(
+            "Dialog", "如果你有任何問題"))
+        self.IfhasQuestion.setFont(Config.BasicFont)
+
+        self.OneQuestion.setText(_translate(
+            "Dialog", "1."))
+        self.OneQuestion.setFont(Config.BasicFont)
+
+        self.TwoQuestion.setText(_translate(
+            "Dialog", "2."))
+        self.TwoQuestion.setFont(Config.BasicFont)
 
         self.Issue.setText(_translate(
             "Dialog", "<a href=\"https://github.com/Truth0906/PTTPostman/issues/new\">填寫問題單</a>"))
