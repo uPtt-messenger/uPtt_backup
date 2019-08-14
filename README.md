@@ -1,5 +1,6 @@
 ![PTTPostman: A PTT Postman in Python](https://i.imgur.com/B1dzlL6.png)
 # PTTPostman
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/74d1e75f6fca4960a5bd6c7e307d8954)](https://app.codacy.com/app/Truth0906/PTTPostman?utm_source=github.com&utm_medium=referral&utm_content=Truth0906/PTTPostman&utm_campaign=Badge_Grade_Dashboard)
 [![Gitter](https://badges.gitter.im/PTTPostman/TalkingRoom.svg)](https://gitter.im/PTTPostman/TalkingRoom?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
 
 #### PTT Postman 是使用 PyQt5 開發，用來通知使用者是否有新信的小程式
