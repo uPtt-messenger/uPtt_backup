@@ -6,6 +6,7 @@ import threading
 import json
 import traceback
 
+from fbs_runtime.application_context.PyQt5 import ApplicationContext
 from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
 
