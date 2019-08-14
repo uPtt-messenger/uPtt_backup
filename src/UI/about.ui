@@ -29,7 +29,7 @@
    <property name="geometry">
     <rect>
      <x>300</x>
-     <y>290</y>
+     <y>300</y>
      <width>261</width>
      <height>32</height>
     </rect>
@@ -47,7 +47,7 @@
      <x>350</x>
      <y>20</y>
      <width>221</width>
-     <height>221</height>
+     <height>261</height>
     </rect>
    </property>
    <layout class="QVBoxLayout" name="verticalLayout">
@@ -69,6 +69,16 @@
      <widget class="QLabel" name="Developer">
       <property name="text">
        <string>Developer: CodingMan</string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QLabel" name="SourceCode">
+      <property name="text">
+       <string>原始碼</string>
+      </property>
+      <property name="textFormat">
+       <enum>Qt::AutoText</enum>
       </property>
      </widget>
     </item>
@@ -139,16 +149,6 @@
        </widget>
       </item>
      </layout>
-    </item>
-    <item>
-     <widget class="QLabel" name="SourceCode">
-      <property name="text">
-       <string>原始碼</string>
-      </property>
-      <property name="textFormat">
-       <enum>Qt::AutoText</enum>
-      </property>
-     </widget>
     </item>
    </layout>
   </widget>

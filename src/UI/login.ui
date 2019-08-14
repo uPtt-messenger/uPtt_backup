@@ -64,11 +64,22 @@
      </widget>
     </item>
     <item>
-     <widget class="QCheckBox" name="RemberID">
-      <property name="text">
-       <string>CheckBox</string>
-      </property>
-     </widget>
+     <layout class="QHBoxLayout" name="horizontalLayout">
+      <item>
+       <widget class="QCheckBox" name="RemberID">
+        <property name="text">
+         <string>記住帳號</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QCheckBox" name="ShowPW">
+        <property name="text">
+         <string>顯示密碼</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
     </item>
     <item>
      <widget class="QPushButton" name="Login">

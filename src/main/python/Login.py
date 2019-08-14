@@ -41,9 +41,15 @@ class Ui(object):
         self.PW.setAlignment(QtCore.Qt.AlignCenter)
         self.PW.setObjectName("PW")
         self.verticalLayout.addWidget(self.PW)
+        self.horizontalLayout = QtWidgets.QHBoxLayout()
+        self.horizontalLayout.setObjectName("horizontalLayout")
         self.RemberID = QtWidgets.QCheckBox(self.verticalLayoutWidget)
         self.RemberID.setObjectName("RemberID")
-        self.verticalLayout.addWidget(self.RemberID)
+        self.horizontalLayout.addWidget(self.RemberID)
+        self.ShowPW = QtWidgets.QCheckBox(self.verticalLayoutWidget)
+        self.ShowPW.setObjectName("ShowPW")
+        self.horizontalLayout.addWidget(self.ShowPW)
+        self.verticalLayout.addLayout(self.horizontalLayout)
         self.Login = QtWidgets.QPushButton(self.verticalLayoutWidget)
         self.Login.setFocusPolicy(QtCore.Qt.NoFocus)
         self.Login.setObjectName("Login")
@@ -60,6 +66,14 @@ class Ui(object):
         def setLoginFocus():
             self.Login.setFocus()
             print('設定關注到登入按鈕')
+        
+        def ShowPWStateChanged():
+            if self.ShowPW.isChecked():
+                print('顯示密碼')
+                self.PW.setEchoMode(QtWidgets.QLineEdit.Normal)
+            else:
+                print('不顯示密碼')
+                self.PW.setEchoMode(QtWidgets.QLineEdit.Password)
 
         ID = ConfigObj.getValue(Config.Key_ID)
         if ID is not None:
@@ -83,7 +97,9 @@ class Ui(object):
         self.ID.returnPressed.connect(setPWFocus)
         self.PW.returnPressed.connect(setLoginFocus)
         self.PW.editingFinished.connect(setLoginFocus)
-        # self.RemberID.stateChanged.connect(RemberID_StateChanged)
+
+        self.ShowPW.setText(_translate("Dialog", "顯示密碼"))
+        self.ShowPW.stateChanged.connect(ShowPWStateChanged)
 
     def getIDPW(self):
         return self.ID.text(), self.PW.text(), self.RemberID.isChecked()
@@ -123,3 +139,4 @@ if __name__ == "__main__":
     ui.setupUi(Dialog)
     Dialog.show()
     sys.exit(app.exec_())
+
