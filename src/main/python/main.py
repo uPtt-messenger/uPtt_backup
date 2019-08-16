@@ -18,10 +18,7 @@ import About
 import Login
 import Notification
 import NewMail
-
-LoginStatus = False
-PTTBot = None
-SystemTray = None
+import Menu
 
 
 def checkMailFunc(ID, PW):
@@ -84,23 +81,20 @@ def checkMailFunc(ID, PW):
 
 
 def LoginFunc():
-    global LoginStatus
-    global PTTBot
-    global ThreadRun
-    global SystemTray
-    global ConfigObj
 
-    LoginStatus = False
+    global MenuObj
 
     ID, PW, SaveID = Login.start(ConfigObj)
 
     if ID is None or PW is None:
-        Notification.throw(SystemTray, 'PTT Postman', '登入取消')
+        NotificationObj.throw('PTT Postman', '登入取消')
+        MenuObj.setMenu(Menu.Type.Login)
+        return
+    if len(ID) < 3 or len(PW) == 0:
+        NotificationObj.throw('PTT Postman', '登入取消')
+        MenuObj.setMenu(Menu.Type.Login)
         return
 
-    if len(ID) < 3 or len(PW) == 0:
-        Notification.throw(SystemTray, 'PTT Postman', '登入取消')
-        return
     if SaveID:
         ConfigObj.setValue(Config.Key_ID, ID)
     else:
@@ -109,10 +103,8 @@ def LoginFunc():
     print('ID: ' + ID)
     print('PW: ' + PW)
 
-    ThreadRun = True
-
-    t = threading.Thread(target=checkMailFunc, args=(ID, PW))
-    t.start()
+    # t = threading.Thread(target=checkMailFunc, args=(ID, PW))
+    # t.start()
 
 
 def LogoutFunc():
@@ -130,34 +122,33 @@ def LogoutFunc():
 
 
 def AboutFunc():
-
     About.start()
 
 
 def ExitFunc():
 
-    global SystemTray
-
-    LogoutFunc()
     SystemTray.hide()
     print('Exit')
     sys.exit()
 
 if __name__ == '__main__':
     Appctxt = ApplicationContext()
-
     ConfigObj = Config.Config(Appctxt)
 
     app = QApplication([])
     app.setQuitOnLastWindowClosed(False)
-    icon = QIcon(Config.SmallImage)
 
     SystemTray = QSystemTrayIcon(app)
-    SystemTray.setIcon(icon)
+    SystemTray.setIcon(ConfigObj.Icon_SmallImage)
     SystemTray.setVisible(True)
     SystemTray.setToolTip('PTT Postman')
+
+    NotificationObj = Notification.Notification(SystemTray, ConfigObj)
+    MenuObj = Menu.Menu(SystemTray)
+    MenuObj.addEvent(Menu.Type.About, AboutFunc)
+    MenuObj.addEvent(Menu.Type.Exit, ExitFunc)
 
     LoginFunc()
 
     exit_code = Appctxt.app.exec_()
-    sys.exit(exit_code)
+    sys.exit(Appctxt.app.exec_())

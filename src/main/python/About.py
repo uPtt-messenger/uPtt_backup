@@ -10,11 +10,10 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtGui import *
 
 import Ver
-import Config
 
 
 class Ui(object):
-    def setupUi(self, Dialog):
+    def setupUi(self, Dialog, ConfigObj):
         Dialog.setObjectName("Dialog")
         Dialog.resize(590, 340)
         Dialog.setMinimumSize(QtCore.QSize(590, 340))
@@ -43,7 +42,8 @@ class Ui(object):
         self.SourceCode.setTextFormat(QtCore.Qt.AutoText)
         self.SourceCode.setObjectName("SourceCode")
         self.verticalLayout.addWidget(self.SourceCode)
-        spacerItem = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
+        spacerItem = QtWidgets.QSpacerItem(
+            20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
         self.verticalLayout.addItem(spacerItem)
         self.IfhasQuestion = QtWidgets.QLabel(self.verticalLayoutWidget)
         self.IfhasQuestion.setObjectName("IfhasQuestion")
@@ -57,7 +57,8 @@ class Ui(object):
         self.Issue.setTextFormat(QtCore.Qt.AutoText)
         self.Issue.setObjectName("Issue")
         self.horizontalLayout.addWidget(self.Issue)
-        spacerItem1 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        spacerItem1 = QtWidgets.QSpacerItem(
+            40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
         self.horizontalLayout.addItem(spacerItem1)
         self.TwoQuestion = QtWidgets.QLabel(self.verticalLayoutWidget)
         self.TwoQuestion.setObjectName("TwoQuestion")
@@ -70,76 +71,75 @@ class Ui(object):
         self.IconDisplay.setGeometry(QtCore.QRect(20, 20, 300, 300))
         self.IconDisplay.setObjectName("IconDisplay")
 
-        self.retranslateUi(Dialog)
+        self.retranslateUi(Dialog, ConfigObj)
         self.buttonBox.accepted.connect(Dialog.accept)
         self.buttonBox.rejected.connect(Dialog.reject)
         QtCore.QMetaObject.connectSlotsByName(Dialog)
 
-    def retranslateUi(self, Dialog):
+    def retranslateUi(self, Dialog, ConfigObj):
         _translate = QtCore.QCoreApplication.translate
-        Dialog.setWindowIcon(QIcon(Config.SmallImage))
+        Dialog.setWindowIcon(ConfigObj.Icon_SmallImage)
         Dialog.setWindowTitle(_translate("Dialog", " 關於 PTT Postman"))
         Dialog.setWindowFlags(QtCore.Qt.WindowStaysOnTopHint)
 
         self.Name.setText(_translate("Dialog", "PTT Postman"))
-        self.Name.setFont(Config.TitleFont)
+        self.Name.setFont(ConfigObj.TitleFont)
 
         self.Version.setText(_translate("Dialog", "版本: " + Ver.V))
-        self.Version.setFont(Config.BasicFont)
+        self.Version.setFont(ConfigObj.BasicFont)
 
         self.Developer.setText(_translate(
             "Dialog", "開發: CodingMan"))
-        self.Developer.setFont(Config.BasicFont)
+        self.Developer.setFont(ConfigObj.BasicFont)
 
         self.IfhasQuestion.setText(_translate(
             "Dialog", "如果你有任何問題"))
-        self.IfhasQuestion.setFont(Config.BasicFont)
+        self.IfhasQuestion.setFont(ConfigObj.BasicFont)
 
         self.OneQuestion.setText(_translate(
             "Dialog", "1."))
-        self.OneQuestion.setFont(Config.BasicFont)
+        self.OneQuestion.setFont(ConfigObj.BasicFont)
 
         self.TwoQuestion.setText(_translate(
             "Dialog", "2."))
-        self.TwoQuestion.setFont(Config.BasicFont)
+        self.TwoQuestion.setFont(ConfigObj.BasicFont)
 
         self.Issue.setText(_translate(
             "Dialog", "<a href=\"https://github.com/Truth0906/PTTPostman/issues/new\">填寫問題單</a>"))
         self.Issue.setOpenExternalLinks(True)
-        self.Issue.setFont(Config.BasicFont)
+        self.Issue.setFont(ConfigObj.BasicFont)
 
         self.Gitter.setText(_translate(
             "Dialog", "<a href=\"https://gitter.im/PTTPostman/TalkingRoom\">線上找我</a>"))
         self.Gitter.setOpenExternalLinks(True)
-        self.Gitter.setFont(Config.BasicFont)
+        self.Gitter.setFont(ConfigObj.BasicFont)
 
         self.SourceCode.setText(_translate(
             "Dialog", "<a href=\"https://github.com/Truth0906/PTTPostman\">原始碼</a>"))
         self.SourceCode.setOpenExternalLinks(True)
-        self.SourceCode.setFont(Config.BasicFont)
+        self.SourceCode.setFont(ConfigObj.BasicFont)
 
         self.IconDisplay.setText(_translate("Dialog", "TextLabel"))
 
-        IconImage = QPixmap(Config.OriImage)
-        IconImage = IconImage.scaled(300, 300, QtCore.Qt.KeepAspectRatio)
+        IconImage=QPixmap(ConfigObj.OriImage)
+        IconImage=IconImage.scaled(300, 300, QtCore.Qt.KeepAspectRatio)
         self.IconDisplay.setPixmap(IconImage)
 
 
-def start():
+def start(ConfigObj):
 
-    Dialog = QtWidgets.QDialog()
-    ui = Ui()
-    ui.setupUi(Dialog)
+    Dialog=QtWidgets.QDialog()
+    ui=Ui()
+    ui.setupUi(Dialog, ConfigObj)
     Dialog.show()
     Dialog.exec()
 
 
 if __name__ == "__main__":
     import sys
-    app = QtWidgets.QApplication(sys.argv)
-    Dialog = QtWidgets.QDialog()
-    ui = Ui_Dialog()
+    app=QtWidgets.QApplication(sys.argv)
+    Dialog=QtWidgets.QDialog()
+    ui=Ui_Dialog()
     ui.setupUi(Dialog)
     Dialog.show()
     sys.exit(app.exec_())
-
