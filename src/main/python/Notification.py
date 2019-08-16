@@ -3,11 +3,15 @@ from PyQt5.QtGui import *
 import Config
 
 
-def throw(SystemTray, Title, Message):
+class Notification(object):
+    def __init__(self, SystemTray):
+        self._SysTray = SystemTray
 
-    SystemTray.showMessage(
-        Title,
-        Message,
-        QIcon(Config.SmallImage),
-        3000
-    )
+    def throw(self, Title, Message):
+
+        self._SysTray.showMessage(
+            Title,
+            Message,
+            QIcon(Config.SmallImage),
+            3000
+        )

@@ -21,9 +21,9 @@ class Config(object):
         global SmallImage
         global SmallIcon
 
-        OriImage = Appctxt.get_resource('OriginIcon.png')
-        SmallImage = Appctxt.get_resource('Small.png')
-        SmallIcon = Appctxt.get_resource('Small.ico')
+        OriImage = Appctxt.get_resource('BallChat.png')
+        SmallImage = Appctxt.get_resource('Icon.png')
+        SmallIcon = Appctxt.get_resource('Icon.ico')
 
         self.ConfigFileName = 'PTTPostman.txt'
         self.ConfigPath = None

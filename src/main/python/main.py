@@ -23,27 +23,6 @@ LoginStatus = False
 PTTBot = None
 SystemTray = None
 
-Menu_Login = None
-Menu_Logout = None
-
-ThreadRun = False
-ConfigObj = None
-
-
-def genMenu():
-
-    global LoginStatus
-    global Menu_Logout
-    global Menu_Login
-    global SystemTray
-
-    if LoginStatus:
-        print('Menu_Login is None: ' + str(Menu_Login is None))
-        SystemTray.setContextMenu(Menu_Login)
-    else:
-        print('Menu_Logout is None: ' + str(Menu_Logout is None))
-        SystemTray.setContextMenu(Menu_Logout)
-
 
 def checkMailFunc(ID, PW):
     global PTTBot
@@ -178,32 +157,6 @@ if __name__ == '__main__':
     SystemTray.setVisible(True)
     SystemTray.setToolTip('PTT Postman')
 
-    Menu_Login = QMenu()
-    Menu_Logout = QMenu()
-
-    action_Login = QAction('登入')
-    action_Login.triggered.connect(LoginFunc)
-
-    action_Logout = QAction('登出')
-    action_Logout.triggered.connect(LogoutFunc)
-
-    action_About = QAction('關於')
-    action_About.triggered.connect(AboutFunc)
-
-    action_Exit = QAction('離開')
-    action_Exit.triggered.connect(ExitFunc)
-
-    Menu_Login.addAction(action_Logout)
-    Menu_Login.addAction(action_About)
-    Menu_Login.addSeparator()
-    Menu_Login.addAction(action_Exit)
-
-    Menu_Logout.addAction(action_Login)
-    Menu_Logout.addAction(action_About)
-    Menu_Logout.addSeparator()
-    Menu_Logout.addAction(action_Exit)
-
-    genMenu()
     LoginFunc()
 
     exit_code = Appctxt.app.exec_()
