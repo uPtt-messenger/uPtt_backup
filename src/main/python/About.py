@@ -121,15 +121,15 @@ class Ui(object):
 
         self.IconDisplay.setText(_translate("Dialog", "TextLabel"))
 
-        IconImage=QPixmap(ConfigObj.OriImage)
-        IconImage=IconImage.scaled(300, 300, QtCore.Qt.KeepAspectRatio)
+        IconImage = QPixmap(ConfigObj.Icon_OriImage)
+        IconImage = IconImage.scaled(300, 300, QtCore.Qt.KeepAspectRatio)
         self.IconDisplay.setPixmap(IconImage)
 
 
 def start(ConfigObj):
 
-    Dialog=QtWidgets.QDialog()
-    ui=Ui()
+    Dialog = QtWidgets.QDialog()
+    ui = Ui()
     ui.setupUi(Dialog, ConfigObj)
     Dialog.show()
     Dialog.exec()
@@ -137,9 +137,9 @@ def start(ConfigObj):
 
 if __name__ == "__main__":
     import sys
-    app=QtWidgets.QApplication(sys.argv)
-    Dialog=QtWidgets.QDialog()
-    ui=Ui_Dialog()
+    app = QtWidgets.QApplication(sys.argv)
+    Dialog = QtWidgets.QDialog()
+    ui = Ui_Dialog()
     ui.setupUi(Dialog)
     Dialog.show()
     sys.exit(app.exec_())

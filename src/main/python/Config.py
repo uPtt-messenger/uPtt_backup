@@ -13,7 +13,8 @@ class Config(object):
         self.TitleFont = QtGui.QFont('微軟正黑體', 14, QtGui.QFont.Bold)
         self.BasicFont = QtGui.QFont('微軟正黑體', 14, QtGui.QFont.Bold)
 
-        self.Icon_OriImage = QtGui.QIcon(Appctxt.get_resource('OriginIcon.png'))
+        self.Icon_OriImage = QtGui.QPixmap(
+            Appctxt.get_resource('OriginIcon.png'))
         self.Icon_SmallImage = QtGui.QIcon(Appctxt.get_resource('Small.png'))
         self.Icon_SmallIcon = QtGui.QIcon(Appctxt.get_resource('Icon.ico'))
 
@@ -33,7 +34,8 @@ class Config(object):
         try:
             with open(self.ConfigFullPath, encoding='utf8') as File:
                 self.Data = json.load(File)
-        except Exception as e:
+        # except Exception as e:
+        except:
             pass
 
     def getValue(self, Key):

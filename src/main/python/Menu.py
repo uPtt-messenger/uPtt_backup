@@ -1,6 +1,6 @@
 
-from PyQt5.QtGui import *
-from PyQt5.QtWidgets import *
+from PyQt5 import QtGui
+from PyQt5 import QtWidgets
 
 
 class Type(object):
@@ -18,19 +18,19 @@ class Menu(object):
 
         self._SysTray = SystemTray
 
-        self._Menu_Login = QMenu()
-        self._Menu_Logout = QMenu()
+        self._Menu_Login = QtWidgets.QMenu()
+        self._Menu_Logout = QtWidgets.QMenu()
 
-        self._action_Login = QAction('登入')
+        self._action_Login = QtWidgets.QAction('登入')
         self._action_Login.triggered.connect(self._LoginFunc)
 
-        self._action_Logout = QAction('登出')
+        self._action_Logout = QtWidgets.QAction('登出')
         self._action_Logout.triggered.connect(self._LogoutFunc)
 
-        self._action_About = QAction('關於')
+        self._action_About = QtWidgets.QAction('關於')
         self._action_About.triggered.connect(self._AboutFunc)
 
-        self._action_Exit = QAction('離開')
+        self._action_Exit = QtWidgets. QAction('離開')
         self._action_Exit.triggered.connect(self._ExitFunc)
 
         self._Menu_Login.addAction(self._action_Login)
