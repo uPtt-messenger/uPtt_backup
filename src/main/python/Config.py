@@ -2,28 +2,21 @@
 import os
 import json
 from PyQt5 import QtCore, QtGui
-
-TitleFont = QtGui.QFont('微軟正黑體', 14, QtGui.QFont.Bold)
-BasicFont = QtGui.QFont('微軟正黑體', 14, QtGui.QFont.Bold)
-
-OriImage = None
-SmallImage = None
-SmallIcon = None
-
-Key_ID = 'ID'
+from PyQt5.QtGui import *
 
 
 class Config(object):
-
     def __init__(self, Appctxt):
 
-        global OriImage
-        global SmallImage
-        global SmallIcon
+        self.Key_ID = 'ID'
 
-        OriImage = Appctxt.get_resource('BallChat.png')
-        SmallImage = Appctxt.get_resource('Icon.png')
-        SmallIcon = Appctxt.get_resource('Icon.ico')
+        self.TitleFont = QtGui.QFont('微軟正黑體', 14, QtGui.QFont.Bold)
+        self.BasicFont = QtGui.QFont('微軟正黑體', 14, QtGui.QFont.Bold)
+
+        self.Icon_OriImage = QtGui.QPixmap(
+            Appctxt.get_resource('OriginIcon.png'))
+        self.Icon_SmallImage = QtGui.QIcon(Appctxt.get_resource('Small.png'))
+        self.Icon_SmallIcon = QtGui.QIcon(Appctxt.get_resource('Icon.ico'))
 
         self.ConfigFileName = 'PTTPostman.txt'
         self.ConfigPath = None
@@ -41,7 +34,8 @@ class Config(object):
         try:
             with open(self.ConfigFullPath, encoding='utf8') as File:
                 self.Data = json.load(File)
-        except Exception as e:
+        # except Exception as e:
+        except:
             pass
 
     def getValue(self, Key):

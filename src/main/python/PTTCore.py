@@ -16,6 +16,7 @@ class Core(object):
         self._PW = PW
 
         self._ThreadRun = True
+        self._LoginStatus = False
 
         self._PTTBot = PTT.Library()
 
@@ -32,7 +33,7 @@ class Core(object):
                 else:
                     self._Notification.throw('PTT Postman', '登入失敗')
                 self._PTTBot = None
-                LoginStatus = False
+                self._LoginStatus = False
                 return
 
             if Recover:
@@ -43,7 +44,7 @@ class Core(object):
                 self._Notification.throw('PTT Postman', '登入成功')
 
             Recover = False
-            LoginStatus = True
+            self._LoginStatus = True
 
             ShowNewMail = False
             try:

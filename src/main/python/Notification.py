@@ -1,17 +1,17 @@
 
 from PyQt5.QtGui import *
-import Config
 
 
 class Notification(object):
-    def __init__(self, SystemTray):
+    def __init__(self, SystemTray, ConfigObj):
         self._SysTray = SystemTray
+        self._ConfigObj = ConfigObj
 
     def throw(self, Title, Message):
 
         self._SysTray.showMessage(
             Title,
             Message,
-            QIcon(Config.SmallImage),
+            self._ConfigObj.Icon_SmallIcon,
             3000
         )
