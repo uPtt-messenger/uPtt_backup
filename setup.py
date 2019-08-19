@@ -34,7 +34,7 @@ setup(
     # There are some restrictions on what makes a valid project name
     # specification here:
     # https://packaging.python.org/specifications/core-metadata/#name
-    name='PTTPostman',  # Required
+    name='uPTT',  # Required
 
     # Versions should comply with PEP 440:
     # https://www.python.org/dev/peps/pep-0440/
@@ -47,7 +47,7 @@ setup(
     # This is a one-line description or tagline of what your project does. This
     # corresponds to the "Summary" metadata field:
     # https://packaging.python.org/specifications/core-metadata/#summary
-    description='PTT Postman',  # Required
+    description='uPTT',  # Required
 
     # This is an optional longer description of your project that represents
     # the body of text which users will see when they visit PyPI.
@@ -63,7 +63,7 @@ setup(
     #
     # This field corresponds to the "Home-Page" metadata field:
     # https://packaging.python.org/specifications/core-metadata/#home-page-optional
-    url='https://github.com/Truth0906/PTTPostman',  # Optional
+    # url='https://github.com/Truth0906/PTTPostman',  # Optional
 
     # This should be your name or the name of the organization which owns the
     # project.
@@ -93,7 +93,7 @@ setup(
         'Topic :: Communications :: BBS',
         # 'Topic :: Software Development :: Libraries :: Python Modules',
         'Topic :: Internet',
-        'Topic :: Terminals :: Telnet',
+        # 'Topic :: Terminals :: Telnet',
         # Pick your license as you wish
         'License :: OSI Approved :: GNU General Public License v3 (GPLv3)',
 
