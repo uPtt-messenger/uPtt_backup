@@ -24,5 +24,6 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 
 FORMS += \
     about.ui \
+    chatwindow.ui \
     login.ui \
     newmail.ui
