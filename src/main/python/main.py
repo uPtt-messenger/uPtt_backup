@@ -20,7 +20,7 @@ import Login
 import Notification
 import NewMail
 import Menu
-
+import ChatWindow
 
 def checkMailFunc(ID, PW):
     global PTTBot
@@ -155,7 +155,9 @@ if __name__ == '__main__':
     MenuObj.addEvent(Menu.Type.About, AboutFunc)
     MenuObj.addEvent(Menu.Type.Exit, ExitFunc)
 
-    LoginFunc()
+    ChatWindow.start(ConfigObj)
+    # LoginFunc()
+    ExitFunc()
 
     exit_code = Appctxt.app.exec_()
     sys.exit(Appctxt.app.exec_())
