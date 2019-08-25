@@ -50,15 +50,29 @@ class Ui_Dialog(object):
         _translate = QtCore.QCoreApplication.translate
         Dialog.setWindowTitle(_translate("Dialog", Target))
 
-        inner = QtWidgets.QFrame(self.scrollArea)
-        inner.setLayout(QtWidgets.QVBoxLayout())
+        self.SAObj = QtWidgets.QWidget(self.scrollArea)
+        self.SAObj.setLayout(QtWidgets.QVBoxLayout())
 
-        self.scrollArea.setWidget(inner)
+        self.scrollArea.setWidget(self.SAObj)
 
-        for i in range(40):
-            b = QtWidgets.QLabel(inner)
-            b.setText(str(i))
-            inner.layout().addWidget(b)
+        for _ in range(40):
+            H = QtWidgets.QHBoxLayout()
+            
+            Name = QtWidgets.QLabel()
+            Name.setText(f'★{Target}')
+
+            Content = QtWidgets.QLabel()
+            Content.setText(f'測試水球')
+
+            SI = QtWidgets.QSpacerItem(150, 10, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
+
+            H.addWidget(Name)
+            H.addWidget(Content)
+            H.addSpacerItem(SI)
+
+            # self.SAObj.layout().addWidget(b)
+            # ★
+            self.SAObj.layout().addLayout(H)
 
 
 def start(ConfigObj, Target):
