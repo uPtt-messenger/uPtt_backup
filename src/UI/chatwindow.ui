@@ -6,18 +6,42 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>508</width>
-    <height>382</height>
+    <width>300</width>
+    <height>500</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Dialog</string>
   </property>
   <layout class="QGridLayout" name="gridLayout">
+   <property name="leftMargin">
+    <number>0</number>
+   </property>
+   <property name="topMargin">
+    <number>0</number>
+   </property>
+   <property name="rightMargin">
+    <number>0</number>
+   </property>
+   <property name="bottomMargin">
+    <number>0</number>
+   </property>
    <item row="0" column="0">
     <layout class="QVBoxLayout" name="verticalLayout">
      <item>
       <widget class="QScrollArea" name="scrollArea">
+       <property name="enabled">
+        <bool>true</bool>
+       </property>
+       <property name="frameShape">
+        <enum>QFrame::NoFrame</enum>
+       </property>
+       <property name="lineWidth">
+        <number>0</number>
+       </property>
+       <property name="horizontalScrollBarPolicy">
+        <enum>Qt::ScrollBarAlwaysOff</enum>
+       </property>
        <property name="widgetResizable">
         <bool>true</bool>
        </property>
@@ -26,9 +50,15 @@
          <rect>
           <x>0</x>
           <y>0</y>
-          <width>486</width>
-          <height>329</height>
+          <width>298</width>
+          <height>430</height>
          </rect>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>0</width>
+          <height>0</height>
+         </size>
         </property>
        </widget>
       </widget>
@@ -36,12 +66,21 @@
      <item>
       <layout class="QHBoxLayout" name="horizontalLayout">
        <item>
-        <widget class="QLineEdit" name="lineEdit"/>
-       </item>
-       <item>
-        <widget class="QPushButton" name="pushButton">
-         <property name="text">
-          <string>PushButton</string>
+        <widget class="QLineEdit" name="lineEdit">
+         <property name="minimumSize">
+          <size>
+           <width>0</width>
+           <height>60</height>
+          </size>
+         </property>
+         <property name="frame">
+          <bool>false</bool>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+         </property>
+         <property name="cursorMoveStyle">
+          <enum>Qt::LogicalMoveStyle</enum>
          </property>
         </widget>
        </item>
