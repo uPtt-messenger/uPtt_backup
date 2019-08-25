@@ -5,7 +5,8 @@
 [![Gitter](https://badges.gitter.im/PTTPostman/PTTPostman.svg)](https://gitter.im/PTTPostman/PTTPostman?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
 
 ## uPTT, PTT for you.
-#### 這是一個為了讓你平時使用的 PTT 更強大的程式
+#### 這是一個為了練習多人合作而啟動的專案。
+#### 軟體工程師的下班樂趣，往往就是這麼樸實無華，且枯燥。
 #### 原始碼
 #### github: https://github.com/Truth0906/PTTLibrary
 
