@@ -55,20 +55,29 @@ class Ui_Dialog(object):
 
         self.scrollArea.setWidget(self.SAObj)
 
-        for _ in range(40):
+        for i in range(40):
             H = QtWidgets.QHBoxLayout()
-            
+            H.setSpacing(0)
+
             Name = QtWidgets.QLabel()
-            Name.setText(f'★{Target}')
+            Name.setText('★')
+            Name.setStyleSheet('QLabel{color:rgb(255, 255, 0, 250);background:rgb(0, 128, 128, 250);}')
 
             Content = QtWidgets.QLabel()
             Content.setText(f'測試水球')
+            Content.setStyleSheet('QLabel{color:rgb(255, 255, 255, 250);background:rgb(128, 0, 128, 250);}')
 
-            SI = QtWidgets.QSpacerItem(150, 10, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
+            SI = QtWidgets.QSpacerItem(0, 0, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
 
-            H.addWidget(Name)
-            H.addWidget(Content)
-            H.addSpacerItem(SI)
+            if i % 2 == 0:
+                H.addWidget(Name)
+                H.addWidget(Content)
+                H.addSpacerItem(SI)
+            else:
+                H.addSpacerItem(SI)
+                H.addWidget(Name)
+                H.addWidget(Content)
+                
 
             # self.SAObj.layout().addWidget(b)
             # ★
