@@ -84,8 +84,12 @@ class Ui_Dialog(object):
             self.SAObj.layout().addLayout(H)
 
 
-def start(ConfigObj, Target):
+def start(ConfigObj, Target=None):
 
+    import InputDialog
+
+    if Target is None:
+        InputDialog.start('請輸入水球對像帳號')
     Dialog = QtWidgets.QDialog()
     ui = Ui_Dialog()
     ui.setupUi(Dialog, Target)

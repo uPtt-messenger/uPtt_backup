@@ -155,7 +155,7 @@ if __name__ == '__main__':
     MenuObj.addEvent(Menu.Type.About, AboutFunc)
     MenuObj.addEvent(Menu.Type.Exit, ExitFunc)
 
-    ChatWindow.start(ConfigObj, 'TestUser')
+    ChatWindow.start(ConfigObj)
     # LoginFunc()
     ExitFunc()
 
