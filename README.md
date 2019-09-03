@@ -21,6 +21,12 @@
 ## 編譯
 #### 參考 [fbs](https://github.com/mherrmann/fbs-tutorial) 的說明文件就可以建立好環境了
 
+## 創始成員
+#### 開發: CodingMan (CodingMan@uptt.cc)
+#### 美術: Doreen (Doreen@uptt.cc)
+#### 行銷文案: Amber (Amber@uptt.cc)
+#### 出張嘴: Rose (Rose@uptt.cc)
+
 ## 贊助
 #### 在這個 github 的小園地，用熱血的心為您打造在 PTT 翱翔的翅膀。
 #### 希望您可以贊助這雙翅膀，讓我們一起飛得更遠，
