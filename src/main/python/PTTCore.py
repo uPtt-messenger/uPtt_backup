@@ -1,16 +1,24 @@
 
 import time
+import threading
 
-import PTTLibrary
 from PTTLibrary import PTT
-
 import Notification
 
 
 class Core(object):
-    def __init__(self, SystemTray, ID, PW):
+    def __init__(
+        self,
+        SystemTray,
+        ConfigObj,
+        ID,
+        PW
+    ):
         self._SysTray = SystemTray
-        self._Notification = Notification.Notification(self._SysTray)
+        self._Notification = Notification.Notification(
+            SystemTray,
+            ConfigObj
+        )
 
         self._ID = ID
         self._PW = PW
@@ -19,6 +27,10 @@ class Core(object):
         self._LoginStatus = False
 
         self._PTTBot = PTT.Library()
+
+    def start(self):
+        Thread = threading.thread(target=self.TrackThread)
+        Thread.start()
 
     def TrackThread(self):
         Recover = False
