@@ -22,6 +22,7 @@ import NewMail
 import Menu
 import ChatWindow
 
+
 def checkMailFunc(ID, PW):
     global PTTBot
     global ThreadRun

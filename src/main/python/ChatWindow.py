@@ -89,7 +89,8 @@ def start(ConfigObj, Target=None):
     import InputDialog
 
     if Target is None:
-        InputDialog.start('請輸入水球對象帳號')
+        TargetID = InputDialog.start('請輸入水球對象帳號')
+        print(f'TargetID [{TargetID}]')
     Dialog = QtWidgets.QDialog()
     ui = Ui_Dialog()
     ui.setupUi(Dialog, Target)

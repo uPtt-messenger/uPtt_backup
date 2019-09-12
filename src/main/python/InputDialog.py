@@ -8,6 +8,9 @@
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 
+Input = None
+
+
 class Ui_Dialog(object):
     def setupUi(self, Dialog, Display):
         Dialog.setObjectName("Dialog")
@@ -45,6 +48,13 @@ class Ui_Dialog(object):
         self.OK.setText(_translate("Dialog", "確認"))
         self.Cancel.setText(_translate("Dialog", "取消"))
 
+        self.InputEdit.textChanged.connect(self.EditChanged)
+    
+    def EditChanged(self, text):
+        # print(f'=>{text}')
+        global Input
+        Input = text
+
 
 def start(Display):
     Dialog = QtWidgets.QDialog()
@@ -52,6 +62,9 @@ def start(Display):
     ui.setupUi(Dialog, Display)
     Dialog.show()
     Dialog.exec()
+
+    global Input
+    return Input
 
 if __name__ == "__main__":
     import sys
