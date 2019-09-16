@@ -47,6 +47,7 @@ def LoginFunc():
     PTTCoreObj = PTTCore.Core(
         SystemTray,
         ConfigObj,
+        MenuObj,
         ID,
         PW
     )
@@ -96,7 +97,7 @@ if __name__ == '__main__':
     SystemTray.setVisible(True)
     SystemTray.setToolTip('uPTT')
 
-    NotificationObj = Notification.Notification(SystemTray, ConfigObj)
+    # NotificationObj = Notification.Notification(SystemTray, ConfigObj)
     MenuObj = Menu.Menu(SystemTray)
     MenuObj.addEvent(Menu.Type.Login, LoginFunc)
     MenuObj.addEvent(Menu.Type.About, AboutFunc)

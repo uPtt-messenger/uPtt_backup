@@ -4,6 +4,7 @@ import threading
 
 from PTTLibrary import PTT
 import Notification
+import Menu
 
 
 class Core(object):
@@ -11,6 +12,7 @@ class Core(object):
         self,
         SystemTray,
         ConfigObj,
+        MenuObj,
         ID,
         PW
     ):
@@ -19,6 +21,7 @@ class Core(object):
             SystemTray,
             ConfigObj
         )
+        self._MenuObj = MenuObj
 
         self._ID = ID
         self._PW = PW
@@ -29,9 +32,12 @@ class Core(object):
     def start(self):
         Thread = threading.Thread(
             target=self.TrackThread,
-            # daemon=True
+            daemon=True
         )
         Thread.start()
+
+    def stop(self):
+        self._ThreadRun = False
 
     def TrackThread(self):
 
@@ -51,6 +57,8 @@ class Core(object):
                 self._PTTBot = None
                 self._LoginStatus = False
                 return
+
+            self._MenuObj.setMenu(Menu.Type.Logout)
 
             if Recover:
                 self._PTTBot.log('重新登入成功')
