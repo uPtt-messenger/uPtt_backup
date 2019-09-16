@@ -26,13 +26,17 @@ class Core(object):
         self._ThreadRun = True
         self._LoginStatus = False
 
-        self._PTTBot = PTT.Library()
-
     def start(self):
-        Thread = threading.thread(target=self.TrackThread)
+        Thread = threading.Thread(
+            target=self.TrackThread,
+            # daemon=True
+        )
         Thread.start()
 
     def TrackThread(self):
+
+        self._PTTBot = PTT.Library()
+
         Recover = False
         while self._ThreadRun:
 

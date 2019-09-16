@@ -51,6 +51,8 @@ def LoginFunc():
         PW
     )
 
+    PTTCoreObj.start()
+
     return True
 
 
@@ -84,6 +86,7 @@ def ExitFunc():
 if __name__ == '__main__':
     Appctxt = ApplicationContext()
     ConfigObj = Config.Config(Appctxt)
+    PTTCoreObj = None
 
     app = QtWidgets.QApplication([])
     app.setQuitOnLastWindowClosed(False)
@@ -102,7 +105,6 @@ if __name__ == '__main__':
     # ChatWindow.start(ConfigObj)
     # LoginFunc()
     # ExitFunc()
-
     LoginFunc()
 
     exit_code = Appctxt.app.exec_()
