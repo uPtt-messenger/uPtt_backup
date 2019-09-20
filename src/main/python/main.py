@@ -78,8 +78,12 @@ def AboutFunc():
 
 
 def ExitFunc():
+    global PTTCoreObj
 
     SystemTray.hide()
+    if PTTCoreObj is not None:
+        PTTCoreObj.stop()
+        time.sleep(3)
     print('Exit')
     sys.exit()
 
@@ -97,16 +101,16 @@ if __name__ == '__main__':
     SystemTray.setVisible(True)
     SystemTray.setToolTip('uPTT')
 
-    # NotificationObj = Notification.Notification(SystemTray, ConfigObj)
+    NotificationObj = Notification.Notification(SystemTray, ConfigObj)
     MenuObj = Menu.Menu(SystemTray)
     MenuObj.addEvent(Menu.Type.Login, LoginFunc)
     MenuObj.addEvent(Menu.Type.About, AboutFunc)
     MenuObj.addEvent(Menu.Type.Exit, ExitFunc)
-
+    MenuObj.setMenu(Menu.Type.Login)
     # ChatWindow.start(ConfigObj)
     # LoginFunc()
     # ExitFunc()
-    LoginFunc()
+    # LoginFunc()
 
     exit_code = Appctxt.app.exec_()
     sys.exit(Appctxt.app.exec_())

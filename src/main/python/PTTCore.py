@@ -51,9 +51,9 @@ class Core(object):
             except PTT.Exceptions.LoginError:
                 self._PTTBot.log('登入失敗')
                 if Recover:
-                    self._Notification.throw('PTT Postman', '重新登入失敗')
+                    self._Notification.throw('uPTT', '重新登入失敗')
                 else:
-                    self._Notification.throw('PTT Postman', '登入失敗')
+                    self._Notification.throw('uPTT', '登入失敗')
                 self._PTTBot = None
                 self._LoginStatus = False
                 return
@@ -62,10 +62,10 @@ class Core(object):
 
             if Recover:
                 self._PTTBot.log('重新登入成功')
-                self._Notification.throw('PTT Postman', '重新登入成功')
+                self._Notification.throw('uPTT', '重新登入成功')
             else:
                 self._PTTBot.log('登入成功')
-                self._Notification.throw('PTT Postman', '登入成功')
+                self._Notification.throw('uPTT', '登入成功')
 
             Recover = False
             self._LoginStatus = True
@@ -78,13 +78,15 @@ class Core(object):
                     if self._PTTBot.hasNewMail():
                         if not ShowNewMail:
                             print('收到新信!!')
-                            self._Notification.throw('PTT Postman', '你有新信件')
-                            self._SysTray.setToolTip('PTT Postman - 你有新信件')
+                            self._Notification.throw('uPTT', '你有新信件')
+                            self._SysTray.setToolTip('uPTT - 你有新信件')
                         ShowNewMail = True
                     else:
-                        self._SysTray.setToolTip('PTT Postman - 無新信件')
+                        self._SysTray.setToolTip('uPTT - 無新信件')
                         ShowNewMail = False
                     time.sleep(2)
+
+                print('登出!')
                 self._PTTBot.logout()
             except:
                 Recover = True
@@ -93,4 +95,4 @@ class Core(object):
                     time.sleep(1)
 
             self._PTTBot = None
-        self._Notification.throw('PTT Postman', '登出成功')
+        self._Notification.throw('uPTT', '登出成功')
