@@ -83,7 +83,7 @@ def ExitFunc():
     SystemTray.hide()
     if PTTCoreObj is not None:
         PTTCoreObj.stop()
-        time.sleep(3)
+        time.sleep(5)
     print('Exit')
     sys.exit()
 
@@ -110,7 +110,7 @@ if __name__ == '__main__':
     # ChatWindow.start(ConfigObj)
     # LoginFunc()
     # ExitFunc()
-    # LoginFunc()
+    LoginFunc()
 
     exit_code = Appctxt.app.exec_()
     sys.exit(Appctxt.app.exec_())
