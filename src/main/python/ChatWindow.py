@@ -22,7 +22,8 @@ class Ui_Dialog(object):
         self.scrollArea.setEnabled(True)
         self.scrollArea.setFrameShape(QtWidgets.QFrame.NoFrame)
         self.scrollArea.setLineWidth(0)
-        self.scrollArea.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
+        self.scrollArea.setHorizontalScrollBarPolicy(
+            QtCore.Qt.ScrollBarAlwaysOff)
         self.scrollArea.setWidgetResizable(True)
         self.scrollArea.setObjectName("scrollArea")
         self.scrollAreaWidgetContents = QtWidgets.QWidget()
@@ -61,13 +62,16 @@ class Ui_Dialog(object):
 
             Name = QtWidgets.QLabel()
             Name.setText('★')
-            Name.setStyleSheet('QLabel{color:rgb(255, 255, 0, 250);background:rgb(0, 128, 128, 250);}')
+            Name.setStyleSheet(
+                'QLabel{color:rgb(255, 255, 0, 250);background:rgb(0, 128, 128, 250);}')
 
             Content = QtWidgets.QLabel()
             Content.setText(f'測試水球')
-            Content.setStyleSheet('QLabel{color:rgb(255, 255, 255, 250);background:rgb(128, 0, 128, 250);}')
+            Content.setStyleSheet(
+                'QLabel{color:rgb(255, 255, 255, 250);background:rgb(128, 0, 128, 250);}')
 
-            SI = QtWidgets.QSpacerItem(0, 0, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+            SI = QtWidgets.QSpacerItem(
+                0, 0, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
 
             if i % 2 == 0:
                 H.addWidget(Name)
@@ -77,7 +81,6 @@ class Ui_Dialog(object):
                 H.addSpacerItem(SI)
                 H.addWidget(Name)
                 H.addWidget(Content)
-                
 
             # self.SAObj.layout().addWidget(b)
             # ★
@@ -86,13 +89,18 @@ class Ui_Dialog(object):
 
 def start(ConfigObj, Target=None):
 
-    import InputDialog
-
     if Target is None:
-        InputDialog.start('請輸入水球對象帳號')
+        import InputDialog
+        OK, TargetID = InputDialog.start('請輸入水球對象帳號')
+        if not OK:
+            return
+        print(f'TargetID [{TargetID}]')
+    else:
+        TargetID = Target    
+
     Dialog = QtWidgets.QDialog()
     ui = Ui_Dialog()
-    ui.setupUi(Dialog, Target)
+    ui.setupUi(Dialog, TargetID)
     Dialog.show()
     Dialog.exec()
 
@@ -105,4 +113,3 @@ if __name__ == "__main__":
     ui.setupUi(Dialog)
     Dialog.show()
     sys.exit(app.exec_())
-

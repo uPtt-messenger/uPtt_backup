@@ -8,6 +8,10 @@
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 
+Input = None
+OK = False
+
+
 class Ui_Dialog(object):
     def setupUi(self, Dialog, Display):
         Dialog.setObjectName("Dialog")
@@ -22,6 +26,7 @@ class Ui_Dialog(object):
         self.verticalLayout.addWidget(self.label)
         self.InputEdit = QtWidgets.QLineEdit(Dialog)
         self.InputEdit.setMinimumSize(QtCore.QSize(20, 30))
+        self.InputEdit.setAlignment(QtCore.Qt.AlignCenter)
         self.InputEdit.setObjectName("InputEdit")
         self.verticalLayout.addWidget(self.InputEdit)
         self.horizontalLayout = QtWidgets.QHBoxLayout()
@@ -45,6 +50,26 @@ class Ui_Dialog(object):
         self.OK.setText(_translate("Dialog", "確認"))
         self.Cancel.setText(_translate("Dialog", "取消"))
 
+        self._Dialog = Dialog
+
+        self.InputEdit.textChanged.connect(self.EditChanged)
+        self.OK.clicked.connect(self.PressOK)
+        self.Cancel.clicked.connect(self.PressCancel)
+
+    def EditChanged(self, text):
+        global Input
+        Input = text
+
+    def PressOK(self):
+        global OK
+        OK = True
+        self._Dialog.close()
+
+    def PressCancel(self):
+        global OK
+        OK = False
+        self._Dialog.close()
+
 
 def start(Display):
     Dialog = QtWidgets.QDialog()
@@ -52,6 +77,11 @@ def start(Display):
     ui.setupUi(Dialog, Display)
     Dialog.show()
     Dialog.exec()
+
+    global Input
+    global OK
+    return OK, Input
+
 
 if __name__ == "__main__":
     import sys
@@ -61,4 +91,3 @@ if __name__ == "__main__":
     ui.setupUi(Dialog)
     Dialog.show()
     sys.exit(app.exec_())
-

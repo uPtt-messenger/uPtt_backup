@@ -10,10 +10,6 @@ from fbs_runtime.application_context.PyQt5 import ApplicationContext
 from PyQt5 import QtGui
 from PyQt5 import QtWidgets
 
-
-import PTTLibrary
-from PTTLibrary import PTT
-
 import Config
 import About
 import Login
@@ -21,69 +17,13 @@ import Notification
 import NewMail
 import Menu
 import ChatWindow
-
-def checkMailFunc(ID, PW):
-    global PTTBot
-    global ThreadRun
-    global LoginStatus
-    global SystemTray
-
-    Recover = False
-    while ThreadRun:
-
-        PTTBot = PTT.Library()
-        try:
-            PTTBot.login(ID, PW)
-        except PTT.Exceptions.LoginError:
-            PTTBot.log('登入失敗')
-            if Recover:
-                Notification.throw(SystemTray, 'PTT Postman', '重新登入失敗')
-            else:
-                Notification.throw(SystemTray, 'PTT Postman', '登入失敗')
-            PTTBot = None
-            LoginStatus = False
-            return
-
-        if Recover:
-            PTTBot.log('重新登入成功')
-            Notification.throw(SystemTray, 'PTT Postman', '重新登入成功')
-        else:
-            PTTBot.log('登入成功')
-            Notification.throw(SystemTray, 'PTT Postman', '登入成功')
-
-        Recover = False
-        LoginStatus = True
-        genMenu()
-
-        ShowNewMail = False
-        try:
-            while ThreadRun:
-                if PTTBot is None:
-                    break
-                if PTTBot.hasNewMail():
-                    if not ShowNewMail:
-                        print('收到新信!!')
-                        Notification.throw(SystemTray, 'PTT Postman', '你有新信件')
-                        SystemTray.setToolTip('PTT Postman - 你有新信件')
-                    ShowNewMail = True
-                else:
-                    SystemTray.setToolTip('PTT Postman - 無新信件')
-                    ShowNewMail = False
-                time.sleep(2)
-            PTTBot.logout()
-        except:
-            Recover = True
-            for s in range(5):
-                print(f'發生錯誤! {5 - s} 秒後啟動恢復機制')
-                time.sleep(1)
-
-        PTTBot = None
-    Notification.throw(SystemTray, 'PTT Postman', '登出成功')
+import PTTCore
 
 
 def LoginFunc():
 
     global MenuObj
+    global PTTCoreObj
 
     ID, PW, SaveID = Login.start(ConfigObj)
 
@@ -104,8 +44,15 @@ def LoginFunc():
     print('ID: ' + ID)
     print('PW: ' + PW)
 
-    # t = threading.Thread(target=checkMailFunc, args=(ID, PW))
-    # t.start()
+    PTTCoreObj = PTTCore.Core(
+        SystemTray,
+        ConfigObj,
+        MenuObj,
+        ID,
+        PW
+    )
+
+    PTTCoreObj.start()
 
     return True
 
@@ -131,8 +78,12 @@ def AboutFunc():
 
 
 def ExitFunc():
+    global PTTCoreObj
 
     SystemTray.hide()
+    if PTTCoreObj is not None:
+        PTTCoreObj.stop()
+        time.sleep(5)
     print('Exit')
     sys.exit()
 
@@ -140,6 +91,7 @@ def ExitFunc():
 if __name__ == '__main__':
     Appctxt = ApplicationContext()
     ConfigObj = Config.Config(Appctxt)
+    PTTCoreObj = None
 
     app = QtWidgets.QApplication([])
     app.setQuitOnLastWindowClosed(False)
@@ -154,10 +106,11 @@ if __name__ == '__main__':
     MenuObj.addEvent(Menu.Type.Login, LoginFunc)
     MenuObj.addEvent(Menu.Type.About, AboutFunc)
     MenuObj.addEvent(Menu.Type.Exit, ExitFunc)
-
-    ChatWindow.start(ConfigObj)
+    MenuObj.setMenu(Menu.Type.Login)
+    # ChatWindow.start(ConfigObj)
     # LoginFunc()
-    ExitFunc()
+    # ExitFunc()
+    LoginFunc()
 
     exit_code = Appctxt.app.exec_()
     sys.exit(Appctxt.app.exec_())
