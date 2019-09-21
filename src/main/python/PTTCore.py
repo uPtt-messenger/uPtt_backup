@@ -52,7 +52,9 @@ class Core(object):
 
                     StartTime = EndTime = time.time()
                     while EndTime - StartTime >= 2:
+                        # 優先操作層
                         if not self._ThreadRun:
+                            self._PTTBot.logout()
                             break
                         time.sleep(0.1)
                         EndTime = time.time()
@@ -66,7 +68,6 @@ class Core(object):
                     else:
                         self._SysTray.setToolTip('PTT Postman - 無新信件')
                         ShowNewMail = False
-                self._PTTBot.logout()
             except:
                 Recover = True
                 for s in range(5):
