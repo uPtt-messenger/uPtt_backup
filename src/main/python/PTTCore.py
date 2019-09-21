@@ -49,8 +49,14 @@ class Core(object):
             ShowNewMail = False
             try:
                 while self._ThreadRun:
-                    if self._PTTBot is None:
-                        break
+
+                    StartTime = EndTime = time.time()
+                    while EndTime - StartTime >= 2:
+                        if not self._ThreadRun:
+                            break
+                        time.sleep(0.1)
+                        EndTime = time.time()
+
                     if self._PTTBot.hasNewMail():
                         if not ShowNewMail:
                             print('收到新信!!')
@@ -60,7 +66,6 @@ class Core(object):
                     else:
                         self._SysTray.setToolTip('PTT Postman - 無新信件')
                         ShowNewMail = False
-                    time.sleep(2)
                 self._PTTBot.logout()
             except:
                 Recover = True
