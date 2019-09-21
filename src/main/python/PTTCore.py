@@ -21,6 +21,7 @@ class Core(object):
             SystemTray,
             ConfigObj
         )
+        self._ConfigObj = ConfigObj
         self._MenuObj = MenuObj
 
         self._ID = ID
@@ -56,6 +57,7 @@ class Core(object):
                     self._Notification.throw('uPTT', '登入失敗')
                 self._PTTBot = None
                 self._LoginStatus = False
+                self._MenuObj.setMenu(Menu.Type.Login)
                 return
 
             self._MenuObj.setMenu(Menu.Type.Logout)
@@ -72,16 +74,28 @@ class Core(object):
 
             ShowNewMail = False
             try:
-                while self._ThreadRun:
+                while True:
 
+                    print('Wait')
                     StartTime = EndTime = time.time()
-                    while EndTime - StartTime >= 2:
+                    while EndTime - StartTime < self._ConfigObj.QueryCycle:
                         # 優先操作層
+                        print(self._ThreadRun)
                         if not self._ThreadRun:
+                            print('Logout')
                             self._PTTBot.logout()
+                            self._PTTBot = None
+                            self._MenuObj.setMenu(Menu.Type.Login)
                             break
+
+                        # 未來實作
+                        # 丟水球
+
                         time.sleep(0.1)
                         EndTime = time.time()
+                    print('Wait out')
+                    if self._PTTBot is None:
+                        break
 
                     if self._PTTBot.hasNewMail():
                         if not ShowNewMail:

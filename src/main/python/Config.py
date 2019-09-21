@@ -30,6 +30,8 @@ class Config(object):
         if not os.path.exists(self.ConfigPath):
             os.makedirs(self.ConfigPath)
 
+        self.QueryCycle = 5
+
         self.Data = dict()
         try:
             with open(self.ConfigFullPath, encoding='utf8') as File:

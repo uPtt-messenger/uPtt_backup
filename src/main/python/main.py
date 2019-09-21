@@ -62,14 +62,8 @@ def LogoutFunc():
     global PTTBot
     global ThreadRun
 
-    LoginStatus = False
-    ThreadRun = False
-
-    while PTTBot is not None:
-        time.sleep(0.2)
-
-    genMenu()
-
+    PTTCoreObj.stop()
+    time.sleep(1)
 
 def AboutFunc():
     About.start(ConfigObj)
@@ -83,7 +77,7 @@ def ExitFunc():
     SystemTray.hide()
     if PTTCoreObj is not None:
         PTTCoreObj.stop()
-        time.sleep(5)
+        time.sleep(1)
     print('Exit')
     sys.exit()
 
