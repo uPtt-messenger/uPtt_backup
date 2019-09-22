@@ -48,6 +48,42 @@ class Ui_Dialog(object):
         QtCore.QMetaObject.connectSlotsByName(Dialog)
 
     def retranslateUi(self, Dialog, Target):
+
+        def sendMsg():
+            import Log
+
+            Msg = self.lineEdit.text()
+            Log.showValue(
+                f'Chat Window with {Target}',
+                Log.Level.INFO,
+                '送出訊息',
+                Msg
+            )
+
+            self.lineEdit.setText('')
+
+            SI = QtWidgets.QSpacerItem(
+                0, 0, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+
+            Name = QtWidgets.QLabel()
+            Name.setText('★')
+            Name.setStyleSheet(
+                'QLabel{color:rgb(255, 255, 0, 250);background:rgb(0, 128, 128, 250);}')
+
+            Content = QtWidgets.QLabel()
+            Content.setText(Msg)
+            Content.setStyleSheet(
+                'QLabel{color:rgb(255, 255, 255, 250);background:rgb(128, 0, 128, 250);}')
+
+            H = QtWidgets.QHBoxLayout()
+            H.setSpacing(0)
+
+            H.addSpacerItem(SI)
+            H.addWidget(Name)
+            H.addWidget(Content)
+
+            self.SAObj.layout().addLayout(H)
+
         _translate = QtCore.QCoreApplication.translate
         Dialog.setWindowTitle(_translate("Dialog", Target))
 
@@ -56,35 +92,35 @@ class Ui_Dialog(object):
 
         self.scrollArea.setWidget(self.SAObj)
 
-        for i in range(40):
-            H = QtWidgets.QHBoxLayout()
-            H.setSpacing(0)
+        self.lineEdit.returnPressed.connect(sendMsg)
 
-            Name = QtWidgets.QLabel()
-            Name.setText('★')
-            Name.setStyleSheet(
-                'QLabel{color:rgb(255, 255, 0, 250);background:rgb(0, 128, 128, 250);}')
+        # for i in range(40):
+        #     H = QtWidgets.QHBoxLayout()
+        #     H.setSpacing(0)
 
-            Content = QtWidgets.QLabel()
-            Content.setText(f'測試水球')
-            Content.setStyleSheet(
-                'QLabel{color:rgb(255, 255, 255, 250);background:rgb(128, 0, 128, 250);}')
+        #     Name = QtWidgets.QLabel()
+        #     Name.setText('★')
+        #     Name.setStyleSheet(
+        #         'QLabel{color:rgb(255, 255, 0, 250);background:rgb(0, 128, 128, 250);}')
 
-            SI = QtWidgets.QSpacerItem(
-                0, 0, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        #     Content = QtWidgets.QLabel()
+        #     Content.setText(f'測試水球')
+        #     Content.setStyleSheet(
+        #         'QLabel{color:rgb(255, 255, 255, 250);background:rgb(128, 0, 128, 250);}')
 
-            if i % 2 == 0:
-                H.addWidget(Name)
-                H.addWidget(Content)
-                H.addSpacerItem(SI)
-            else:
-                H.addSpacerItem(SI)
-                H.addWidget(Name)
-                H.addWidget(Content)
+        #     SI = QtWidgets.QSpacerItem(
+        #         0, 0, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
 
-            # self.SAObj.layout().addWidget(b)
-            # ★
-            self.SAObj.layout().addLayout(H)
+        #     if i % 2 == 0:
+        #         H.addWidget(Name)
+        #         H.addWidget(Content)
+        #         H.addSpacerItem(SI)
+        #     else:
+        #         H.addSpacerItem(SI)
+        #         H.addWidget(Name)
+        #         H.addWidget(Content)
+
+        #     self.SAObj.layout().addLayout(H)
 
 
 def start(ConfigObj, Target=None):
@@ -96,7 +132,7 @@ def start(ConfigObj, Target=None):
             return
         print(f'TargetID [{TargetID}]')
     else:
-        TargetID = Target    
+        TargetID = Target
 
     Dialog = QtWidgets.QDialog()
     ui = Ui_Dialog()

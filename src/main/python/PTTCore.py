@@ -80,17 +80,17 @@ class Core(object):
             try:
                 while True:
 
-                    Log.log(
-                        'PTT Core',
-                        Log.Level.INFO,
-                        '進入等待區'
-                    )
+                    # Log.log(
+                    #     'uPTT Core',
+                    #     Log.Level.INFO,
+                    #     '進入等待區'
+                    # )
                     StartTime = EndTime = time.time()
                     while EndTime - StartTime < self._ConfigObj.QueryCycle:
                         # 優先操作層
                         if not self._ThreadRun:
                             Log.log(
-                                'PTT Core',
+                                'uPTT Core',
                                 Log.Level.INFO,
                                 '登出'
                             )
@@ -105,18 +105,18 @@ class Core(object):
                         time.sleep(0.1)
                         EndTime = time.time()
 
-                    Log.log(
-                        'PTT Core',
-                        Log.Level.INFO,
-                        '等待區結束'
-                    )
+                    # Log.log(
+                    #     'uPTT Core',
+                    #     Log.Level.INFO,
+                    #     '等待區結束'
+                    # )
                     if self._PTTBot is None:
                         break
 
                     if self._PTTBot.hasNewMail():
                         if not ShowNewMail:
                             Log.log(
-                                'PTT Core',
+                                'uPTT Core',
                                 Log.Level.INFO,
                                 '你有新信件'
                             )
@@ -130,7 +130,7 @@ class Core(object):
                 Recover = True
                 for s in range(5):
                     Log.showValue(
-                        'PTT Core',
+                        'uPTT Core',
                         Log.Level.INFO,
                         '啟動恢復機制',
                         5 - s

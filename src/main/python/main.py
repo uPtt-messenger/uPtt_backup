@@ -25,6 +25,7 @@ def LoginFunc():
 
     global MenuObj
     global PTTCoreObj
+    global ID
 
     ID, PW, SaveID = Login.start(ConfigObj)
 
@@ -79,6 +80,13 @@ def LogoutFunc():
     return True
 
 
+def StartChatWindowFunc():
+    global ConfigObj
+    global ID
+    ChatWindow.start(ConfigObj)
+    return True
+
+
 def AboutFunc():
     About.start(ConfigObj)
 
@@ -116,6 +124,7 @@ if __name__ == '__main__':
     MenuObj.addEvent(Menu.Type.Login, LoginFunc)
     MenuObj.addEvent(Menu.Type.Logout, LogoutFunc)
     MenuObj.addEvent(Menu.Type.About, AboutFunc)
+    MenuObj.addEvent(Menu.Type.ThrowWaterBall, StartChatWindowFunc)
     MenuObj.addEvent(Menu.Type.Exit, ExitFunc)
     MenuObj.setMenu(Menu.Type.Login)
     # ChatWindow.start(ConfigObj)
