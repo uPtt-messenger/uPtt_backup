@@ -18,12 +18,12 @@ class Config(object):
         self.Icon_SmallImage = QtGui.QIcon(Appctxt.get_resource('Small.png'))
         self.Icon_SmallIcon = QtGui.QIcon(Appctxt.get_resource('Icon.ico'))
 
-        self.ConfigFileName = 'PTTPostman.txt'
+        self.ConfigFileName = 'Config.txt'
         self.ConfigPath = None
 
         if os.name == 'nt':
             print('Windows')
-            self.ConfigPath = 'C:/ProgramData/PTTPostman/'
+            self.ConfigPath = 'C:/ProgramData/uPTT/'
 
         self.ConfigFullPath = self.ConfigPath + self.ConfigFileName
 

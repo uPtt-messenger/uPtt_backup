@@ -2,6 +2,8 @@
 from PyQt5 import QtGui
 from PyQt5 import QtWidgets
 
+import Log
+
 
 class Type(object):
     Login = 1
@@ -55,10 +57,18 @@ class Menu(object):
             )
 
         if inType == Type.Login:
-            print('載入登入表單')
+            Log.log(
+                'uPTT Menu',
+                Log.Level.INFO,
+                '載入登入表單'
+            )
             self._SysTray.setContextMenu(self._Menu_Login)
         if inType == Type.Logout:
-            print('載入登出表單')
+            Log.log(
+                'uPTT Menu',
+                Log.Level.INFO,
+                '載入登出表單'
+            )
             self._SysTray.setContextMenu(self._Menu_Logout)
 
     def _LoginFunc(self):

@@ -18,6 +18,7 @@ import NewMail
 import Menu
 import ChatWindow
 import PTTCore
+import Log
 
 
 def LoginFunc():
@@ -41,8 +42,18 @@ def LoginFunc():
     else:
         ConfigObj.setValue(ConfigObj.Key_ID, None)
 
-    print('ID: ' + ID)
-    print('PW: ' + PW)
+    Log.showValue(
+        'uPTT Main',
+        Log.Level.INFO,
+        '帳號',
+        ID
+    )
+    Log.showValue(
+        'uPTT Main',
+        Log.Level.INFO,
+        '密碼',
+        PW
+    )
 
     PTTCoreObj = PTTCore.Core(
         SystemTray,
@@ -58,12 +69,15 @@ def LoginFunc():
 
 
 def LogoutFunc():
-    global LoginStatus
-    global PTTBot
-    global ThreadRun
+    global PTTCoreObj
+    if PTTCoreObj is not None:
+        if not PTTCoreObj.isStop():
+            PTTCoreObj.stop()
+            while not PTTCoreObj.isStop():
+                time.sleep(0.1)
 
-    PTTCoreObj.stop()
-    time.sleep(1)
+    return True
+
 
 def AboutFunc():
     About.start(ConfigObj)
@@ -72,13 +86,15 @@ def AboutFunc():
 
 
 def ExitFunc():
-    global PTTCoreObj
+    global SystemTray
 
     SystemTray.hide()
-    if PTTCoreObj is not None:
-        PTTCoreObj.stop()
-        time.sleep(1)
-    print('Exit')
+    LogoutFunc()
+    Log.log(
+        'uPTT Main',
+        Log.Level.INFO,
+        '離開程式'
+    )
     sys.exit()
 
 
@@ -98,6 +114,7 @@ if __name__ == '__main__':
     NotificationObj = Notification.Notification(SystemTray, ConfigObj)
     MenuObj = Menu.Menu(SystemTray)
     MenuObj.addEvent(Menu.Type.Login, LoginFunc)
+    MenuObj.addEvent(Menu.Type.Logout, LogoutFunc)
     MenuObj.addEvent(Menu.Type.About, AboutFunc)
     MenuObj.addEvent(Menu.Type.Exit, ExitFunc)
     MenuObj.setMenu(Menu.Type.Login)
