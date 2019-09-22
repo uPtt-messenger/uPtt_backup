@@ -87,9 +87,16 @@ class Ui_Dialog(object):
         _translate = QtCore.QCoreApplication.translate
         Dialog.setWindowTitle(_translate("Dialog", Target))
 
-        self.SAObj = QtWidgets.QWidget(self.scrollArea)
-        self.SAObj.setLayout(QtWidgets.QVBoxLayout())
+        self.scrollArea.setAutoFillBackground(True)
+        bar = self.scrollArea.verticalScrollBar()
+        bar.rangeChanged.connect(lambda x, y: bar.setValue(y))
 
+        self.SAObj = QtWidgets.QWidget()
+
+        VBOX = QtWidgets.QVBoxLayout()
+        VBOX.addStretch()
+
+        self.SAObj.setLayout(VBOX)
         self.scrollArea.setWidget(self.SAObj)
 
         self.lineEdit.returnPressed.connect(sendMsg)
