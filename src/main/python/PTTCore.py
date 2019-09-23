@@ -1,6 +1,9 @@
 
 import time
 import threading
+import traceback
+
+from PyQt5.QtCore import QThread
 
 from PTTLibrary import PTT
 import Notification
@@ -8,7 +11,7 @@ import Menu
 import Log
 
 
-class Core(object):
+class Core(QThread):
     def __init__(
         self,
         SystemTray,
@@ -74,12 +77,10 @@ class Core(object):
         return self._ErrorMsg
 
     def TrackThread(self):
-
-        self._PTTBot = PTT.Library()
-
         Recover = False
         while self._ThreadRun:
 
+            self._PTTBot = PTT.Library()
             try:
                 self._PTTBot.login(self._ID, self._PW)
             except PTT.Exceptions.LoginError:
@@ -163,6 +164,7 @@ class Core(object):
                                     self._Target,
                                     self._Content
                                 )
+                                self._PTTBot.setCallStatus(PTT.CallStatus.Off)
                             except PTT.Exceptions.NoSuchUser:
                                 self._ErrorMsg = f'無此使用者: {self._UserName}'
                             except PTT.Exceptions.UserOffline:
@@ -194,7 +196,26 @@ class Core(object):
                     else:
                         self._SysTray.setToolTip('uPTT - 無新信件')
                         ShowNewMail = False
-            except:
+
+                    WaterBallList = self._PTTBot.getWaterBall(
+                        PTT.WaterBallOperateType.Clear
+                    )
+
+                    if WaterBallList is not None:
+                        for WaterBall in WaterBallList:
+
+                            if not WaterBall.getType() == PTT.WaterBallType.Catch:
+                                continue
+
+                            Target = WaterBall.getTarget()
+                            Content = WaterBall.getContent()
+                            print(f'來自 {Target} 的水球 [{Content}]')
+
+                            print('=' * 30)
+            except Exception as e:
+
+                traceback.print_tb(e.__traceback__)
+                print(e)
                 Recover = True
                 for s in range(5):
                     Log.showValue(
@@ -204,6 +225,8 @@ class Core(object):
                         5 - s
                     )
                     time.sleep(1)
-
-            self._PTTBot = None
+            
+            if self._PTTBot is not None:
+                self._PTTBot.logout()
+                self._PTTBot = None
         self._Notification.throw('uPTT', '登出成功')

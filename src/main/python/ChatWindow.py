@@ -62,7 +62,7 @@ class Ui_Dialog(object):
             )
 
             self.lineEdit.setText('')
-            
+
             ErrorMsg = PTTCoreObj.throwWaterBall(Target, Msg)
 
             if ErrorMsg is not None:
@@ -70,7 +70,11 @@ class Ui_Dialog(object):
                 return
 
             SI = QtWidgets.QSpacerItem(
-                0, 0, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+                0,
+                0,
+                QtWidgets.QSizePolicy.Expanding,
+                QtWidgets.QSizePolicy.Minimum
+            )
 
             Name = QtWidgets.QLabel()
             Name.setText('★')
@@ -156,9 +160,9 @@ def start(SystemTray, ConfigObj, PTTCoreObj, Target=None):
         if ErrorMsg is not None:
             NotifiObj.throw('uPTT', ErrorMsg)
             return
-        
+
         TargetID = User.getID()
-        
+
         if '不在站上' in User.getState():
             NotifiObj.throw('uPTT', f'{TargetID} 不在站上')
             return

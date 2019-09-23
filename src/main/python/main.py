@@ -7,6 +7,8 @@ import json
 import traceback
 
 from fbs_runtime.application_context.PyQt5 import ApplicationContext
+
+from PyQt5 import QtCore
 from PyQt5 import QtGui
 from PyQt5 import QtWidgets
 
@@ -19,6 +21,11 @@ import Menu
 import ChatWindow
 import PTTCore
 import Log
+
+
+def CatchWaterBall():
+
+    print('收到水球兒')
 
 
 def LoginFunc():
@@ -135,6 +142,8 @@ if __name__ == '__main__':
     # LoginFunc()
     # ExitFunc()
     LoginFunc()
+
+    Appctxt.connect(PTTCoreObj, SIGNAL("收到水球()"), CatchWaterBall)
 
     exit_code = Appctxt.app.exec_()
     sys.exit(Appctxt.app.exec_())
