@@ -10,7 +10,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 
 
 class Ui_Dialog(object):
-    def setupUi(self, Dialog, Target):
+    def setupUi(self, Dialog, PTTCoreObj, Target):
         Dialog.setObjectName("Dialog")
         Dialog.resize(300, 500)
         self.gridLayout = QtWidgets.QGridLayout(Dialog)
@@ -44,13 +44,14 @@ class Ui_Dialog(object):
         self.verticalLayout.addLayout(self.horizontalLayout)
         self.gridLayout.addLayout(self.verticalLayout, 0, 0, 1, 1)
 
-        self.retranslateUi(Dialog, Target)
+        self.retranslateUi(Dialog, PTTCoreObj, Target)
         QtCore.QMetaObject.connectSlotsByName(Dialog)
 
-    def retranslateUi(self, Dialog, Target):
+    def retranslateUi(self, Dialog, PTTCoreObj, Target):
 
         def sendMsg():
             import Log
+            global NotifiObj
 
             Msg = self.lineEdit.text()
             Log.showValue(
@@ -61,6 +62,12 @@ class Ui_Dialog(object):
             )
 
             self.lineEdit.setText('')
+            
+            ErrorMsg = PTTCoreObj.throwWaterBall(Target, Msg)
+
+            if ErrorMsg is not None:
+                NotifiObj.throw('uPTT', ErrorMsg)
+                return
 
             SI = QtWidgets.QSpacerItem(
                 0, 0, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
@@ -130,20 +137,41 @@ class Ui_Dialog(object):
         #     self.SAObj.layout().addLayout(H)
 
 
-def start(ConfigObj, Target=None):
+def start(SystemTray, ConfigObj, PTTCoreObj, Target=None):
+    import Notification
+    global NotifiObj
+    NotifiObj = Notification.Notification(
+        SystemTray,
+        ConfigObj
+    )
 
     if Target is None:
         import InputDialog
         OK, TargetID = InputDialog.start('請輸入水球對象帳號')
         if not OK:
             return
+
+        ErrorMsg, User = PTTCoreObj.getUser(TargetID)
+
+        if ErrorMsg is not None:
+            NotifiObj.throw('uPTT', ErrorMsg)
+            return
+        
+        TargetID = User.getID()
+        
+        if '不在站上' in User.getState():
+            NotifiObj.throw('uPTT', f'{TargetID} 不在站上')
+            return
+
+        TargetID = TargetID[:TargetID.find('(')].strip()
+
         print(f'TargetID [{TargetID}]')
     else:
         TargetID = Target
 
     Dialog = QtWidgets.QDialog()
     ui = Ui_Dialog()
-    ui.setupUi(Dialog, TargetID)
+    ui.setupUi(Dialog, PTTCoreObj, TargetID)
     Dialog.show()
     Dialog.exec()
 

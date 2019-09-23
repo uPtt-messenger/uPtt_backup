@@ -31,6 +31,9 @@ class Core(object):
         self._ThreadRun = True
         self._LoginStatus = False
 
+        self._getUser = False
+        self._throwWaterBall = False
+
     def start(self):
         Thread = threading.Thread(
             target=self.TrackThread,
@@ -43,6 +46,32 @@ class Core(object):
 
     def isStop(self):
         return self._PTTBot is None
+
+    def getUser(self, Name):
+
+        self._result = None
+        self._UserName = Name
+
+        self._ErrorMsg = None
+        self._getUser = True
+
+        while self._getUser:
+            time.sleep(0.1)
+
+        return self._ErrorMsg, self._result
+
+    def throwWaterBall(self, Target, Content):
+
+        self._Target = Target
+        self._Content = Content
+
+        self._ErrorMsg = None
+        self._throwWaterBall = True
+
+        while self._throwWaterBall:
+            time.sleep(0.1)
+
+        return self._ErrorMsg
 
     def TrackThread(self):
 
@@ -99,8 +128,47 @@ class Core(object):
                             self._PTTBot = None
                             break
 
-                        # 未來實作
-                        # 丟水球
+                        if self._getUser:
+                            Log.showValue(
+                                'uPTT Core',
+                                Log.Level.INFO,
+                                '查詢使用者',
+                                self._UserName
+                            )
+                            try:
+                                self._result = self._PTTBot.getUser(
+                                    self._UserName
+                                )
+                            except PTT.Exceptions.NoSuchUser:
+                                self._ErrorMsg = f'無此使用者: {self._UserName}'
+
+                            self._getUser = False
+
+                        if self._throwWaterBall:
+                            Log.showValue(
+                                'uPTT Core',
+                                Log.Level.INFO,
+                                '丟水球給',
+                                self._Target
+                            )
+                            Log.showValue(
+                                'uPTT Core',
+                                Log.Level.INFO,
+                                '水球內容',
+                                self._Content
+                            )
+
+                            try:
+                                self._PTTBot.throwWaterBall(
+                                    self._Target,
+                                    self._Content
+                                )
+                            except PTT.Exceptions.NoSuchUser:
+                                self._ErrorMsg = f'無此使用者: {self._UserName}'
+                            except PTT.Exceptions.UserOffline:
+                                self._ErrorMsg = f'使用者離線: {self._UserName}'
+
+                            self._throwWaterBall = False
 
                         time.sleep(0.1)
                         EndTime = time.time()

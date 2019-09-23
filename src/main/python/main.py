@@ -30,11 +30,11 @@ def LoginFunc():
     ID, PW, SaveID = Login.start(ConfigObj)
 
     if ID is None or PW is None:
-        NotificationObj.throw('PTT Postman', '登入取消')
+        NotifiObj.throw('uPTT', '登入取消')
         MenuObj.setMenu(Menu.Type.Login)
         return True
     if len(ID) < 3 or len(PW) == 0:
-        NotificationObj.throw('PTT Postman', '登入取消')
+        NotifiObj.throw('uPTT', '登入取消')
         MenuObj.setMenu(Menu.Type.Login)
         return True
 
@@ -81,9 +81,10 @@ def LogoutFunc():
 
 
 def StartChatWindowFunc():
+    global SystemTray
     global ConfigObj
-    global ID
-    ChatWindow.start(ConfigObj)
+    global PTTCoreObj
+    ChatWindow.start(SystemTray, ConfigObj, PTTCoreObj)
     return True
 
 
@@ -103,6 +104,7 @@ def ExitFunc():
         Log.Level.INFO,
         '離開程式'
     )
+    NotifiObj.throw('uPTT', '程式結束')
     sys.exit()
 
 
@@ -119,7 +121,7 @@ if __name__ == '__main__':
     SystemTray.setVisible(True)
     SystemTray.setToolTip('uPTT')
 
-    NotificationObj = Notification.Notification(SystemTray, ConfigObj)
+    NotifiObj = Notification.Notification(SystemTray, ConfigObj)
     MenuObj = Menu.Menu(SystemTray)
     MenuObj.addEvent(Menu.Type.Login, LoginFunc)
     MenuObj.addEvent(Menu.Type.Logout, LogoutFunc)
@@ -127,6 +129,8 @@ if __name__ == '__main__':
     MenuObj.addEvent(Menu.Type.ThrowWaterBall, StartChatWindowFunc)
     MenuObj.addEvent(Menu.Type.Exit, ExitFunc)
     MenuObj.setMenu(Menu.Type.Login)
+
+    NotifiObj.throw('uPTT', '啟動成功')
     # ChatWindow.start(ConfigObj)
     # LoginFunc()
     # ExitFunc()
