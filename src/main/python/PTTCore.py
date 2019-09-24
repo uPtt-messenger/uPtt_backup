@@ -10,11 +10,12 @@ from PTTLibrary import PTT
 import Notification
 import Menu
 import Log
+import ChatWindow
 
 
 class Core(QtCore.QThread):
     Waterball_Signal = QtCore.pyqtSignal(PTT.DataType.WaterBallInfo)
-    
+
     def __init__(
         self,
         SystemTray,
@@ -43,6 +44,7 @@ class Core(QtCore.QThread):
         self._throwWaterBall = False
 
         self.Waterball_Signal.connect(self._CatchWaterBall)
+        self.WaterballList = dict()
 
     def start(self):
         Thread = threading.Thread(
@@ -83,9 +85,29 @@ class Core(QtCore.QThread):
 
         return self._ErrorMsg
 
-    def _CatchWaterBall(self, WaterBall):
+    def registerWaterballList(self, Target, Func):
 
-        print(f'收到水球兒 [{WaterBall.getContent()}]')
+        if Target not in self.WaterballList:
+            self.WaterballList[Target] = Func
+
+    def _CatchWaterBall(self, WaterBall):
+        Target = WaterBall.getTarget()
+
+        print(f'收到水球 [{WaterBall.getContent()}]')
+
+        Dialog = None
+        if Target not in self.WaterballList:
+            Dialog = ChatWindow.start(
+                self._SysTray,
+                self._ConfigObj,
+                self,
+                Target=Target
+            )
+        Func = self.WaterballList[Target]
+        Func(WaterBall)
+
+        if Dialog is not None:
+            Dialog.exec()
 
     def TrackThread(self):
         Recover = False
@@ -244,7 +266,7 @@ class Core(QtCore.QThread):
                         5 - s
                     )
                     time.sleep(1)
-            
+
             if self._PTTBot is not None:
                 self._PTTBot.logout()
                 self._PTTBot = None

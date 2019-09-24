@@ -86,7 +86,8 @@ def StartChatWindowFunc():
     global SystemTray
     global ConfigObj
     global PTTCoreObj
-    ChatWindow.start(SystemTray, ConfigObj, PTTCoreObj)
+    Dialog = ChatWindow.start(SystemTray, ConfigObj, PTTCoreObj)
+    Dialog.exec()
     return True
 
 

@@ -7,6 +7,7 @@
 # WARNING! All changes made in this file will be lost!
 
 from PyQt5 import QtCore, QtGui, QtWidgets
+from PTTLibrary import PTT
 
 
 class Ui_Dialog(object):
@@ -64,7 +65,6 @@ class Ui_Dialog(object):
             self.lineEdit.setText('')
 
             ErrorMsg = PTTCoreObj.throwWaterBall(Target, Msg)
-
             if ErrorMsg is not None:
                 NotifiObj.throw('uPTT', ErrorMsg)
                 return
@@ -93,8 +93,36 @@ class Ui_Dialog(object):
             H.addWidget(Name)
             H.addWidget(Content)
 
-            # self.SAObj.layout().addLayout(H)
-            # insertLayout
+            self.SAObj.layout().insertLayout(self._InsertIndex, H)
+            self._InsertIndex += 1
+        
+        def recvMsg(Waterball):
+            print(f'視窗收到水球 {Waterball.getContent()}')
+
+            SI = QtWidgets.QSpacerItem(
+                0,
+                0,
+                QtWidgets.QSizePolicy.Expanding,
+                QtWidgets.QSizePolicy.Minimum
+            )
+
+            Name = QtWidgets.QLabel()
+            Name.setText('★')
+            Name.setStyleSheet(
+                'QLabel{color:rgb(255, 255, 0, 250);background:rgb(0, 128, 128, 250);}')
+
+            Content = QtWidgets.QLabel()
+            Content.setText(Waterball.getContent())
+            Content.setStyleSheet(
+                'QLabel{color:rgb(255, 255, 255, 250);background:rgb(128, 0, 128, 250);}')
+
+            H = QtWidgets.QHBoxLayout()
+            H.setSpacing(0)
+
+            H.addWidget(Name)
+            H.addWidget(Content)
+            H.addSpacerItem(SI)
+            
             self.SAObj.layout().insertLayout(self._InsertIndex, H)
             self._InsertIndex += 1
 
@@ -116,6 +144,7 @@ class Ui_Dialog(object):
         self.scrollArea.setWidget(self.SAObj)
 
         self.lineEdit.returnPressed.connect(sendMsg)
+        PTTCoreObj.registerWaterballList(Target, recvMsg)
 
         # for i in range(40):
         #     H = QtWidgets.QHBoxLayout()
@@ -160,29 +189,28 @@ def start(SystemTray, ConfigObj, PTTCoreObj, Target=None):
         if not OK:
             return
 
-        ErrorMsg, User = PTTCoreObj.getUser(TargetID)
+        try:
+            ErrorMsg, User = PTTCoreObj.getUser(TargetID)
+        except PTT.Exceptions.NoSuchUser:
+            NotifiObj.throw('uPTT', ErrorMsg)
+            return
 
         if ErrorMsg is not None:
             NotifiObj.throw('uPTT', ErrorMsg)
             return
 
         TargetID = User.getID()
-
-        if '不在站上' in User.getState():
-            NotifiObj.throw('uPTT', f'{TargetID} 不在站上')
-            return
-
         TargetID = TargetID[:TargetID.find('(')].strip()
-
-        print(f'TargetID [{TargetID}]')
     else:
         TargetID = Target
+    print(f'TargetID [{TargetID}]')
 
     Dialog = QtWidgets.QDialog()
     ui = Ui_Dialog()
     ui.setupUi(Dialog, PTTCoreObj, TargetID)
     Dialog.show()
-    Dialog.exec()
+    return Dialog
+    # Dialog.exec()
 
 
 if __name__ == "__main__":
