@@ -122,7 +122,7 @@ class Ui_Dialog(object):
             H.addWidget(Name)
             H.addWidget(Content)
             H.addSpacerItem(SI)
-            
+
             self.SAObj.layout().insertLayout(self._InsertIndex, H)
             self._InsertIndex += 1
 

@@ -108,6 +108,7 @@ class Core(QtCore.QThread):
 
         if Dialog is not None:
             Dialog.exec()
+            del self.WaterballList[Target]
 
     def TrackThread(self):
         Recover = False
