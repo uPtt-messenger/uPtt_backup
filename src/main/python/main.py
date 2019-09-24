@@ -23,11 +23,6 @@ import PTTCore
 import Log
 
 
-def CatchWaterBall():
-
-    print('收到水球兒')
-
-
 def LoginFunc():
 
     global MenuObj
@@ -142,8 +137,6 @@ if __name__ == '__main__':
     # LoginFunc()
     # ExitFunc()
     LoginFunc()
-
-    Appctxt.connect(PTTCoreObj, SIGNAL("收到水球()"), CatchWaterBall)
 
     exit_code = Appctxt.app.exec_()
     sys.exit(Appctxt.app.exec_())

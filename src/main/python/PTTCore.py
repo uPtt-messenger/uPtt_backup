@@ -3,7 +3,8 @@ import time
 import threading
 import traceback
 
-from PyQt5.QtCore import QThread
+# from PyQt5.QtCore import QThread
+from PyQt5 import QtCore
 
 from PTTLibrary import PTT
 import Notification
@@ -11,7 +12,9 @@ import Menu
 import Log
 
 
-class Core(QThread):
+class Core(QtCore.QThread):
+    Waterball_Signal = QtCore.pyqtSignal(PTT.DataType.WaterBallInfo)
+    
     def __init__(
         self,
         SystemTray,
@@ -20,6 +23,8 @@ class Core(QThread):
         ID,
         PW
     ):
+        super(Core, self).__init__(None)
+
         self._SysTray = SystemTray
         self._Notification = Notification.Notification(
             SystemTray,
@@ -36,6 +41,8 @@ class Core(QThread):
 
         self._getUser = False
         self._throwWaterBall = False
+
+        self.Waterball_Signal.connect(self._CatchWaterBall)
 
     def start(self):
         Thread = threading.Thread(
@@ -76,13 +83,21 @@ class Core(QThread):
 
         return self._ErrorMsg
 
+    def _CatchWaterBall(self, WaterBall):
+
+        print(f'收到水球兒 [{WaterBall.getContent()}]')
+
     def TrackThread(self):
         Recover = False
         while self._ThreadRun:
 
             self._PTTBot = PTT.Library()
             try:
-                self._PTTBot.login(self._ID, self._PW)
+                self._PTTBot.login(
+                    self._ID,
+                    self._PW,
+                    KickOtherLogin=True
+                )
             except PTT.Exceptions.LoginError:
                 self._PTTBot.log('登入失敗')
                 if Recover:
@@ -212,6 +227,10 @@ class Core(QThread):
                             print(f'來自 {Target} 的水球 [{Content}]')
 
                             print('=' * 30)
+
+                            self.Waterball_Signal.emit(
+                                WaterBall
+                            )
             except Exception as e:
 
                 traceback.print_tb(e.__traceback__)

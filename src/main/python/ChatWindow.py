@@ -93,7 +93,12 @@ class Ui_Dialog(object):
             H.addWidget(Name)
             H.addWidget(Content)
 
-            self.SAObj.layout().addLayout(H)
+            # self.SAObj.layout().addLayout(H)
+            # insertLayout
+            self.SAObj.layout().insertLayout(self._InsertIndex, H)
+            self._InsertIndex += 1
+
+        self._InsertIndex = 0
 
         _translate = QtCore.QCoreApplication.translate
         Dialog.setWindowTitle(_translate("Dialog", Target))
