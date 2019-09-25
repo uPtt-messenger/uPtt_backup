@@ -95,6 +95,8 @@ class Core(QtCore.QThread):
 
         print(f'收到水球 [{WaterBall.getContent()}]')
 
+        self._Notification.throw('uPTT', '收到來自 {Target} 的水球')
+
         Dialog = None
         if Target not in self.WaterballList:
             Dialog = ChatWindow.start(

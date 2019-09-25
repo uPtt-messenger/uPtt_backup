@@ -40,13 +40,15 @@ class Menu(object):
         self._action_Exit.triggered.connect(self._ExitFunc)
 
         self._Menu_Login.addAction(self._action_Login)
+        self._Menu_Login.addSeparator()
         self._Menu_Login.addAction(self._action_About)
         self._Menu_Login.addSeparator()
         self._Menu_Login.addAction(self._action_Exit)
 
-        self._Menu_Logout.addAction(self._action_Logout)
         self._Menu_Logout.addAction(self._action_ThrowWaterBall)
         self._Menu_Logout.addAction(self._action_About)
+        self._Menu_Logout.addSeparator()
+        self._Menu_Logout.addAction(self._action_Logout)
         self._Menu_Logout.addSeparator()
         self._Menu_Logout.addAction(self._action_Exit)
 
