@@ -27,4 +27,5 @@ FORMS += \
     chatwindow.ui \
     inputdialog.ui \
     login.ui \
-    newmail.ui
+    newmail.ui \
+    setting.ui
