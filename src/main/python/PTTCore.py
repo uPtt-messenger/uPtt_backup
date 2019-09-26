@@ -11,6 +11,7 @@ import Notification
 import Menu
 import Log
 import ChatWindow
+# import i18n
 
 
 class Core(QtCore.QThread):
