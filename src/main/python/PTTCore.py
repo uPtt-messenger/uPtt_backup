@@ -94,9 +94,12 @@ class Core(QtCore.QThread):
     def _CatchWaterBall(self, WaterBall):
         Target = WaterBall.getTarget()
 
-        print(f'收到水球 [{WaterBall.getContent()}]')
+        RecviveWaterballFrom = i18n.RecviveWaterballFrom
+        RecviveWaterballFrom = i18n.replace(RecviveWaterballFrom, Target)
 
-        self._Notification.throw('uPTT', '收到來自 {Target} 的水球')
+        print(RecviveWaterballFrom)
+
+        self._Notification.throw('uPTT', RecviveWaterballFrom)
 
         Dialog = None
         if Target not in self.WaterballList:
@@ -127,9 +130,9 @@ class Core(QtCore.QThread):
             except PTT.Exceptions.LoginError:
                 self._PTTBot.log('登入失敗')
                 if Recover:
-                    self._Notification.throw('uPTT', '重新登入失敗')
+                    self._Notification.throw('uPTT', i18n.ReLoginFail)
                 else:
-                    self._Notification.throw('uPTT', '登入失敗')
+                    self._Notification.throw('uPTT', i18n.LoginFail)
                 self._PTTBot = None
                 self._LoginStatus = False
                 self._MenuObj.setMenu(Menu.Type.Login)
@@ -139,10 +142,12 @@ class Core(QtCore.QThread):
 
             if Recover:
                 self._PTTBot.log('重新登入成功')
-                self._Notification.throw('uPTT', '重新登入成功')
+                self._Notification.throw('uPTT', i18n.ReLoginSuccess)
             else:
                 self._PTTBot.log('登入成功')
-                self._Notification.throw('uPTT', '登入成功')
+                self._Notification.throw('uPTT', i18n.LoginSuccess)
+
+            self._PTTBot.setCallStatus(PTT.CallStatus.Off)
 
             if self.First:
                 self.First = False
@@ -152,13 +157,17 @@ class Core(QtCore.QThread):
                         self._ID
                     )
                 except PTT.Exceptions.NoSuchUser:
-                    self._ErrorMsg = f'無此使用者: {self._ID}'
+                    NoSuchUser = i18n.NoSuchUser
+                    NoSuchUser = i18n.replace(NoSuchUser, self._ID)
+                    self._ErrorMsg = NoSuchUser
 
                 NickName = self._CurrentUser.getID()
                 NickName = NickName[NickName.find('(') + 1:]
                 NickName = NickName[:NickName.rfind(')')]
 
-                self._Notification.throw('uPTT', f'{NickName}! 歡迎您!')
+                Welcome = i18n.Welcome
+                Welcome = i18n.replace(Welcome, NickName)
+                self._Notification.throw('uPTT', Welcome)
 
             Recover = False
             self._LoginStatus = True
@@ -173,7 +182,7 @@ class Core(QtCore.QThread):
                         # 在這個 While 裡面是整個優先操作區跟等待區
                         # 一邊等待下一次倫巡比較不需要即時反應時間的功能
                         # 但是如果有需要即時回應的 API 操作，這裡依舊可以快速反應
-                        # 
+                        #
                         # 原則上只要出現在選單又需要操作批踢踢的功能
                         # 就會出現在優先操作區
                         if not self._ThreadRun:
@@ -181,7 +190,7 @@ class Core(QtCore.QThread):
                             Log.log(
                                 'uPTT Core',
                                 Log.Level.INFO,
-                                '登出'
+                                i18n.Logout
                             )
                             self._MenuObj.setMenu(Menu.Type.Login)
                             self._PTTBot.logout()
@@ -201,7 +210,12 @@ class Core(QtCore.QThread):
                                     self._UserName
                                 )
                             except PTT.Exceptions.NoSuchUser:
-                                self._ErrorMsg = f'無此使用者: {self._UserName}'
+                                NoSuchUser = i18n.NoSuchUser
+                                NoSuchUser = i18n.replace(
+                                    NoSuchUser,
+                                    self._UserName
+                                )
+                                self._ErrorMsg = NoSuchUser
 
                             self._getUser = False
 
@@ -227,9 +241,19 @@ class Core(QtCore.QThread):
                                 )
                                 self._PTTBot.setCallStatus(PTT.CallStatus.Off)
                             except PTT.Exceptions.NoSuchUser:
-                                self._ErrorMsg = f'無此使用者: {self._UserName}'
+                                NoSuchUser = i18n.NoSuchUser
+                                NoSuchUser = i18n.replace(
+                                    NoSuchUser,
+                                    self._UserName
+                                )
+                                self._ErrorMsg = NoSuchUser
                             except PTT.Exceptions.UserOffline:
-                                self._ErrorMsg = f'使用者離線: {self._UserName}'
+                                UserOffline = i18n.UserOffline
+                                UserOffline = i18n.replace(
+                                    UserOffline,
+                                    self._UserName
+                                )
+                                self._ErrorMsg = UserOffline
 
                             self._throwWaterBall = False
 
@@ -251,11 +275,13 @@ class Core(QtCore.QThread):
                             )
                             # self._Notification 是用來丟出系統通知的
                             # self._SysTray.setToolTip 是設定滑鼠移到系統列圖示上的時候顯示的文字
-                            self._Notification.throw('uPTT', '你有新信件')
-                            self._SysTray.setToolTip('uPTT - 你有新信件')
+                            self._Notification.throw('uPTT', i18n.HaveNewMail)
+                            self._SysTray.setToolTip(
+                                f'uPTT - {i18n.HaveNewMail}'
+                            )
                         ShowNewMail = True
                     else:
-                        self._SysTray.setToolTip('uPTT - 無新信件')
+                        self._SysTray.setToolTip(f'uPTT - {i18n.HaveNoMail}')
                         ShowNewMail = False
 
                     # 有沒有新水球丟過來，每 self._ConfigObj.QueryCycle 秒檢查一次
@@ -277,7 +303,7 @@ class Core(QtCore.QThread):
                             self.Waterball_Signal.emit(
                                 WaterBall
                             )
-                    
+
                     # 慢速輪巡區結束
             except Exception as e:
 
@@ -296,4 +322,4 @@ class Core(QtCore.QThread):
             if self._PTTBot is not None:
                 self._PTTBot.logout()
                 self._PTTBot = None
-        self._Notification.throw('uPTT', '登出成功')
+        self._Notification.throw('uPTT', i18n.LogoutSuccess)
