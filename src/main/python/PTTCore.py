@@ -3,7 +3,6 @@ import time
 import threading
 import traceback
 
-# from PyQt5.QtCore import QThread
 from PyQt5 import QtCore
 
 from PTTLibrary import PTT
@@ -11,7 +10,7 @@ import Notification
 import Menu
 import Log
 import ChatWindow
-# import i18n
+import i18n
 
 
 class Core(QtCore.QThread):
@@ -168,15 +167,17 @@ class Core(QtCore.QThread):
             try:
                 while True:
 
-                    # Log.log(
-                    #     'uPTT Core',
-                    #     Log.Level.INFO,
-                    #     '進入等待區'
-                    # )
+                    # 以下是整個操作批踢踢的邏輯
                     StartTime = EndTime = time.time()
                     while EndTime - StartTime < self._ConfigObj.QueryCycle:
-                        # 優先操作層
+                        # 在這個 While 裡面是整個優先操作區跟等待區
+                        # 一邊等待下一次倫巡比較不需要即時反應時間的功能
+                        # 但是如果有需要即時回應的 API 操作，這裡依舊可以快速反應
+                        # 
+                        # 原則上只要出現在選單又需要操作批踢踢的功能
+                        # 就會出現在優先操作區
                         if not self._ThreadRun:
+                            # 當使用者點了登出，就馬上給我登出!
                             Log.log(
                                 'uPTT Core',
                                 Log.Level.INFO,
@@ -188,6 +189,7 @@ class Core(QtCore.QThread):
                             break
 
                         if self._getUser:
+                            # 當使用者需要查詢使用者，就馬上給我查!!!
                             Log.showValue(
                                 'uPTT Core',
                                 Log.Level.INFO,
@@ -204,6 +206,7 @@ class Core(QtCore.QThread):
                             self._getUser = False
 
                         if self._throwWaterBall:
+                            # 當使用者需要丟水球，就馬上給我丟!!!
                             Log.showValue(
                                 'uPTT Core',
                                 Log.Level.INFO,
@@ -232,22 +235,22 @@ class Core(QtCore.QThread):
 
                         time.sleep(0.1)
                         EndTime = time.time()
+                    # 優先操作區結束
 
-                    # Log.log(
-                    #     'uPTT Core',
-                    #     Log.Level.INFO,
-                    #     '等待區結束'
-                    # )
                     if self._PTTBot is None:
                         break
 
+                    # 以下是慢速輪巡區，會每 self._ConfigObj.QueryCycle 秒檢查一次
                     if self._PTTBot.hasNewMail():
+                        # 有沒有新信
                         if not ShowNewMail:
                             Log.log(
                                 'uPTT Core',
                                 Log.Level.INFO,
                                 '你有新信件'
                             )
+                            # self._Notification 是用來丟出系統通知的
+                            # self._SysTray.setToolTip 是設定滑鼠移到系統列圖示上的時候顯示的文字
                             self._Notification.throw('uPTT', '你有新信件')
                             self._SysTray.setToolTip('uPTT - 你有新信件')
                         ShowNewMail = True
@@ -255,10 +258,10 @@ class Core(QtCore.QThread):
                         self._SysTray.setToolTip('uPTT - 無新信件')
                         ShowNewMail = False
 
+                    # 有沒有新水球丟過來，每 self._ConfigObj.QueryCycle 秒檢查一次
                     WaterBallList = self._PTTBot.getWaterBall(
                         PTT.WaterBallOperateType.Clear
                     )
-
                     if WaterBallList is not None:
                         for WaterBall in WaterBallList:
 
@@ -274,6 +277,8 @@ class Core(QtCore.QThread):
                             self.Waterball_Signal.emit(
                                 WaterBall
                             )
+                    
+                    # 慢速輪巡區結束
             except Exception as e:
 
                 traceback.print_tb(e.__traceback__)
