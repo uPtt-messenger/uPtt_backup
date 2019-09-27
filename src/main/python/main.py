@@ -21,6 +21,7 @@ import Menu
 import ChatWindow
 import PTTCore
 import Log
+import i18n
 
 
 def LoginFunc():
@@ -114,6 +115,8 @@ def ExitFunc():
 
 
 if __name__ == '__main__':
+    i18n.load(i18n.Language.Chinese)
+
     Appctxt = ApplicationContext()
     ConfigObj = Config.Config(Appctxt)
     PTTCoreObj = None
