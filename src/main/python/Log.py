@@ -52,7 +52,7 @@ def log(PreFix, CurrentLogLevel, Msg):
         return
     Msg = merge(Msg)
 
-    TotalMessage = '[' + strftime('%m%d %H:%M:%S') + ']'
+    TotalMessage = '[' + strftime('%m-%d %H:%M:%S') + ']'
 
     if CurrentLogLevel == Level.DEBUG:
         TotalMessage += '[除錯]'

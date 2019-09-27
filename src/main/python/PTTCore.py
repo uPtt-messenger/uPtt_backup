@@ -11,6 +11,7 @@ import Notification
 import Menu
 import Log
 import ChatWindow
+# import i18n
 
 
 class Core(QtCore.QThread):
@@ -45,6 +46,7 @@ class Core(QtCore.QThread):
 
         self.Waterball_Signal.connect(self._CatchWaterBall)
         self.WaterballList = dict()
+        self.First = True
 
     def start(self):
         Thread = threading.Thread(
@@ -142,6 +144,22 @@ class Core(QtCore.QThread):
             else:
                 self._PTTBot.log('登入成功')
                 self._Notification.throw('uPTT', '登入成功')
+
+            if self.First:
+                self.First = False
+
+                try:
+                    self._CurrentUser = self._PTTBot.getUser(
+                        self._ID
+                    )
+                except PTT.Exceptions.NoSuchUser:
+                    self._ErrorMsg = f'無此使用者: {self._ID}'
+
+                NickName = self._CurrentUser.getID()
+                NickName = NickName[NickName.find('(') + 1:]
+                NickName = NickName[:NickName.rfind(')')]
+
+                self._Notification.throw('uPTT', f'{NickName}! 歡迎您!')
 
             Recover = False
             self._LoginStatus = True
