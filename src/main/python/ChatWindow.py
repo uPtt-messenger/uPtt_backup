@@ -11,7 +11,7 @@ from PTTLibrary import PTT
 
 
 class Ui_Dialog(object):
-    def setupUi(self, Dialog, PTTCoreObj, Target):
+    def setupUi(self, Dialog, PTTCoreObj, Target, NickName):
         Dialog.setObjectName("Dialog")
         Dialog.resize(300, 500)
         self.gridLayout = QtWidgets.QGridLayout(Dialog)
@@ -19,6 +19,53 @@ class Ui_Dialog(object):
         self.gridLayout.setObjectName("gridLayout")
         self.verticalLayout = QtWidgets.QVBoxLayout()
         self.verticalLayout.setObjectName("verticalLayout")
+        self.SettingLayout = QtWidgets.QVBoxLayout()
+        self.SettingLayout.setSpacing(0)
+        self.SettingLayout.setObjectName("SettingLayout")
+        self.horizontalLayout_2 = QtWidgets.QHBoxLayout()
+        self.horizontalLayout_2.setObjectName("horizontalLayout_2")
+        self.TargetName = QtWidgets.QLabel(Dialog)
+        self.TargetName.setMinimumSize(QtCore.QSize(100, 0))
+        self.TargetName.setMaximumSize(QtCore.QSize(100, 16777215))
+        self.TargetName.setAlignment(QtCore.Qt.AlignCenter)
+        self.TargetName.setObjectName("TargetName")
+        self.horizontalLayout_2.addWidget(self.TargetName)
+        self.lineEdit_2 = QtWidgets.QLineEdit(Dialog)
+        self.lineEdit_2.setToolTip("")
+        self.lineEdit_2.setObjectName("lineEdit_2")
+        self.horizontalLayout_2.addWidget(self.lineEdit_2)
+        self.SettingLayout.addLayout(self.horizontalLayout_2)
+        self.horizontalLayout_3 = QtWidgets.QHBoxLayout()
+        self.horizontalLayout_3.setObjectName("horizontalLayout_3")
+        spacerItem = QtWidgets.QSpacerItem(
+            40, 5, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        self.horizontalLayout_3.addItem(spacerItem)
+        self.pushButton = QtWidgets.QPushButton(Dialog)
+        sizePolicy = QtWidgets.QSizePolicy(
+            QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Fixed)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(
+            self.pushButton.sizePolicy().hasHeightForWidth())
+        self.pushButton.setSizePolicy(sizePolicy)
+        self.pushButton.setMinimumSize(QtCore.QSize(0, 0))
+        self.pushButton.setMaximumSize(QtCore.QSize(16777215, 15))
+        self.pushButton.setObjectName("pushButton")
+        self.horizontalLayout_3.addWidget(self.pushButton)
+        self.SettingLayout.addLayout(self.horizontalLayout_3)
+        self.horizontalLayout_4 = QtWidgets.QHBoxLayout()
+        self.horizontalLayout_4.setObjectName("horizontalLayout_4")
+        self.pushButton_4 = QtWidgets.QPushButton(Dialog)
+        self.pushButton_4.setObjectName("pushButton_4")
+        self.horizontalLayout_4.addWidget(self.pushButton_4)
+        self.pushButton_3 = QtWidgets.QPushButton(Dialog)
+        self.pushButton_3.setObjectName("pushButton_3")
+        self.horizontalLayout_4.addWidget(self.pushButton_3)
+        self.pushButton_2 = QtWidgets.QPushButton(Dialog)
+        self.pushButton_2.setObjectName("pushButton_2")
+        self.horizontalLayout_4.addWidget(self.pushButton_2)
+        self.SettingLayout.addLayout(self.horizontalLayout_4)
+        self.verticalLayout.addLayout(self.SettingLayout)
         self.scrollArea = QtWidgets.QScrollArea(Dialog)
         self.scrollArea.setEnabled(True)
         self.scrollArea.setFrameShape(QtWidgets.QFrame.NoFrame)
@@ -28,7 +75,7 @@ class Ui_Dialog(object):
         self.scrollArea.setWidgetResizable(True)
         self.scrollArea.setObjectName("scrollArea")
         self.scrollAreaWidgetContents = QtWidgets.QWidget()
-        self.scrollAreaWidgetContents.setGeometry(QtCore.QRect(0, 0, 298, 430))
+        self.scrollAreaWidgetContents.setGeometry(QtCore.QRect(0, 0, 297, 309))
         self.scrollAreaWidgetContents.setMinimumSize(QtCore.QSize(0, 0))
         self.scrollAreaWidgetContents.setObjectName("scrollAreaWidgetContents")
         self.scrollArea.setWidget(self.scrollAreaWidgetContents)
@@ -45,10 +92,10 @@ class Ui_Dialog(object):
         self.verticalLayout.addLayout(self.horizontalLayout)
         self.gridLayout.addLayout(self.verticalLayout, 0, 0, 1, 1)
 
-        self.retranslateUi(Dialog, PTTCoreObj, Target)
+        self.retranslateUi(Dialog, PTTCoreObj, Target, NickName)
         QtCore.QMetaObject.connectSlotsByName(Dialog)
 
-    def retranslateUi(self, Dialog, PTTCoreObj, Target):
+    def retranslateUi(self, Dialog, PTTCoreObj, Target, NickName):
 
         def sendMsg():
             import Log
@@ -79,12 +126,14 @@ class Ui_Dialog(object):
             Name = QtWidgets.QLabel()
             Name.setText('★')
             Name.setStyleSheet(
-                'QLabel{color:rgb(255, 255, 0, 250);background:rgb(0, 128, 128, 250);}')
+                'QLabel{color:rgb(255, 255, 0, 250);background:rgb(0, 128, 128, 250);}'
+            )
 
             Content = QtWidgets.QLabel()
             Content.setText(Msg)
             Content.setStyleSheet(
-                'QLabel{color:rgb(255, 255, 255, 250);background:rgb(128, 0, 128, 250);}')
+                'QLabel{color:rgb(255, 255, 255, 250);background:rgb(128, 0, 128, 250);}'
+            )
 
             H = QtWidgets.QHBoxLayout()
             H.setSpacing(0)
@@ -95,7 +144,7 @@ class Ui_Dialog(object):
 
             self.SAObj.layout().insertLayout(self._InsertIndex, H)
             self._InsertIndex += 1
-        
+
         def recvMsg(Waterball):
             print(f'視窗收到水球 {Waterball.getContent()}')
 
@@ -109,12 +158,14 @@ class Ui_Dialog(object):
             Name = QtWidgets.QLabel()
             Name.setText('★')
             Name.setStyleSheet(
-                'QLabel{color:rgb(255, 255, 0, 250);background:rgb(0, 128, 128, 250);}')
+                'QLabel{color:rgb(255, 255, 0, 250);background:rgb(0, 128, 128, 250);}'
+            )
 
             Content = QtWidgets.QLabel()
             Content.setText(Waterball.getContent())
             Content.setStyleSheet(
-                'QLabel{color:rgb(255, 255, 255, 250);background:rgb(128, 0, 128, 250);}')
+                'QLabel{color:rgb(255, 255, 255, 250);background:rgb(128, 0, 128, 250);}'
+            )
 
             H = QtWidgets.QHBoxLayout()
             H.setSpacing(0)
@@ -129,6 +180,15 @@ class Ui_Dialog(object):
         self._InsertIndex = 0
 
         _translate = QtCore.QCoreApplication.translate
+        Dialog.setWindowTitle(_translate("Dialog", "Dialog"))
+        self.TargetName.setToolTip(_translate("Dialog", "ID"))
+        self.TargetName.setText(_translate("Dialog", Target))
+        self.lineEdit_2.setText(_translate("Dialog", NickName))
+        self.pushButton.setText(_translate("Dialog", "PushButton"))
+        self.pushButton_4.setText(_translate("Dialog", "給他P幣"))
+        self.pushButton_3.setText(_translate("Dialog", "關閉提醒"))
+        self.pushButton_2.setText(_translate("Dialog", "封鎖"))
+
         Dialog.setWindowTitle(_translate("Dialog", Target))
 
         self.scrollArea.setAutoFillBackground(True)
@@ -146,34 +206,6 @@ class Ui_Dialog(object):
         self.lineEdit.returnPressed.connect(sendMsg)
         PTTCoreObj.registerWaterballList(Target, recvMsg)
 
-        # for i in range(40):
-        #     H = QtWidgets.QHBoxLayout()
-        #     H.setSpacing(0)
-
-        #     Name = QtWidgets.QLabel()
-        #     Name.setText('★')
-        #     Name.setStyleSheet(
-        #         'QLabel{color:rgb(255, 255, 0, 250);background:rgb(0, 128, 128, 250);}')
-
-        #     Content = QtWidgets.QLabel()
-        #     Content.setText(f'測試水球')
-        #     Content.setStyleSheet(
-        #         'QLabel{color:rgb(255, 255, 255, 250);background:rgb(128, 0, 128, 250);}')
-
-        #     SI = QtWidgets.QSpacerItem(
-        #         0, 0, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
-
-        #     if i % 2 == 0:
-        #         H.addWidget(Name)
-        #         H.addWidget(Content)
-        #         H.addSpacerItem(SI)
-        #     else:
-        #         H.addSpacerItem(SI)
-        #         H.addWidget(Name)
-        #         H.addWidget(Content)
-
-        #     self.SAObj.layout().addLayout(H)
-
 
 def start(SystemTray, ConfigObj, PTTCoreObj, Target=None):
     import Notification
@@ -189,25 +221,23 @@ def start(SystemTray, ConfigObj, PTTCoreObj, Target=None):
         if not OK:
             return
 
-        try:
-            ErrorMsg, User = PTTCoreObj.getUser(TargetID)
-        except PTT.Exceptions.NoSuchUser:
-            NotifiObj.throw('uPTT', ErrorMsg)
-            return
+    TargetID = Target
+    ErrorMsg, User = PTTCoreObj.getUser(TargetID)
 
-        if ErrorMsg is not None:
-            NotifiObj.throw('uPTT', ErrorMsg)
-            return
+    if ErrorMsg is not None:
+        NotifiObj.throw('uPTT', ErrorMsg)
+        return
 
-        TargetID = User.getID()
-        TargetID = TargetID[:TargetID.find('(')].strip()
-    else:
-        TargetID = Target
-    print(f'TargetID [{TargetID}]')
+    Temp = User.getID()
+    TargetID = Temp[:Temp.find('(')].strip()
+
+    NickName = Temp
+    NickName = NickName[NickName.find('(') + 1:]
+    NickName = NickName[:NickName.rfind(')')]
 
     Dialog = QtWidgets.QDialog()
     ui = Ui_Dialog()
-    ui.setupUi(Dialog, PTTCoreObj, TargetID)
+    ui.setupUi(Dialog, PTTCoreObj, TargetID, NickName)
     Dialog.show()
     return Dialog
     # Dialog.exec()

@@ -110,6 +110,7 @@ class Core(QtCore.QThread):
                 Target=Target
             )
         Func = self.WaterballList[Target]
+        # 112 KeyError
         Func(WaterBall)
 
         if Dialog is not None:
