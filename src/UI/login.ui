@@ -24,6 +24,16 @@
    </property>
    <layout class="QVBoxLayout" name="verticalLayout">
     <item>
+     <widget class="QLabel" name="Online">
+      <property name="text">
+       <string>TextLabel</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
+      </property>
+     </widget>
+    </item>
+    <item>
      <widget class="QLabel" name="InputID">
       <property name="text">
        <string>TextLabel</string>
@@ -69,6 +79,13 @@
        <widget class="QCheckBox" name="RemberID">
         <property name="text">
          <string>記住帳號</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QCheckBox" name="AutoLogin">
+        <property name="text">
+         <string>自動登入</string>
         </property>
        </widget>
       </item>

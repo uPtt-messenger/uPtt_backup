@@ -30,7 +30,7 @@ class Config(object):
         if not os.path.exists(self.ConfigPath):
             os.makedirs(self.ConfigPath)
 
-        self.QueryCycle = 5
+        self.QueryCycle = 2
 
         self.Data = dict()
         try:
