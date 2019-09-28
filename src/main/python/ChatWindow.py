@@ -220,8 +220,8 @@ def start(SystemTray, ConfigObj, PTTCoreObj, Target=None):
         OK, TargetID = InputDialog.start('請輸入水球對象帳號')
         if not OK:
             return
-
-    TargetID = Target
+    else:
+        TargetID = Target
     ErrorMsg, User = PTTCoreObj.getUser(TargetID)
 
     if ErrorMsg is not None:
