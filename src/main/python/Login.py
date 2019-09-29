@@ -48,12 +48,9 @@ class Ui(object):
         self.verticalLayout.addWidget(self.PW)
         self.horizontalLayout = QtWidgets.QHBoxLayout()
         self.horizontalLayout.setObjectName("horizontalLayout")
-        self.RemberID = QtWidgets.QCheckBox(self.verticalLayoutWidget)
-        self.RemberID.setObjectName("RemberID")
-        self.horizontalLayout.addWidget(self.RemberID)
-        self.AutoLogin = QtWidgets.QCheckBox(self.verticalLayoutWidget)
-        self.AutoLogin.setObjectName("AutoLogin")
-        self.horizontalLayout.addWidget(self.AutoLogin)
+        self.RemberPassword = QtWidgets.QCheckBox(self.verticalLayoutWidget)
+        self.RemberPassword.setObjectName("RemberPassword")
+        self.horizontalLayout.addWidget(self.RemberPassword)
         self.ShowPW = QtWidgets.QCheckBox(self.verticalLayoutWidget)
         self.ShowPW.setObjectName("ShowPW")
         self.horizontalLayout.addWidget(self.ShowPW)
@@ -74,35 +71,42 @@ class Ui(object):
         def setLoginFocus():
             self.Login.setFocus()
             print('設定關注到登入按鈕')
-        
+
         def ShowPWStateChanged():
             if self.ShowPW.isChecked():
-                print('顯示密碼')
                 self.PW.setEchoMode(QtWidgets.QLineEdit.Normal)
             else:
-                print('不顯示密碼')
                 self.PW.setEchoMode(QtWidgets.QLineEdit.Password)
 
-        ID = ConfigObj.getValue(ConfigObj.Key_ID)
+        ID = ConfigObj.getValue(
+            Config.Type.System,
+            Config.Key_CurrentUser
+        )
         if ID is not None:
             self.ID.setText(ID)
-            self.RemberID.setChecked(True)
+
+        Password = ConfigObj.getValue(
+            Config.Type.User,
+            Config.Key_Password
+        )
+        if Password is not None:
+            self.PW.setText(Password)
+            self.RemberPassword.setChecked(True)
 
         _translate = QtCore.QCoreApplication.translate
         Dialog.setWindowTitle(_translate("Dialog", "uPTT 登入"))
         Dialog.setWindowIcon(ConfigObj.Icon_SmallImage)
         Dialog.setWindowFlags(QtCore.Qt.WindowStaysOnTopHint)
-        
+
         self.InputID.setText(_translate("Dialog", "請輸入帳號"))
         self.InputID.setFont(ConfigObj.BasicFont)
         self.InputPW.setText(_translate("Dialog", "請輸入密碼"))
         self.InputPW.setFont(ConfigObj.BasicFont)
-        self.RemberID.setText(_translate("Dialog", "記住帳號"))
         self.Login.setText(_translate("Dialog", "登入"))
         self.Login.setFont(ConfigObj.BasicFont)
         self.Login.clicked.connect(FinishFunc)
-        self.Online.setText(_translate("Dialog", "TextLabel"))
-        self.AutoLogin.setText(_translate("Dialog", "自動登入"))
+        self.Online.setText(_translate("Dialog", "目前共有【999999】位 uPTTer 正在使用"))
+        self.RemberPassword.setText(_translate("Dialog", "記住密碼"))
 
         self.ID.returnPressed.connect(setPWFocus)
         self.PW.returnPressed.connect(setLoginFocus)
@@ -112,7 +116,12 @@ class Ui(object):
         self.ShowPW.stateChanged.connect(ShowPWStateChanged)
 
     def getIDPW(self):
-        return self.ID.text(), self.PW.text(), self.RemberID.isChecked()
+
+        ID = self.ID.text()
+        Pw = self.PW.text()
+        RemberPassword = self.RemberPassword.isChecked()
+
+        return ID, Pw, RemberPassword
 
 
 PressLogin = False

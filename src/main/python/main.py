@@ -30,7 +30,7 @@ def LoginFunc():
     global PTTCoreObj
     global ID
 
-    ID, PW, SaveID = Login.start(ConfigObj)
+    ID, PW, RemberPassword = Login.start(ConfigObj)
 
     if ID is None or PW is None:
         NotifiObj.throw('uPTT', '登入取消')
@@ -41,10 +41,30 @@ def LoginFunc():
         MenuObj.setMenu(Menu.Type.Login)
         return True
 
-    if SaveID:
-        ConfigObj.setValue(ConfigObj.Key_ID, ID)
+    ConfigObj.initUser(ID)
+    ConfigObj.setValue(
+        Config.Type.System,
+        Config.Key_CurrentUser,
+        ID
+    )
+    ConfigObj.setValue(
+        Config.Type.User,
+        Config.Key_ID,
+        ID
+    )
+
+    if RemberPassword:
+        ConfigObj.setValue(
+            Config.Type.User,
+            Config.Key_Password,
+            PW
+        )
     else:
-        ConfigObj.setValue(ConfigObj.Key_ID, None)
+        ConfigObj.setValue(
+            Config.Type.User,
+            Config.Key_Password,
+            None
+        )
 
     Log.showValue(
         'uPTT Main',
@@ -119,6 +139,12 @@ if __name__ == '__main__':
 
     Appctxt = ApplicationContext()
     ConfigObj = Config.Config(Appctxt)
+    CurrentID = ConfigObj.getValue(
+        Config.Type.System,
+        Config.Key_CurrentUser
+    )
+    ConfigObj.initUser(CurrentID)
+    
     PTTCoreObj = None
 
     app = QtWidgets.QApplication([])

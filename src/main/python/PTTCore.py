@@ -92,16 +92,17 @@ class Core(QtCore.QThread):
             self.WaterballList[Target] = Func
 
     def _CatchWaterBall(self, WaterBall):
-        Target = WaterBall.getTarget()
+        Dialog = None
 
+        def TopUI():
+            Dialog.activateWindow()
+
+        Target = WaterBall.getTarget()
         RecviveWaterballFrom = i18n.RecviveWaterballFrom
         RecviveWaterballFrom = i18n.replace(RecviveWaterballFrom, Target)
 
         print(RecviveWaterballFrom)
 
-        self._Notification.throw('uPTT', RecviveWaterballFrom)
-
-        Dialog = None
         if Target not in self.WaterballList:
             Dialog = ChatWindow.start(
                 self._SysTray,
@@ -112,6 +113,8 @@ class Core(QtCore.QThread):
         Func = self.WaterballList[Target]
         # 112 KeyError
         Func(WaterBall)
+
+        self._Notification.throw('uPTT', RecviveWaterballFrom, Click=TopUI)
 
         if Dialog is not None:
             Dialog.exec()
@@ -138,16 +141,18 @@ class Core(QtCore.QThread):
                 self._LoginStatus = False
                 self._MenuObj.setMenu(Menu.Type.Login)
                 return
+            except PTT.Exceptions.ConnectionClosed:
+                self._PTTBot.log('登入失敗')
+                if Recover:
+                    self._Notification.throw('uPTT', i18n.ReLoginFail)
+                else:
+                    self._Notification.throw('uPTT', i18n.LoginFail)
+                self._PTTBot = None
+                self._LoginStatus = False
+                self._MenuObj.setMenu(Menu.Type.Login)
+                return
 
             self._MenuObj.setMenu(Menu.Type.Logout)
-
-            if Recover:
-                self._PTTBot.log('重新登入成功')
-                self._Notification.throw('uPTT', i18n.ReLoginSuccess)
-            else:
-                self._PTTBot.log('登入成功')
-                self._Notification.throw('uPTT', i18n.LoginSuccess)
-
             self._PTTBot.setCallStatus(PTT.CallStatus.Off)
 
             if self.First:
@@ -169,6 +174,13 @@ class Core(QtCore.QThread):
                 Welcome = i18n.Welcome
                 Welcome = i18n.replace(Welcome, NickName)
                 self._Notification.throw('uPTT', Welcome)
+            else:
+                if Recover:
+                    self._PTTBot.log('重新登入成功')
+                    self._Notification.throw('uPTT', i18n.ReLoginSuccess)
+                else:
+                    self._PTTBot.log('登入成功')
+                    self._Notification.throw('uPTT', i18n.LoginSuccess)
 
             Recover = False
             self._LoginStatus = True
@@ -292,12 +304,12 @@ class Core(QtCore.QThread):
                     if WaterBallList is not None:
                         for WaterBall in WaterBallList:
 
-                            if not WaterBall.getType() == PTT.WaterBallType.Catch:
+                            if WaterBall.getType() != PTT.WaterBallType.Catch:
                                 continue
-
-                            Target = WaterBall.getTarget()
-                            Content = WaterBall.getContent()
-                            print(f'來自 {Target} 的水球 [{Content}]')
+                            else:
+                                Target = WaterBall.getTarget()
+                                Content = WaterBall.getContent()
+                                print(f'來自 {Target} 的水球 [{Content}]')
 
                             print('=' * 30)
 
@@ -311,14 +323,20 @@ class Core(QtCore.QThread):
                 traceback.print_tb(e.__traceback__)
                 print(e)
                 Recover = True
-                for s in range(5):
+                for s in range(self.RecoverTime):
                     Log.showValue(
                         'uPTT Core',
                         Log.Level.INFO,
-                        '啟動恢復機制',
-                        5 - s
+                        '等待恢復機制',
+                        self.RecoverTime - s
                     )
                     time.sleep(1)
+
+                Log.log(
+                    'uPTT Core',
+                    Log.Level.INFO,
+                    '啟動恢復機制'
+                )
 
             if self._PTTBot is not None:
                 self._PTTBot.logout()
