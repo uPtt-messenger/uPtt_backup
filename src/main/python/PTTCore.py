@@ -112,7 +112,18 @@ class Core(QtCore.QThread):
 
             if self.DialogList[Target].isMinimized():
                 self.DialogList[Target].showNormal()
-            # self.DialogList[Target].activateWindow()
+            else:
+                # O = self.DialogList[Target].WindowFlags()
+                self.DialogList[Target].setWindowFlags(
+                    QtCore.Qt.WindowMinimizeButtonHint |
+                    QtCore.Qt.WindowCloseButtonHint |
+                    QtCore.Qt.WindowStaysOnTopHint
+                )
+                self.DialogList[Target].setWindowFlags(
+                    QtCore.Qt.WindowMinimizeButtonHint |
+                    QtCore.Qt.WindowCloseButtonHint
+                )
+            # self.DialogList[Target].showNormal()
 
         Dialog = None
         if Target not in self.WaterballRecvMsgFuncList:
@@ -169,7 +180,6 @@ class Core(QtCore.QThread):
             self._PTTBot.setCallStatus(PTT.CallStatus.Off)
 
             if self.First:
-                self.First = False
 
                 try:
                     self._CurrentUser = self._PTTBot.getUser(
@@ -318,7 +328,10 @@ class Core(QtCore.QThread):
                         for WaterBall in WaterballRecvMsgFuncList:
 
                             if WaterBall.getType() != PTT.WaterBallType.Catch:
-                                continue
+                                if self.First:
+                                    pass
+                                else:
+                                    continue
                             else:
                                 Target = WaterBall.getTarget()
                                 Content = WaterBall.getContent()
@@ -331,6 +344,8 @@ class Core(QtCore.QThread):
                             )
 
                     # 慢速輪巡區結束
+
+                    self.First = False
             except Exception as e:
 
                 traceback.print_tb(e.__traceback__)

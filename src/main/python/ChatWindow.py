@@ -152,6 +152,24 @@ class Ui_Dialog(object):
         def recvMsg(Waterball):
             print(f'視窗收到水球 {Waterball.getContent()}')
 
+            # List = ConfigObj.getValue(
+            #     Config.Type.User,
+            #     'QQQ'
+            # )
+
+            # print(List)
+
+            # if List is None:
+            #     List = [Waterball]
+            # else:
+            #     List.append(Waterball)
+
+            # ConfigObj.setValue(
+            #     Config.Type.User,
+            #     'QQQ',
+            #     List
+            # )
+
             SI = QtWidgets.QSpacerItem(
                 0,
                 0,
@@ -199,7 +217,7 @@ class Ui_Dialog(object):
 
         # print(BlockList)
 
-        # BlockList = ConfigObj.setValue(
+        # ConfigObj.setValue(
         #     Config.Type.User,
         #     Config.Key_Blacklist,
         #     [
@@ -229,7 +247,10 @@ class Ui_Dialog(object):
         self.NotificationSwitch.setText(_translate("Dialog", "關閉提醒"))
         self.BlockSwitch.setText(_translate("Dialog", "封鎖"))
 
-        Dialog.setWindowFlags(QtCore.Qt.WindowStaysOnTopHint)
+        Dialog.setWindowFlags(
+            QtCore.Qt.WindowMinimizeButtonHint |
+            QtCore.Qt.WindowCloseButtonHint
+            )
         Dialog.setWindowTitle(_translate("Dialog", Target))
 
         self.scrollArea.setAutoFillBackground(True)
