@@ -13,6 +13,7 @@ class Type:
 Key_CurrentUser = 'CurrentUser'
 Key_ID = 'ID'
 Key_Password = 'Password'
+Key_Blacklist = 'Blacklist'
 
 
 class Config:
@@ -20,6 +21,7 @@ class Config:
     def __init__(self, Appctxt):
         # 不想給使用者改的設定值就寫在這兒
         # 想給使用者改的就透過 setValue
+        # 因為會被存起來
         self.QueryCycle = 3.1
         self.RecoverTime = 2
 

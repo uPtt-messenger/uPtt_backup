@@ -9,9 +9,11 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PTTLibrary import PTT
 
+import Config
+
 
 class Ui_Dialog(object):
-    def setupUi(self, Dialog, PTTCoreObj, Target, NickName):
+    def setupUi(self, Dialog, ConfigObj, PTTCoreObj, Target):
         Dialog.setObjectName("Dialog")
         Dialog.resize(300, 500)
         self.gridLayout = QtWidgets.QGridLayout(Dialog)
@@ -29,43 +31,43 @@ class Ui_Dialog(object):
         self.SettingLayout.addWidget(self.label)
         self.horizontalLayout_2 = QtWidgets.QHBoxLayout()
         self.horizontalLayout_2.setObjectName("horizontalLayout_2")
-        self.TargetName = QtWidgets.QLabel(Dialog)
-        self.TargetName.setMinimumSize(QtCore.QSize(100, 0))
-        self.TargetName.setMaximumSize(QtCore.QSize(100, 16777215))
-        self.TargetName.setAlignment(QtCore.Qt.AlignCenter)
-        self.TargetName.setObjectName("TargetName")
-        self.horizontalLayout_2.addWidget(self.TargetName)
-        self.lineEdit_2 = QtWidgets.QLineEdit(Dialog)
-        self.lineEdit_2.setToolTip("")
-        self.lineEdit_2.setObjectName("lineEdit_2")
-        self.horizontalLayout_2.addWidget(self.lineEdit_2)
+        self.OnlineState = QtWidgets.QLabel(Dialog)
+        self.OnlineState.setMinimumSize(QtCore.QSize(100, 0))
+        self.OnlineState.setMaximumSize(QtCore.QSize(100, 16777215))
+        self.OnlineState.setAlignment(QtCore.Qt.AlignCenter)
+        self.OnlineState.setObjectName("OnlineState")
+        self.horizontalLayout_2.addWidget(self.OnlineState)
+        self.Remarks = QtWidgets.QLineEdit(Dialog)
+        self.Remarks.setToolTip("")
+        self.Remarks.setObjectName("Remarks")
+        self.horizontalLayout_2.addWidget(self.Remarks)
         self.SettingLayout.addLayout(self.horizontalLayout_2)
         self.horizontalLayout_3 = QtWidgets.QHBoxLayout()
         self.horizontalLayout_3.setObjectName("horizontalLayout_3")
         spacerItem = QtWidgets.QSpacerItem(
             40, 5, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
         self.horizontalLayout_3.addItem(spacerItem)
-        self.pushButton = QtWidgets.QPushButton(Dialog)
+        self.OptionSwitch = QtWidgets.QPushButton(Dialog)
         sizePolicy = QtWidgets.QSizePolicy(
             QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Fixed)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(
-            self.pushButton.sizePolicy().hasHeightForWidth())
-        self.pushButton.setSizePolicy(sizePolicy)
-        self.pushButton.setMinimumSize(QtCore.QSize(0, 0))
-        self.pushButton.setMaximumSize(QtCore.QSize(16777215, 15))
-        self.pushButton.setObjectName("pushButton")
-        self.horizontalLayout_3.addWidget(self.pushButton)
+            self.OptionSwitch.sizePolicy().hasHeightForWidth())
+        self.OptionSwitch.setSizePolicy(sizePolicy)
+        self.OptionSwitch.setMinimumSize(QtCore.QSize(0, 0))
+        self.OptionSwitch.setMaximumSize(QtCore.QSize(16777215, 15))
+        self.OptionSwitch.setObjectName("OptionSwitch")
+        self.horizontalLayout_3.addWidget(self.OptionSwitch)
         self.SettingLayout.addLayout(self.horizontalLayout_3)
         self.horizontalLayout_4 = QtWidgets.QHBoxLayout()
         self.horizontalLayout_4.setObjectName("horizontalLayout_4")
-        self.pushButton_3 = QtWidgets.QPushButton(Dialog)
-        self.pushButton_3.setObjectName("pushButton_3")
-        self.horizontalLayout_4.addWidget(self.pushButton_3)
-        self.pushButton_2 = QtWidgets.QPushButton(Dialog)
-        self.pushButton_2.setObjectName("pushButton_2")
-        self.horizontalLayout_4.addWidget(self.pushButton_2)
+        self.NotificationSwitch = QtWidgets.QPushButton(Dialog)
+        self.NotificationSwitch.setObjectName("NotificationSwitch")
+        self.horizontalLayout_4.addWidget(self.NotificationSwitch)
+        self.BlockSwitch = QtWidgets.QPushButton(Dialog)
+        self.BlockSwitch.setObjectName("BlockSwitch")
+        self.horizontalLayout_4.addWidget(self.BlockSwitch)
         self.SettingLayout.addLayout(self.horizontalLayout_4)
         self.verticalLayout.addLayout(self.SettingLayout)
         self.scrollArea = QtWidgets.QScrollArea(Dialog)
@@ -94,10 +96,10 @@ class Ui_Dialog(object):
         self.verticalLayout.addLayout(self.horizontalLayout)
         self.gridLayout.addLayout(self.verticalLayout, 0, 0, 1, 1)
 
-        self.retranslateUi(Dialog, PTTCoreObj, Target, NickName)
+        self.retranslateUi(Dialog, ConfigObj, PTTCoreObj, Target)
         QtCore.QMetaObject.connectSlotsByName(Dialog)
 
-    def retranslateUi(self, Dialog, PTTCoreObj, Target, NickName):
+    def retranslateUi(self, Dialog, ConfigObj, PTTCoreObj, Target):
 
         def sendMsg():
             import Log
@@ -179,17 +181,55 @@ class Ui_Dialog(object):
             self.SAObj.layout().insertLayout(self._InsertIndex, H)
             self._InsertIndex += 1
 
+        def blockUser():
+            print('QQ block')
+
         self._InsertIndex = 0
+
+        ErrorMsg, User = PTTCoreObj.getUser(Target)
+
+        if ErrorMsg is not None:
+            NotifiObj.throw('uPTT', ErrorMsg)
+            return
+
+        # BlockList = ConfigObj.getValue(
+        #     Config.Type.User,
+        #     Config.Key_Blacklist
+        # )
+
+        # print(BlockList)
+
+        # BlockList = ConfigObj.setValue(
+        #     Config.Type.User,
+        #     Config.Key_Blacklist,
+        #     [
+        #         'TestUSer1',
+        #         'TestUSer2',
+        #         'TestUSer3',
+        #     ]
+        # )
+
+        Temp = User.getID()
+        Target = Temp[:Temp.find('(')].strip()
+
+        NickName = Temp
+        NickName = NickName[NickName.find('(') + 1:]
+        NickName = NickName[:NickName.rfind(')')]
 
         _translate = QtCore.QCoreApplication.translate
         Dialog.setWindowTitle(_translate("Dialog", "Dialog"))
-        self.TargetName.setToolTip(_translate("Dialog", "ID"))
-        self.TargetName.setText(_translate("Dialog", Target))
-        self.lineEdit_2.setText(_translate("Dialog", NickName))
-        self.pushButton.setText(_translate("Dialog", "PushButton"))
-        self.pushButton_3.setText(_translate("Dialog", "關閉提醒"))
-        self.pushButton_2.setText(_translate("Dialog", "封鎖"))
+        self.OnlineState.setToolTip(_translate("Dialog", "上線狀態"))
 
+        if User.getState() != '不在站上':
+            self.OnlineState.setText(_translate("Dialog", '不在線上'))
+        else:
+            self.OnlineState.setText(_translate("Dialog", '上線中'))
+        self.Remarks.setText(_translate("Dialog", NickName))
+        self.OptionSwitch.setText(_translate("Dialog", "PushButton"))
+        self.NotificationSwitch.setText(_translate("Dialog", "關閉提醒"))
+        self.BlockSwitch.setText(_translate("Dialog", "封鎖"))
+
+        Dialog.setWindowFlags(QtCore.Qt.WindowStaysOnTopHint)
         Dialog.setWindowTitle(_translate("Dialog", Target))
 
         self.scrollArea.setAutoFillBackground(True)
@@ -205,7 +245,7 @@ class Ui_Dialog(object):
         self.scrollArea.setWidget(self.SAObj)
 
         self.lineEdit.returnPressed.connect(sendMsg)
-        PTTCoreObj.registerWaterballList(Target, recvMsg)
+        PTTCoreObj.registerWaterball(Dialog, recvMsg, Target)
 
 
 def start(SystemTray, ConfigObj, PTTCoreObj, Target=None):
@@ -223,22 +263,10 @@ def start(SystemTray, ConfigObj, PTTCoreObj, Target=None):
             return
     else:
         TargetID = Target
-    ErrorMsg, User = PTTCoreObj.getUser(TargetID)
-
-    if ErrorMsg is not None:
-        NotifiObj.throw('uPTT', ErrorMsg)
-        return
-
-    Temp = User.getID()
-    TargetID = Temp[:Temp.find('(')].strip()
-
-    NickName = Temp
-    NickName = NickName[NickName.find('(') + 1:]
-    NickName = NickName[:NickName.rfind(')')]
 
     Dialog = QtWidgets.QDialog()
     ui = Ui_Dialog()
-    ui.setupUi(Dialog, PTTCoreObj, TargetID, NickName)
+    ui.setupUi(Dialog, ConfigObj, PTTCoreObj, TargetID)
     Dialog.show()
     return Dialog
     # Dialog.exec()
@@ -252,4 +280,3 @@ if __name__ == "__main__":
     ui.setupUi(Dialog)
     Dialog.show()
     sys.exit(app.exec_())
-

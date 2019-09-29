@@ -44,7 +44,8 @@ class Core(QtCore.QThread):
         self._throwWaterBall = False
 
         self.Waterball_Signal.connect(self._CatchWaterBall)
-        self.WaterballList = dict()
+        self.WaterballRecvMsgFuncList = dict()
+        self.DialogList = dict()
         self.First = True
 
     def start(self):
@@ -86,16 +87,14 @@ class Core(QtCore.QThread):
 
         return self._ErrorMsg
 
-    def registerWaterballList(self, Target, Func):
+    def registerWaterball(self, Dialog, RecvMsgFunc, Target):
 
-        if Target not in self.WaterballList:
-            self.WaterballList[Target] = Func
+        if Target not in self.DialogList:
+            self.DialogList[Target] = Dialog
+        if Target not in self.WaterballRecvMsgFuncList:
+            self.WaterballRecvMsgFuncList[Target] = RecvMsgFunc
 
     def _CatchWaterBall(self, WaterBall):
-        Dialog = None
-
-        def TopUI():
-            Dialog.activateWindow()
 
         Target = WaterBall.getTarget()
         RecviveWaterballFrom = i18n.RecviveWaterballFrom
@@ -103,22 +102,36 @@ class Core(QtCore.QThread):
 
         print(RecviveWaterballFrom)
 
-        if Target not in self.WaterballList:
+        def TopUI():
+            Log.showValue(
+                'uPTT Core',
+                Log.Level.INFO,
+                '啟動視窗',
+                Target
+            )
+
+            if self.DialogList[Target].isMinimized():
+                self.DialogList[Target].showNormal()
+            # self.DialogList[Target].activateWindow()
+
+        Dialog = None
+        if Target not in self.WaterballRecvMsgFuncList:
             Dialog = ChatWindow.start(
                 self._SysTray,
                 self._ConfigObj,
                 self,
                 Target=Target
             )
-        Func = self.WaterballList[Target]
+        Func = self.WaterballRecvMsgFuncList[Target]
         # 112 KeyError
         Func(WaterBall)
 
-        self._Notification.throw('uPTT', RecviveWaterballFrom, Click=TopUI)
-
         if Dialog is not None:
             Dialog.exec()
-            del self.WaterballList[Target]
+            del self.WaterballRecvMsgFuncList[Target]
+        else:
+            self._Notification.throw('uPTT', RecviveWaterballFrom, Click=TopUI)
+            self.DialogList[Target].activateWindow()
 
     def TrackThread(self):
         Recover = False
@@ -298,11 +311,11 @@ class Core(QtCore.QThread):
                         ShowNewMail = False
 
                     # 有沒有新水球丟過來，每 self._ConfigObj.QueryCycle 秒檢查一次
-                    WaterBallList = self._PTTBot.getWaterBall(
+                    WaterballRecvMsgFuncList = self._PTTBot.getWaterBall(
                         PTT.WaterBallOperateType.Clear
                     )
-                    if WaterBallList is not None:
-                        for WaterBall in WaterBallList:
+                    if WaterballRecvMsgFuncList is not None:
+                        for WaterBall in WaterballRecvMsgFuncList:
 
                             if WaterBall.getType() != PTT.WaterBallType.Catch:
                                 continue
@@ -323,14 +336,14 @@ class Core(QtCore.QThread):
                 traceback.print_tb(e.__traceback__)
                 print(e)
                 Recover = True
-                for s in range(self.RecoverTime):
-                    Log.showValue(
-                        'uPTT Core',
-                        Log.Level.INFO,
-                        '等待恢復機制',
-                        self.RecoverTime - s
-                    )
-                    time.sleep(1)
+                # for s in range(self._ConfigObj.RecoverTime):
+                #     Log.showValue(
+                #         'uPTT Core',
+                #         Log.Level.INFO,
+                #         '等待恢復機制',
+                #         self._ConfigObj.RecoverTime - s
+                #     )
+                #     time.sleep(1)
 
                 Log.log(
                     'uPTT Core',
