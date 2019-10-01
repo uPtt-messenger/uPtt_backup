@@ -170,6 +170,11 @@ class Ui_Dialog(object):
             #     List
             # )
 
+            import json
+
+            WaterballStr = json.dumps(Waterball.__dict__)
+            print(WaterballStr)
+
             SI = QtWidgets.QSpacerItem(
                 0,
                 0,
