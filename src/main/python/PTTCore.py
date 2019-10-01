@@ -4,7 +4,7 @@ import threading
 import traceback
 
 from PyQt5 import QtCore
-
+from HasNewPush import hasNewPush
 from PTTLibrary import PTT
 import Notification
 import Menu
@@ -301,6 +301,15 @@ class Core(QtCore.QThread):
                         break
 
                     # 以下是慢速輪巡區，會每 self._ConfigObj.QueryCycle 秒檢查一次
+                    
+                    # 偵測有無新推文
+                    if hasNewPush(board, AID).compare()
+                        print ("您所追蹤的文章有新推文 !!!")
+                    else:
+                        print ("無新推文通知。")
+                    )
+
+
                     if self._PTTBot.hasNewMail():
                         # 有沒有新信
                         if not ShowNewMail:
