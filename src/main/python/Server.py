@@ -8,9 +8,13 @@ PortList = [
     49165, 50730, 61512
 ]
 
-# Type 1
+Ws = None
+
+dddd
+
 async def handler(websocket, path):
-    print(path)
+    global Ws
+    Ws = websocket
     while True:
         try:
             print('準備接收')
@@ -24,10 +28,26 @@ async def handler(websocket, path):
         print(f"< {Msg}")
         if Msg == 'close':
             return
-        Response = f"Echo [{Msg}]"
-        print(f"> {Response}")
 
-        await websocket.send(Response)
+# Type 1
+# async def handler(websocket, path):
+#     while True:
+#         try:
+#             print('準備接收')
+#             Msg = await websocket.recv()
+#         except websockets.exceptions.ConnectionClosedError:
+#             print('連線已經關閉')
+#             return
+#         except websockets.exceptions.ConnectionClosedOK:
+#             print('連線已經關閉')
+#             return
+#         print(f"< {Msg}")
+#         if Msg == 'close':
+#             return
+#         Response = f"Echo [{Msg}]"
+#         print(f"> {Response}")
+
+#         await websocket.send(Response)
 
 # type 2
 # async def receiver(message):
