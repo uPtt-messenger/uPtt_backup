@@ -18,7 +18,9 @@ async def handler(websocket, path):
         except websockets.exceptions.ConnectionClosedError:
             print('連線已經關閉')
             return
-
+        except websockets.exceptions.ConnectionClosedOK:
+            print('連線已經關閉')
+            return
         print(f"< {Msg}")
 
         Response = f"Echo [{Msg}]"
