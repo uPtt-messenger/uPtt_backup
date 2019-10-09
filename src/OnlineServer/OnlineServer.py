@@ -18,6 +18,7 @@ class Console:
         self._OnlineList = dict()
 
         self._MaxLiveTime = 30 * 60
+        self._RecycleTime = 10 * 60
 
         RecycleT = threading.Thread(target=self._recycle)
         RecycleT.start()
@@ -57,7 +58,7 @@ class Console:
                 '回收器等待'
             )
             # 每十分鐘回收一次
-            time.sleep(10 * 60)
+            time.sleep(self._RecycleTime)
             Log.log(
                 'OnLine Server',
                 Log.Level.INFO,
@@ -88,7 +89,7 @@ async def handler(websocket, path):
             return
         except websockets.exceptions.ConnectionClosedOK:
             return
-        
+
         Msg = json.loads(MsgStr)
         Purpose = Msg['purpose']
 

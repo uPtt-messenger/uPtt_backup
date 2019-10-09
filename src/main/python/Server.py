@@ -3,18 +3,20 @@ import traceback
 import asyncio
 import websockets
 import time
+import sys
+import json
+import subprocess
+
+import Log
+
 
 PortList = [
     49165, 50730, 61512
 ]
+MachineID = None
 
-Ws = None
-
-dddd
 
 async def handler(websocket, path):
-    global Ws
-    Ws = websocket
     while True:
         try:
             print('準備接收')
@@ -29,89 +31,42 @@ async def handler(websocket, path):
         if Msg == 'close':
             return
 
-# Type 1
-# async def handler(websocket, path):
-#     while True:
-#         try:
-#             print('準備接收')
-#             Msg = await websocket.recv()
-#         except websockets.exceptions.ConnectionClosedError:
-#             print('連線已經關閉')
-#             return
-#         except websockets.exceptions.ConnectionClosedOK:
-#             print('連線已經關閉')
-#             return
-#         print(f"< {Msg}")
-#         if Msg == 'close':
-#             return
-#         Response = f"Echo [{Msg}]"
-#         print(f"> {Response}")
+async def CountOnline_Join(port):
+    url = f"ws://localhost:{port}"
+    print(f'更新線上人數:{url}')
+    async with websockets.connect(url) as websocket:
+        process = subprocess.Popen(
+            'wmic csproduct get uuid'.split(' '),
+            stdout=subprocess.PIPE
+        )
+        out, err = process.communicate()
+        global MachineID
+        MachineID = out.decode("cp950")
+        MachineID = MachineID[4:].strip()
+        Log.showValue(
+            'Server',
+            Log.Level.INFO,
+            'MachineID',
+            MachineID
+        )
+        Msg = dict()
+        Msg['purpose'] = 'CountOnline_Join'
+        Msg['uid'] = MachineID
+        MsgStr = json.dumps(Msg)
+        await websocket.send(MsgStr)
 
-#         await websocket.send(Response)
 
-# type 2
-# async def receiver(message):
-#     print(f'receive [{message}]')
+async def CountOnline_Leave(port):
+    url = f"ws://localhost:{port}"
+    print(f'更新線上人數:{url}')
+    async with websockets.connect(url) as websocket:
+        Msg = dict()
+        Msg['purpose'] = 'CountOnline_Leave'
+        global MachineID
+        Msg['uid'] = MachineID
+        MsgStr = json.dumps(Msg)
+        await websocket.send(MsgStr)
 
-# async def receiver_handler(websocket, path):
-#     async for message in websocket:
-#         await receiver(message)
-
-# async def producer():
-#     return None
-
-# async def producer_handler(websocket, path):
-#     while True:
-#         message = await producer()
-#         if message is not None:
-#             await websocket.send(message)
-
-# @asyncio.coroutine
-# async def handler(websocket, path):
-#     consumer_task = asyncio.ensure_future(
-#         receiver_handler(websocket, path)
-#     )
-#     producer_task = asyncio.ensure_future(
-#         producer_handler(websocket, path)
-#     )
-#     _, pending = await asyncio.wait(
-#         [consumer_task, producer_task],
-#         return_when=asyncio.FIRST_COMPLETED,
-#     )
-#     for task in pending:
-#         task.cancel()
-    
-#     print('Finish')
-
-# Type 3
-# connected = set()
-
-# async def handler(websocket, path):
-#     # Register.
-#     connected.add(websocket)
-#     try:
-#         # Implement logic here.
-#         # await asyncio.wait([ws.send("Hello!") for ws in connected])
-
-#         print(path)
-#         while True:
-#             try:
-#                 print('準備接收')
-#                 Msg = await websocket.recv()
-#             except websockets.exceptions.ConnectionClosedError:
-#                 print('連線已經關閉')
-#                 return
-#             except websockets.exceptions.ConnectionClosedOK:
-#                 print('連線已經關閉')
-#                 return
-#             print(f"< {Msg}")
-#             if Msg == 'close':
-#                 return
-#             Response = f"Echo [{Msg}]"
-#             print(f"> {Response}")
-#     finally:
-#         # Unregister.
-#         connected.remove(websocket)
 
 # https://websockets.readthedocs.io/en/stable/intro.html
 for i in range(len(PortList)):
@@ -125,5 +80,32 @@ for i in range(len(PortList)):
         print(f'WebSocket Server 啟動失敗 Port: {PortList[i]}')
 
 print('OKOK')
+
+OnlineServerPortList = [
+    59277, 56885, 62750
+]
+for port in OnlineServerPortList:
+    try:
+        asyncio.get_event_loop().run_until_complete(CountOnline_Join(port))
+
+        Log.log(
+            'Server',
+            Log.Level.INFO,
+            '線上人數更新成功'
+        )
+        break
+    except Exception as e:
+        traceback.print_tb(e.__traceback__)
+        print(e)
+        Log.log(
+            'Server',
+            Log.Level.INFO,
+            'CountOnline_Join error'
+        )
+Log.log(
+    'Server',
+    Log.Level.INFO,
+    '線上人數更新結束'
+)
 asyncio.get_event_loop().run_until_complete(start_server)
 asyncio.get_event_loop().run_forever()
