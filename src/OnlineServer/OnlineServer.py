@@ -74,7 +74,9 @@ class Console:
                 self._update()
                 self._Lock.release()
 
-# {"purpose": "CountOnline", "uid": "QQQ"}
+
+# {"purpose": "CountOnline_Join", "uid": "QQQ_UID"}
+# {"purpose": "CountOnline_Leave", "uid": "QQQ_UID"}
 
 
 async def handler(websocket, path):
@@ -86,12 +88,18 @@ async def handler(websocket, path):
             return
         except websockets.exceptions.ConnectionClosedOK:
             return
+        
         Msg = json.loads(MsgStr)
         Purpose = Msg['purpose']
-        if Purpose == 'CountOnline':
+
+        if Purpose == 'CountOnline_Join':
             UID = Msg['uid']
             print(f'UID [{UID}]')
             ConsoleObj.add(UID)
+        elif Purpose == 'CountOnline_Leave':
+            UID = Msg['uid']
+            print(f'UID [{UID}]')
+            ConsoleObj.remove(UID)
 
 for i in range(len(PortList)):
     try:
