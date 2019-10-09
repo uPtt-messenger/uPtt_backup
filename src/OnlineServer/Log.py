@@ -1,9 +1,6 @@
 import sys
 from time import gmtime, strftime
 
-import Config
-import Util
-
 # Log Handler
 Handler = None
 
@@ -40,9 +37,6 @@ def merge(Msg) -> str:
 
 
 def log(PreFix, CurrentLogLevel, Msg):
-
-    if not Util.checkRange(Level, CurrentLogLevel):
-        raise ValueError('LogLevel', CurrentLogLevel)
 
     global LogLevel
 
@@ -82,9 +76,6 @@ LastValue = None
 
 
 def showValue(PreFix, CurrentLogLevel, Msg, Value):
-
-    if not Util.checkRange(Level, CurrentLogLevel):
-        raise ValueError('LogLevel', CurrentLogLevel)
 
     global LogLevel
     if LogLevel > CurrentLogLevel:

@@ -6,6 +6,7 @@ import time
 import sys
 import json
 import subprocess
+import threading
 
 import Log
 
@@ -13,8 +14,11 @@ import Log
 PortList = [
     49165, 50730, 61512
 ]
-MachineID = None
 
+OnlineServerPortList = [
+    59277
+    # , 56885, 62750
+]
 
 async def handler(websocket, path):
     while True:
@@ -31,8 +35,9 @@ async def handler(websocket, path):
         if Msg == 'close':
             return
 
-async def CountOnline_Join(port):
-    url = f"ws://localhost:{port}"
+
+async def CountOnline_JoinFunc(port):
+    url = f"ws://104.154.219.183:{port}"
     print(f'更新線上人數:{url}')
     async with websockets.connect(url) as websocket:
         process = subprocess.Popen(
@@ -40,7 +45,6 @@ async def CountOnline_Join(port):
             stdout=subprocess.PIPE
         )
         out, err = process.communicate()
-        global MachineID
         MachineID = out.decode("cp950")
         MachineID = MachineID[4:].strip()
         Log.showValue(
@@ -56,56 +60,106 @@ async def CountOnline_Join(port):
         await websocket.send(MsgStr)
 
 
-async def CountOnline_Leave(port):
-    url = f"ws://localhost:{port}"
+def CountOnline_Join():
+    global OnlineServerPortList
+    for port in OnlineServerPortList:
+        try:
+            asyncio.get_event_loop().run_until_complete(
+                CountOnline_JoinFunc(port)
+            )
+
+            Log.log(
+                'Server',
+                Log.Level.INFO,
+                '線上人數更新成功'
+            )
+            break
+        except Exception as e:
+            traceback.print_tb(e.__traceback__)
+            print(e)
+            Log.log(
+                'Server',
+                Log.Level.INFO,
+                '線上人數更新錯誤'
+            )
+    Log.log(
+        'Server',
+        Log.Level.INFO,
+        '線上人數更新結束'
+    )
+    # 每 25 分鐘更新一次
+    timer = threading.Timer(25 * 60, CountOnline_Join)
+    timer.daemon = True
+    timer.start()
+
+
+async def CountOnline_LeaveFunc(port):
+    url = f"ws://104.154.219.183:{port}"
     print(f'更新線上人數:{url}')
     async with websockets.connect(url) as websocket:
+        process = subprocess.Popen(
+            'wmic csproduct get uuid'.split(' '),
+            stdout=subprocess.PIPE
+        )
+        out, err = process.communicate()
+        MachineID = out.decode("cp950")
+        MachineID = MachineID[4:].strip()
+        Log.showValue(
+            'Server',
+            Log.Level.INFO,
+            'MachineID',
+            MachineID
+        )
         Msg = dict()
         Msg['purpose'] = 'CountOnline_Leave'
-        global MachineID
         Msg['uid'] = MachineID
         MsgStr = json.dumps(Msg)
         await websocket.send(MsgStr)
 
 
-# https://websockets.readthedocs.io/en/stable/intro.html
-for i in range(len(PortList)):
-    try:
-        start_server = websockets.serve(handler, "127.0.0.1", PortList[i])
-        print(f'WebSocket Server 啟動成功 Port: {PortList[i]}')
-        break
-    except Exception as e:
-        traceback.print_tb(e.__traceback__)
-        print(e)
-        print(f'WebSocket Server 啟動失敗 Port: {PortList[i]}')
+def CountOnline_Leave():
+    global OnlineServerPortList
+    for port in OnlineServerPortList:
+        try:
+            asyncio.get_event_loop().run_until_complete(
+                CountOnline_LeaveFunc(port)
+            )
 
-print('OKOK')
+            Log.log(
+                'Server',
+                Log.Level.INFO,
+                '線上人數更新成功'
+            )
+            break
+        except Exception as e:
+            traceback.print_tb(e.__traceback__)
+            print(e)
+            Log.log(
+                'Server',
+                Log.Level.INFO,
+                '線上人數更新錯誤'
+            )
+    Log.log(
+        'Server',
+        Log.Level.INFO,
+        '線上人數更新結束'
+    )
 
-OnlineServerPortList = [
-    59277, 56885, 62750
-]
-for port in OnlineServerPortList:
-    try:
-        asyncio.get_event_loop().run_until_complete(CountOnline_Join(port))
+if __name__ == '__main__':
+    # https://websockets.readthedocs.io/en/stable/intro.html
+    # for i in range(len(PortList)):
+    #     try:
+    #         start_server = websockets.serve(handler, "127.0.0.1", PortList[i])
+    #         print(f'WebSocket Server 啟動成功 Port: {PortList[i]}')
+    #         break
+    #     except Exception as e:
+    #         traceback.print_tb(e.__traceback__)
+    #         print(e)
+    #         print(f'WebSocket Server 啟動失敗 Port: {PortList[i]}')
 
-        Log.log(
-            'Server',
-            Log.Level.INFO,
-            '線上人數更新成功'
-        )
-        break
-    except Exception as e:
-        traceback.print_tb(e.__traceback__)
-        print(e)
-        Log.log(
-            'Server',
-            Log.Level.INFO,
-            'CountOnline_Join error'
-        )
-Log.log(
-    'Server',
-    Log.Level.INFO,
-    '線上人數更新結束'
-)
-asyncio.get_event_loop().run_until_complete(start_server)
-asyncio.get_event_loop().run_forever()
+    # print('OKOK')
+    # asyncio.get_event_loop().run_until_complete(start_server)
+    # asyncio.get_event_loop().run_forever()
+
+    CountOnline_Join()
+    CountOnline_Leave()

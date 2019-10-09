@@ -23,6 +23,8 @@ import PTTCore
 import Log
 import i18n
 
+import Server
+
 
 def LoginFunc():
 
@@ -125,6 +127,7 @@ def ExitFunc():
 
     SystemTray.hide()
     LogoutFunc()
+    Server.CountOnline_Leave()
     Log.log(
         'uPTT Main',
         Log.Level.INFO,
@@ -164,7 +167,7 @@ if __name__ == '__main__':
     MenuObj.addEvent(Menu.Type.Exit, ExitFunc)
     MenuObj.setMenu(Menu.Type.Login)
 
-    CountOnline_Join()
+    Server.CountOnline_Join()
 
     NotifiObj.throw('uPTT', '啟動成功')
     # ChatWindow.start(ConfigObj)

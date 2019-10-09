@@ -8,7 +8,7 @@ import threading
 import Log
 
 PortList = [
-    59277, 56885, 62750
+    59277
 ]
 
 
@@ -20,7 +20,20 @@ class Console:
         self._MaxLiveTime = 30 * 60
         self._RecycleTime = 10 * 60
 
+        try:
+            with open('Data.txt', encoding='utf8') as File:
+                self._Data = json.load(File)
+        except Exception as e:
+
+            traceback.print_tb(e.__traceback__)
+            print(e)
+            print('無法讀取 Data.txt')
+            self._Data = dict()
+
+        self._Key_MaxOnline = 'MaxOnline'
+
         RecycleT = threading.Thread(target=self._recycle)
+        RecycleT.daemon = True
         RecycleT.start()
 
     def add(self, UID):
@@ -42,12 +55,36 @@ class Console:
             self._update()
             self._Lock.release()
 
+    def getOnline(self):
+        self._Lock.acquire()
+        try:
+            Online = len(self._OnlineList)
+            MaxOnline = self._Data[self._Key_MaxOnline]
+        finally:
+            self._Lock.release()
+
+        return Online, MaxOnline
+
+    def _saveData(self):
+        with open('Data.txt', 'w', encoding='utf8') as File:
+            json.dump(self._Data, File, indent=4, ensure_ascii=False)
+
     def _update(self):
-        Log.showValue(
+
+        CurrentOnline = len(self._OnlineList)
+
+        if self._Key_MaxOnline not in self._Data:
+            self._Data[self._Key_MaxOnline] = 0
+
+        if CurrentOnline > self._Data[self._Key_MaxOnline]:
+            self._Data[self._Key_MaxOnline] = CurrentOnline
+            self._saveData()
+
+        Buffer = f'目前人數 [{CurrentOnline}] 最高人數[{self._Data[self._Key_MaxOnline]}]'
+        Log.log(
             'OnLine Server',
             Log.Level.INFO,
-            '目前人數',
-            len(self._OnlineList)
+            Buffer
         )
 
     def _recycle(self):
@@ -67,10 +104,14 @@ class Console:
             self._Lock.acquire()
             try:
                 CurrentTime = time.time()
+                RemoveKey = []
                 for Key in self._OnlineList:
                     if CurrentTime - self._OnlineList[Key] >= \
                             self._MaxLiveTime:
-                        del self._OnlineList[Key]
+                        RemoveKey.append(Key)
+
+                for Key in RemoveKey:
+                    del self._OnlineList[Key]
             finally:
                 self._update()
                 self._Lock.release()
@@ -101,6 +142,16 @@ async def handler(websocket, path):
             UID = Msg['uid']
             print(f'UID [{UID}]')
             ConsoleObj.remove(UID)
+        elif Purpose == 'CountOnline':
+            Online, MaxOnline = ConsoleObj.getOnline()
+
+            ResMsg = dict()
+            ResMsg['state'] = '0'
+            ResMsg['Online'] = str(Online)
+            ResMsg['MaxOnline'] = str(MaxOnline)
+
+            ResMsgStr = json.dumps(ResMsg)
+            await websocket.send(ResMsgStr)
 
 for i in range(len(PortList)):
     try:
