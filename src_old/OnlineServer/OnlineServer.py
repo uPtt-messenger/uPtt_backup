@@ -20,6 +20,8 @@ class Console:
         self._MaxLiveTime = 30 * 60
         self._RecycleTime = 10 * 60
 
+        self._Key_MaxOnline = 'MaxOnline'
+
         try:
             with open('Data.txt', encoding='utf8') as File:
                 self._Data = json.load(File)
@@ -29,8 +31,7 @@ class Console:
             print(e)
             print('無法讀取 Data.txt')
             self._Data = dict()
-
-        self._Key_MaxOnline = 'MaxOnline'
+            self._Data[self._Key_MaxOnline] = 0
 
         RecycleT = threading.Thread(target=self._recycle)
         RecycleT.daemon = True
