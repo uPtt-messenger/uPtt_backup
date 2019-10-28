@@ -104,3 +104,4 @@ venv.bak/
 *.autosave
 *.pro.user
 /src/build/settings/secret.json
+build/
