@@ -23,6 +23,8 @@ def Send(client, server, msg):
     global ClientList
     if client not in ClientList:
         return
+    
+    # print(client['address'])
     try:
         Log.showValue(
             'WebSocket Server',
@@ -42,14 +44,10 @@ def threadingsend(client, server, msg):
 
 
 def MessageReceived(client, server, msg):
-    print(client)
+    print(client['address'])
     print(f'Receive [{msg}]')
 
-    time.sleep(5)
     server.send_message(client, f'Echo [{msg}]')
-    # t = threading.Thread(target=threadingsend, args=(client, server, msg))
-    # t.daemon = True
-    # t.start()
 
 
 def ServerSetup():
