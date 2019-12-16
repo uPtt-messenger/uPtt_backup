@@ -1,5 +1,4 @@
 @echo off
 cls
 
-cd src/
-pyinstaller --onefile uPtt.py
+pyinstaller -w --onefile .\src\uPtt.py
