@@ -82,12 +82,15 @@ async def unregister(websocket):
 
 
 async def counter(websocket, path):
-    # register(websocket) sends user_event() to websocket
+    # 註冊使用者，然後把目前線上人數更新給所有使用者
     await register(websocket)
+    print('user join')
     try:
+        # 對當下使用者更新數值
         await websocket.send(state_event())
         async for message in websocket:
             data = json.loads(message)
+            print(data)
             if data["action"] == "minus":
                 STATE["value"] -= 1
                 await notify_state()
@@ -97,6 +100,7 @@ async def counter(websocket, path):
             else:
                 logging.error("unsupported event: {}", data)
     finally:
+        print('user leave')
         await unregister(websocket)
 
 # threading.Thread(target=testNewMsg).start()
