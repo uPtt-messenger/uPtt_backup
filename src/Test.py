@@ -106,7 +106,7 @@ async def counter(websocket, path):
 # threading.Thread(target=testNewMsg).start()
 
 ssl_context = ssl.SSLContext(ssl.PROTOCOL_TLS_SERVER)
-localhost_pem = pathlib.Path(__file__).with_name("uPttSSL.pem")
+localhost_pem = "../GenerateCACert/uPttSSL.pem"
 ssl_context.load_cert_chain(localhost_pem)
 
 start_server = websockets.serve(
