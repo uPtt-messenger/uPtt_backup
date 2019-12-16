@@ -3,7 +3,7 @@ import time
 
 import Log
 import Config
-import WebSocketServer
+import websocketserver
 
 if __name__ == '__main__':
 
@@ -16,8 +16,8 @@ if __name__ == '__main__':
         ConfigObj.Version
     )
 
-    WebSocketServer.start()
-    while WebSocketServer.RunServer:
+    websocketserver.start()
+    while websocketserver.RunServer:
         try:
             time.sleep(10)
         except KeyboardInterrupt:
