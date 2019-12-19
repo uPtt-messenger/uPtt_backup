@@ -5,6 +5,7 @@ import ssl
 import logging
 import json
 
+import traceback
 import time
 import threading
 
@@ -103,6 +104,80 @@ async def counter(websocket, path):
         print('user leave')
         await unregister(websocket)
 
+
+async def getPushMsg():
+    await asyncio.sleep(5)
+    return 'Push Msg'
+
+
+PushMsg = None
+Run = True
+
+
+async def consumer_handler(ws, path):
+    global Run
+    try:
+        RecvMsg = await ws.recv()
+        print(f'recv [{RecvMsg}]')
+        await ws.send(RecvMsg)
+        print(f'echo complete')
+    except Exception as e:
+        traceback.print_tb(e.__traceback__)
+        print(e)
+        Run = False
+
+
+async def producer_handler(ws, path):
+    global PushMsg
+    while True:
+        if PushMsg is not None:
+            print(f'push [{PushMsg}]')
+            await ws.send(PushMsg)
+            PushMsg = None
+        else:
+            print(f'asyncio.sleep')
+            await asyncio.sleep(2)
+
+
+async def handler(websocket, path):
+    global Run
+
+    Run = True
+
+    while Run:
+        consumer_task = asyncio.ensure_future(
+            consumer_handler(websocket, path))
+
+        producer_task = asyncio.ensure_future(
+            producer_handler(websocket, path))
+
+        done, pending = await asyncio.wait(
+            [consumer_task, producer_task],
+            return_when=asyncio.FIRST_COMPLETED,
+        )
+        for task in pending:
+            task.cancel()
+
+
+# async def handler(websocket, path):
+#     print(f'{path} join')
+#     try:
+#         while True:
+#             RecvMsg = await websocket.recv()
+#             PushMsg = await getPushMsg()
+
+#             if RecvMsg is not None:
+#                 await websocket.send(RecvMsg)
+#             else:
+#                 await websocket.send(PushMsg)
+
+#             PushMsg = None
+#             RecvMsg = None
+
+#     finally:
+#         print(f'{path} leave')
+
+
 # threading.Thread(target=testNewMsg).start()
 
 ssl_context = ssl.SSLContext(ssl.PROTOCOL_TLS_SERVER)
@@ -110,10 +185,10 @@ localhost_pem = "../GenerateCACert/uPttSSL.pem"
 ssl_context.load_cert_chain(localhost_pem)
 
 start_server = websockets.serve(
-    counter,
+    handler,
     "localhost",
     50733,
-    ssl=ssl_context
+    # ssl=ssl_context
 )
 
 asyncio.get_event_loop().run_until_complete(start_server)
