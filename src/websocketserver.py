@@ -1,53 +1,71 @@
-from websocket_server import WebsocketServer
+import asyncio
+import websockets
+import pathlib
+import ssl
+import logging
+import json
 
-import threading
+import traceback
 import time
+import threading
 
 import Log
 
-RunServer = True
-ClientList = []
+RunSession = True
+PushMsgList = []
+EventLoop = None
+ServerStart = False
 
 
-def ClientJoin(client, server):
-    global ClientList
-    ClientList.append(client)
+async def consumer_handler(ws, path):
+    global RunSession
+
+    while RunSession:
+        try:
+            RecvMsg = await ws.recv()
+            print(f'recv [{RecvMsg}]')
+            await ws.send(RecvMsg)
+            print(f'echo complete')
+        except Exception as e:
+            print('Connection Clsoe')
+            RunSession = False
+            break
 
 
-def ClientLeave(client, server):
-    global ClientList
-    ClientList.remove(client)
+async def producer_handler(ws, path):
+    global RunSession
+    global PushMsgList
+
+    while RunSession:
+        if len(PushMsgList) != 0:
+            while len(PushMsgList) != 0:
+                PushMsg = PushMsgList.pop()
+
+                print(f'push [{PushMsg}]')
+                await ws.send(PushMsg)
+        else:
+            # print(f'asyncio.sleep')
+            # No
+            await asyncio.sleep(0.1)
 
 
-def Send(client, server, msg):
-    global ClientList
-    if client not in ClientList:
-        return
-    
-    # print(client['address'])
-    try:
-        Log.showValue(
-            'WebSocket Server',
-            Log.Level.INFO,
-            '送出訊息',
-            msg
+async def handler(websocket, path):
+    global RunSession
+
+    RunSession = True
+    while RunSession:
+        consumer_task = asyncio.ensure_future(
+            consumer_handler(websocket, path))
+
+        producer_task = asyncio.ensure_future(
+            producer_handler(websocket, path))
+
+        done, pending = await asyncio.wait(
+            [consumer_task, producer_task],
+            return_when=asyncio.FIRST_COMPLETED,
         )
-        server.send_message(client, msg)
-    except BrokenPipeError:
-        pass
-
-
-def threadingsend(client, server, msg):
-    for i in range(5):
-        time.sleep(1)
-        Send(client, server, f'Echo [{msg}][{i}]')
-
-
-def MessageReceived(client, server, msg):
-    print(client['address'])
-    print(f'Receive [{msg}]')
-
-    server.send_message(client, f'Echo [{msg}]')
+        for task in pending:
+            task.cancel()
 
 
 def ServerSetup():
@@ -55,13 +73,31 @@ def ServerSetup():
         'WebSocket Server',
         Log.Level.INFO,
         '啟動伺服器',
-        50730
+        50733
     )
-    server = WebsocketServer(50730, host='127.0.0.1')
-    server.set_fn_new_client(ClientJoin)
-    server.set_fn_client_left(ClientLeave)
-    server.set_fn_message_received(MessageReceived)
-    server.run_forever()
+
+    new_loop = asyncio.new_event_loop()
+    asyncio.set_event_loop(new_loop)
+
+    start_server = websockets.serve(
+        handler,
+        "localhost",
+        50733,
+        # ssl=ssl_context
+    )
+
+    asyncio.get_event_loop().run_until_complete(start_server)
+
+    global ServerStart
+    ServerStart = True
+
+    asyncio.get_event_loop().run_forever()
+
+    Log.show(
+        'WebSocket Server',
+        Log.Level.INFO,
+        '關閉伺服器'
+    )
 
 
 def start():
@@ -70,12 +106,27 @@ def start():
     t.start()
 
 
+def stop():
+
+    global EventLoop
+    global ServerStart
+    global RunSession
+
+    while not ServerStart:
+        time.sleep(0.1)
+
+    RunSession = False
+    asyncio.get_event_loop().stop()
+
+
 if __name__ == '__main__':
     start()
+    # stop()
 
     while True:
         try:
             time.sleep(1)
-        except KeyboardInterrupt:
-            print('關閉 WebSocket Server')
+        except:
+            stop()
             break
+        
