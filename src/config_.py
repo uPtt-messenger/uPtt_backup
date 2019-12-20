@@ -2,7 +2,7 @@
 import os
 import json
 
-import Log
+import log
 
 
 class Type:
@@ -31,13 +31,13 @@ class Config:
         self.ConfigPath = None
 
         if os.name == 'nt':
-            Log.showValue(
+            log.showValue(
                 'Config',
-                Log.Level.INFO,
+                log.Level.INFO,
                 '作業系統',
                 'Windows'
             )
-            self.ConfigPath = 'C:/ProgramData/uPTT/'
+            self.ConfigPath = 'C:/ProgramData/uPtt/'
 
         self.ConfigFullPath = self.ConfigPath + self.ConfigFileName
         self.UserConfigPath = None
@@ -53,9 +53,9 @@ class Config:
 
         self.UserData = dict()
 
-        Log.showValue(
+        log.showValue(
             'Config',
-            Log.Level.INFO,
+            log.Level.INFO,
             '設定檔',
             '初始化'
         )

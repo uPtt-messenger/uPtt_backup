@@ -9,7 +9,7 @@ import traceback
 import time
 import threading
 
-import Log
+import log
 
 RunSession = True
 PushMsgList = []
@@ -69,9 +69,9 @@ async def handler(websocket, path):
 
 
 def ServerSetup():
-    Log.showValue(
+    log.showValue(
         'WebSocket Server',
-        Log.Level.INFO,
+        log.Level.INFO,
         '啟動伺服器',
         50733
     )
@@ -93,9 +93,9 @@ def ServerSetup():
 
     asyncio.get_event_loop().run_forever()
 
-    Log.show(
+    log.show(
         'WebSocket Server',
-        Log.Level.INFO,
+        log.Level.INFO,
         '關閉伺服器'
     )
 
@@ -129,4 +129,3 @@ if __name__ == '__main__':
         except:
             stop()
             break
-        

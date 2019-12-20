@@ -1,29 +1,30 @@
 
 import time
 
-import Log
-import Config
+import log
+import config
 import websocketserver
 
 if __name__ == '__main__':
 
-    ConfigObj = Config.Config()
+    ConfigObj = config.Config()
 
-    Log.showValue(
+    log.showValue(
         'Main',
-        Log.Level.INFO,
+        log.Level.INFO,
         'uPtt 版本',
         ConfigObj.Version
     )
 
     websocketserver.start()
-    while websocketserver.RunServer:
+    while True:
         try:
             time.sleep(10)
         except KeyboardInterrupt:
-            Log.show(
+            log.show(
                 'Main',
-                Log.Level.INFO,
-                '伺服器關閉'
+                log.Level.INFO,
+                '關閉伺服器'
             )
+            websocketserver.stop()
             break
