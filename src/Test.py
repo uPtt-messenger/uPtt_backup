@@ -122,8 +122,7 @@ async def consumer_handler(ws, path):
         await ws.send(RecvMsg)
         print(f'echo complete')
     except Exception as e:
-        traceback.print_tb(e.__traceback__)
-        print(e)
+        print('Connection Clsoe')
         Run = False
 
 
@@ -135,7 +134,8 @@ async def producer_handler(ws, path):
             await ws.send(PushMsg)
             PushMsg = None
         else:
-            print(f'asyncio.sleep')
+            # print(f'asyncio.sleep')
+            # No
             await asyncio.sleep(2)
 
 
@@ -180,9 +180,9 @@ async def handler(websocket, path):
 
 # threading.Thread(target=testNewMsg).start()
 
-ssl_context = ssl.SSLContext(ssl.PROTOCOL_TLS_SERVER)
-localhost_pem = "../GenerateCACert/uPttSSL.pem"
-ssl_context.load_cert_chain(localhost_pem)
+# ssl_context = ssl.SSLContext(ssl.PROTOCOL_TLS_SERVER)
+# localhost_pem = "../GenerateCACert/uPttSSL.pem"
+# ssl_context.load_cert_chain(localhost_pem)
 
 start_server = websockets.serve(
     handler,
