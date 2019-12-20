@@ -12,21 +12,22 @@ import threading
 import log
 
 RunSession = True
-PushMsgList = []
-EventLoop = None
+Command = None
 ServerStart = False
 
 
 async def consumer_handler(ws, path):
     global RunSession
+    global Command
 
     while RunSession:
         try:
             RecvMsg = await ws.recv()
             print(f'recv [{RecvMsg}]')
-            await ws.send(RecvMsg)
-            print(f'echo complete')
-        except Exception as e:
+            Command.analyze(RecvMsg)
+            # await ws.send(RecvMsg)
+            # print(f'echo complete')
+        except Exception:
             print('Connection Clsoe')
             RunSession = False
             break
@@ -34,12 +35,12 @@ async def consumer_handler(ws, path):
 
 async def producer_handler(ws, path):
     global RunSession
-    global PushMsgList
+    global Command
 
     while RunSession:
-        if len(PushMsgList) != 0:
-            while len(PushMsgList) != 0:
-                PushMsg = PushMsgList.pop()
+        if len(Command.PushMsg) != 0:
+            while len(Command.PushMsg) != 0:
+                PushMsg = Command.PushMsg.pop()
 
                 print(f'push [{PushMsg}]')
                 await ws.send(PushMsg)
@@ -60,7 +61,7 @@ async def handler(websocket, path):
         producer_task = asyncio.ensure_future(
             producer_handler(websocket, path))
 
-        done, pending = await asyncio.wait(
+        _, pending = await asyncio.wait(
             [consumer_task, producer_task],
             return_when=asyncio.FIRST_COMPLETED,
         )
@@ -108,7 +109,6 @@ def start():
 
 def stop():
 
-    global EventLoop
     global ServerStart
     global RunSession
 
@@ -126,6 +126,6 @@ if __name__ == '__main__':
     while True:
         try:
             time.sleep(1)
-        except:
+        except Exception:
             stop()
             break

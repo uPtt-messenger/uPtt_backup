@@ -2,12 +2,15 @@
 import time
 
 import log
-import config
 import websocketserver
+from config import Config
+from command import Command
+
 
 if __name__ == '__main__':
 
-    ConfigObj = config.Config()
+    ConfigObj = Config()
+    CommObj = Command()
 
     log.showValue(
         'Main',
@@ -16,6 +19,7 @@ if __name__ == '__main__':
         ConfigObj.Version
     )
 
+    websocketserver.Command = CommObj
     websocketserver.start()
     while True:
         try:
