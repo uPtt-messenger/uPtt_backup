@@ -37,7 +37,7 @@ class Config:
                 '作業系統',
                 'Windows'
             )
-            self.ConfigPath = 'C:/ProgramData/uPtt/'
+            self.ConfigPath = 'C:/ProgramData/uPtt'
 
         self.ConfigFullPath = self.ConfigPath + self.ConfigFileName
         self.UserConfigPath = None
@@ -61,9 +61,9 @@ class Config:
         )
 
     def initUser(self, ID):
-        self.UserConfigPath = f'{self.ConfigPath}{ID}/{self.ConfigFileName}'
-        if not os.path.exists(f'{self.ConfigPath}{ID}'):
-            os.makedirs(f'{self.ConfigPath}{ID}')
+        self.UserConfigPath = f'{self.ConfigPath}/{ID}/{self.ConfigFileName}'
+        if not os.path.exists(f'{self.ConfigPath}/{ID}'):
+            os.makedirs(f'{self.ConfigPath}/{ID}')
 
         try:
             with open(self.UserConfigPath, encoding='utf8') as File:
