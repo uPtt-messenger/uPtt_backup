@@ -5,6 +5,7 @@ import log
 import websocketserver
 from config import Config
 from command import Command
+from pttadapter import PTTAdapter
 
 
 if __name__ == '__main__':
@@ -18,6 +19,8 @@ if __name__ == '__main__':
         'uPtt 版本',
         ConfigObj.Version
     )
+
+    pttadapter = PTTAdapter(ConfigObj, CommObj)
 
     websocketserver.Command = CommObj
     websocketserver.start()

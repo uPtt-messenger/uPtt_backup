@@ -184,12 +184,21 @@ async def handler(websocket, path):
 # localhost_pem = "../GenerateCACert/uPttSSL.pem"
 # ssl_context.load_cert_chain(localhost_pem)
 
-start_server = websockets.serve(
-    handler,
-    "localhost",
-    50733,
-    # ssl=ssl_context
-)
+if __name__ == '__main__':
+    # start_server = websockets.serve(
+    #     handler,
+    #     "localhost",
+    #     50733,
+    #     # ssl=ssl_context
+    # )
 
-asyncio.get_event_loop().run_until_complete(start_server)
-asyncio.get_event_loop().run_forever()
+    # asyncio.get_event_loop().run_until_complete(start_server)
+    # asyncio.get_event_loop().run_forever()
+
+    x = None
+    y = None
+
+    if (x, y) == (None, None):
+        print('!!!!')
+    else:
+        print('QQ')

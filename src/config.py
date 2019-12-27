@@ -22,10 +22,10 @@ class Config:
         # 不想給使用者改的設定值就寫在這兒
         # 想給使用者改的就透過 setValue
         # 因為會被存起來
-        self.Version = '0.1.0'
+        self.Version = '0.0.1'
         self.QueryCycle = 3.1
         self.RecoverTime = 2
-        self.Port = 50730
+        self.Port = 50732
 
         self.ConfigFileName = 'Config.txt'
         self.ConfigPath = None
