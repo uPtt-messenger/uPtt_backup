@@ -2,13 +2,7 @@
 import json
 
 from errorcode import ErrorCode
-
-Key_Opt = 'operation'
-Key_Msg = 'msg'
-Key_Code = 'code'
-Key_Payload = 'payload'
-Key_PttID = 'pttId'
-Key_PttPassword = 'pwd'
+from msg import Msg
 
 
 class Command:
@@ -19,28 +13,35 @@ class Command:
         self.PushMsg = []
 
         self.ID, self.Password = None, None
+        self.logout = False
 
-    def analyze(self, RecvMsg: str):
-        Msg = json.loads(RecvMsg)
+    def analyze(self, RecvMsgStr: str):
+        RecvMsg = Msg(strobj=RecvMsgStr)
 
-        if Msg[Key_Opt] == 'echo':
+        Opt = RecvMsg.get(Msg.Key_Opt)
+        if Opt == 'echo':
 
-            ResMsg = dict()
-            ResMsg[Key_Code] = ErrorCode.Success
-            ResMsg[Key_Msg] = Msg[Key_Msg]
+            ResMsg = Msg(ErrorCode.Success, RecvMsg.get(Msg.Key_Msg))
+            self.push(ResMsg)
 
-            self.PushMsg.append(
-                json.dumps(ResMsg)
-            )
-        elif Msg[Key_Opt] == 'login':
-            self.ID = Msg[Key_Payload][Key_PttID]
-            self.Password = Msg[Key_Payload][Key_PttPassword]
+        elif Opt == 'login':
+            self.ID = RecvMsg.get(Msg.Key_Payload)[Msg.Key_PttID]
+            self.Password = RecvMsg.get(Msg.Key_Payload)[Msg.Key_PttPassword]
+
+        elif Opt == 'logout':
+            self.logout = True
 
     def push(self, PushMsg):
 
-        self.PushMsg.append(PushMsg)
+        self.PushMsg.append(PushMsg.__str__())
 
     def recvlogin(self):
         TempID, TempPW = self.ID, self.Password
         self.ID, self.Password = None, None
         return TempID, TempPW
+
+    def recvlogout(self):
+        if self.logout:
+            self.logout = False
+            return True
+        return False

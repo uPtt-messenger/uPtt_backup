@@ -13,6 +13,7 @@ import log
 
 RunSession = True
 Command = None
+Config = None
 ServerStart = False
 
 
@@ -27,7 +28,9 @@ async def consumer_handler(ws, path):
             Command.analyze(RecvMsg)
             # await ws.send(RecvMsg)
             # print(f'echo complete')
-        except Exception:
+        except Exception as e:
+            traceback.print_tb(e.__traceback__)
+            print(e)
             print('Connection Clsoe')
             RunSession = False
             break
@@ -74,7 +77,7 @@ def ServerSetup():
         'WebSocket Server',
         log.Level.INFO,
         '啟動伺服器',
-        50733
+        f'ws://localhost:{Config.Port}'
     )
 
     new_loop = asyncio.new_event_loop()
@@ -83,7 +86,7 @@ def ServerSetup():
     start_server = websockets.serve(
         handler,
         "localhost",
-        50733,
+        Config.Port,
         # ssl=ssl_context
     )
 

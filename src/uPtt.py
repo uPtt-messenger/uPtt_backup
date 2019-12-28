@@ -22,6 +22,7 @@ if __name__ == '__main__':
 
     pttadapter = PTTAdapter(ConfigObj, CommObj)
 
+    websocketserver.Config = ConfigObj
     websocketserver.Command = CommObj
     websocketserver.start()
     while True:
