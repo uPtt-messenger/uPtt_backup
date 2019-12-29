@@ -131,6 +131,7 @@ class PTTAdapter:
                             ErrorCode.UserOffLine,
                             '使用者離線'
                         )
+                    self.command.push(ResMsg)
 
                 time.sleep(0.05)
                 EndTime = time.time()
