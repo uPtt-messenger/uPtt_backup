@@ -12,16 +12,17 @@ from msg import Msg
 
 class PTTAdapter:
     def __init__(self, config, command):
-        self.Config = config
-        self.Command = command
+        self.config = config
+        self.command = command
 
         self.RunServer = True
+        self.login = False
 
-        self.Thread = threading.Thread(
+        self.thread = threading.Thread(
             target=self.run,
             daemon=True
         )
-        self.Thread.start()
+        self.thread.start()
 
     def logout(self):
         log.show(
@@ -40,7 +41,7 @@ class PTTAdapter:
         )
         # self.logout()
         self.RunServer = False
-        self.Thread.join()
+        self.thread.join()
         log.show(
             'PTTAdapter',
             log.Level.INFO,
@@ -58,10 +59,11 @@ class PTTAdapter:
 
         while self.RunServer:
 
+            # 快速反應區
             StartTime = EndTime = time.time()
-            while EndTime - StartTime < self.Config.QueryCycle:
+            while EndTime - StartTime < self.config.QueryCycle:
 
-                ID, Password = self.Command.recvlogin()
+                ID, Password = self.command.recvlogin()
                 if (ID, Password) != (None, None):
                     log.show(
                         'PTTAdapter',
@@ -74,6 +76,8 @@ class PTTAdapter:
                             Password,
                             KickOtherLogin=True
                         )
+                        self.login = True
+                        self.bot.setCallStatus(PTT.CallStatus.Off)
 
                         ResMsg = Msg(
                             ErrorCode.Success,
@@ -95,10 +99,10 @@ class PTTAdapter:
                             ErrorCode.LoginFail,
                             '請稍等一下再登入'
                         )
-                    self.Command.push(ResMsg)
+                    self.command.push(ResMsg)
 
-                if self.Command.recvlogout():
-
+                if self.command.recvlogout():
+                    self.login = False
                     self.logout()
 
                     ResMsg = Msg(
@@ -106,9 +110,60 @@ class PTTAdapter:
                         '登出成功'
                     )
 
-                    self.Command.push(ResMsg)
+                    self.command.push(ResMsg)
+
+                SendID, SendContent = self.command.sendWaterBall()
+                if (SendID, SendContent) != (None, None):
+
+                    try:
+                        self.bot.throwWaterBall(SendID, SendContent)
+                        ResMsg = Msg(
+                            ErrorCode.Success,
+                            '丟水球成功'
+                        )
+                    except PTT.Exceptions.NoSuchUser:
+                        ResMsg = Msg(
+                            ErrorCode.NoSuchUser,
+                            '無此使用者'
+                        )
+                    except PTT.Exceptions.UserOffline:
+                        ResMsg = Msg(
+                            ErrorCode.UserOffLine,
+                            '使用者離線'
+                        )
 
                 time.sleep(0.05)
                 EndTime = time.time()
-        
+
+            # 慢速輪巡區
+            print('慢速輪巡')
+
+            if not self.login:
+                continue
+            WaterBallList = self.bot.getWaterBall(
+                PTT.WaterBallOperateType.Clear
+            )
+
+            if WaterBallList is not None:
+                for WaterBall in WaterBallList:
+                    if not WaterBall.getType() == PTT.WaterBallType.Catch:
+                        continue
+
+                    Target = WaterBall.getTarget()
+                    Content = WaterBall.getContent()
+                    Date = WaterBall.getDate()
+
+                    print(f'收到來自 {Target} 的水球 [{Content}][{Date}]')
+
+                    PushMsg = Msg(opt='recvwaterball')
+
+                    payload = Msg()
+                    payload.add(Msg.Key_PttID, Target)
+                    payload.add(Msg.Key_Content, Content)
+                    payload.add(Msg.Key_Date, Date)
+
+                    PushMsg.add(Msg.Key_Payload, payload)
+
+                    self.command.push(PushMsg)
+
         self.logout()

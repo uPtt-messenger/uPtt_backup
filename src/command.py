@@ -12,10 +12,12 @@ class Command:
 
         self.PushMsg = []
 
-        self.ID = None
-        self.Password = None
+        self.loginid = None
+        self.loginpassword = None
         self.logout = False
         self.close = False
+        self.sendWBid = None
+        self.sendWBcontent = None
 
     def analyze(self, RecvMsgStr: str):
         RecvMsg = Msg(strobj=RecvMsgStr)
@@ -27,21 +29,27 @@ class Command:
             self.push(ResMsg)
 
         elif Opt == 'login':
-            self.ID = RecvMsg.get(Msg.Key_Payload)[Msg.Key_PttID]
-            self.Password = RecvMsg.get(Msg.Key_Payload)[Msg.Key_PttPassword]
+            self.loginid = RecvMsg.get(Msg.Key_Payload)[Msg.Key_PttID]
+            self.loginpassword = RecvMsg.get(Msg.Key_Payload)[
+                Msg.Key_PttPassword]
 
         elif Opt == 'logout':
             self.logout = True
+
         elif Opt == 'close':
             self.close = True
+
+        elif Opt == 'sendwaterball':
+            self.sendWBid = RecvMsg.get(Msg.Key_Payload)[Msg.Key_PttID]
+            self.sendWBcontent = RecvMsg.get(Msg.Key_Payload)[Msg.Key_Content]
 
     def push(self, PushMsg):
 
         self.PushMsg.append(PushMsg.__str__())
 
     def recvlogin(self):
-        TempID, TempPW = self.ID, self.Password
-        self.ID, self.Password = None, None
+        TempID, TempPW = self.loginid, self.loginpassword
+        self.loginid, self.loginpassword = None, None
         return TempID, TempPW
 
     def recvlogout(self):
@@ -49,3 +57,8 @@ class Command:
             self.logout = False
             return True
         return False
+
+    def sendWaterBall(self):
+        TempID, TempContent = self.sendWBid, self.sendWBcontent
+        self.sendWBid, self.sendWBcontent = None, None
+        return TempID, TempContent
