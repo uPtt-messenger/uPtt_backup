@@ -16,6 +16,8 @@ Command = None
 Config = None
 ServerStart = False
 
+Thread = None
+
 
 async def consumer_handler(ws, path):
     global RunSession
@@ -105,21 +107,36 @@ def ServerSetup():
 
 
 def start():
-    t = threading.Thread(target=ServerSetup)
-    t.daemon = True
-    t.start()
+    global Thread
+    Thread = threading.Thread(target=ServerSetup)
+    Thread.daemon = True
+    Thread.start()
 
 
 def stop():
 
     global ServerStart
     global RunSession
+    global Thread
+
+    log.show(
+        'WebSocket Server',
+        log.Level.INFO,
+        '執行終止程序'
+    )
 
     while not ServerStart:
         time.sleep(0.1)
 
     RunSession = False
     asyncio.get_event_loop().stop()
+
+    # Thread.join()
+    log.show(
+        'WebSocket Server',
+        log.Level.INFO,
+        '終止程序完成'
+    )
 
 
 if __name__ == '__main__':

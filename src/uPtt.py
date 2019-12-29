@@ -1,5 +1,6 @@
 
 import time
+import threading
 
 import log
 import websocketserver
@@ -9,6 +10,9 @@ from pttadapter import PTTAdapter
 
 
 if __name__ == '__main__':
+
+    running = threading.Event()
+    running.set()
 
     ConfigObj = Config()
     CommObj = Command()
@@ -25,14 +29,25 @@ if __name__ == '__main__':
     websocketserver.Config = ConfigObj
     websocketserver.Command = CommObj
     websocketserver.start()
-    while True:
+    while not CommObj.close:
         try:
-            time.sleep(10)
+            time.sleep(0.1)
         except KeyboardInterrupt:
-            log.show(
-                'Main',
-                log.Level.INFO,
-                '關閉伺服器'
-            )
-            websocketserver.stop()
             break
+
+    log.show(
+        'Main',
+        log.Level.INFO,
+        '執行終止程序'
+    )
+    pttadapter.stop()
+    websocketserver.stop()
+
+    # 清除所有潛在
+    running.clear()
+
+    log.show(
+        'Main',
+        log.Level.INFO,
+        '終止程序完成'
+    )

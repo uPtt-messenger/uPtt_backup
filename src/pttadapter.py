@@ -15,11 +15,37 @@ class PTTAdapter:
         self.Config = config
         self.Command = command
 
-        Thread = threading.Thread(
+        self.RunServer = True
+
+        self.Thread = threading.Thread(
             target=self.run,
             daemon=True
         )
-        Thread.start()
+        self.Thread.start()
+
+    def logout(self):
+        log.show(
+            'PTTAdapter',
+            log.Level.INFO,
+            '執行登出'
+        )
+
+        self.bot.logout()
+
+    def stop(self):
+        log.show(
+            'PTTAdapter',
+            log.Level.INFO,
+            '執行終止程序'
+        )
+        # self.logout()
+        self.RunServer = False
+        self.Thread.join()
+        log.show(
+            'PTTAdapter',
+            log.Level.INFO,
+            '終止程序完成'
+        )
 
     def run(self):
 
@@ -30,7 +56,7 @@ class PTTAdapter:
         )
         self.bot = PTT.Library()
 
-        while True:
+        while self.RunServer:
 
             StartTime = EndTime = time.time()
             while EndTime - StartTime < self.Config.QueryCycle:
@@ -73,18 +99,16 @@ class PTTAdapter:
 
                 if self.Command.recvlogout():
 
-                    log.show(
-                        'PTTAdapter',
-                        log.Level.INFO,
-                        '執行登出'
-                    )
+                    self.logout()
 
-                    self.bot.logout()
                     ResMsg = Msg(
                         ErrorCode.Success,
                         '登出成功'
                     )
+
                     self.Command.push(ResMsg)
 
                 time.sleep(0.05)
                 EndTime = time.time()
+        
+        self.logout()

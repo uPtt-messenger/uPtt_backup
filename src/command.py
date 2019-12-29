@@ -12,8 +12,10 @@ class Command:
 
         self.PushMsg = []
 
-        self.ID, self.Password = None, None
+        self.ID = None
+        self.Password = None
         self.logout = False
+        self.close = False
 
     def analyze(self, RecvMsgStr: str):
         RecvMsg = Msg(strobj=RecvMsgStr)
@@ -30,6 +32,8 @@ class Command:
 
         elif Opt == 'logout':
             self.logout = True
+        elif Opt == 'close':
+            self.close = True
 
     def push(self, PushMsg):
 
