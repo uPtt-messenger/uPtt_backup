@@ -55,6 +55,7 @@ class PTTAdapter:
             log.Level.INFO,
             '啟動'
         )
+
         self.bot = PTT.Library(
             LogHandler=self.config.PttLogHandler,
             LogLevel=self.config.PttLogLevel

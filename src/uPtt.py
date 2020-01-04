@@ -39,7 +39,8 @@ if __name__ == '__main__':
     ConfigObj = Config()
     CommObj = Command()
 
-    print(sys.argv)
+    if len(sys.argv) > 1:
+        print(sys.argv)
 
     if '-debug' in sys.argv or '-trace' in sys.argv:
         log.Handler = log2File

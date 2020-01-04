@@ -24,7 +24,6 @@ class Command:
 
         Opt = RecvMsg.get(Msg.Key_Opt)
         if Opt == 'echo':
-
             ResMsg = Msg(ErrorCode.Success, RecvMsg.get(Msg.Key_Msg))
             self.push(ResMsg)
 
@@ -42,6 +41,9 @@ class Command:
         elif Opt == 'sendwaterball':
             self.sendWBid = RecvMsg.get(Msg.Key_Payload)[Msg.Key_PttID]
             self.sendWBcontent = RecvMsg.get(Msg.Key_Payload)[Msg.Key_Content]
+        else:
+            ResMsg = Msg(ErrorCode.Unsupport, 'Unsupported')
+            self.push(ResMsg)
 
     def push(self, PushMsg):
 
