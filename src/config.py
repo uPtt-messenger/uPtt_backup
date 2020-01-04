@@ -5,15 +5,30 @@ import json
 import log
 
 
+LogPath = None
+
+
+def log2File(Msg):
+    global LogPath
+    if LogPath is None:
+        desktop = os.path.join(
+            os.path.join(
+                os.environ['USERPROFILE']
+            ),
+            'Desktop'
+        )
+
+        LogPath = f'{desktop}/uPttLog.txt'
+
+        print(LogPath)
+
+    with open(LogPath, 'a') as f:
+        f.write(f'{Msg}\n')
+
+
 class Type:
     System = 1
     User = 2
-
-
-Key_CurrentUser = 'CurrentUser'
-Key_ID = 'ID'
-Key_Password = 'Password'
-Key_Blacklist = 'Blacklist'
 
 
 class Config:
@@ -22,6 +37,10 @@ class Config:
     QueryCycle = 3.1
     RecoverTime = 2
     Port = 50732
+    HttpPort = 57983
+    PttLogHandler = None
+    PttLogLevel = log.Level.INFO
+
 
     def __init__(self):
         # 不想給使用者改的設定值就寫在這兒
@@ -32,7 +51,7 @@ class Config:
         self.ConfigPath = None
 
         if os.name == 'nt':
-            log.showValue(
+            log.showvalue(
                 'Config',
                 log.Level.INFO,
                 '作業系統',
@@ -54,7 +73,7 @@ class Config:
 
         self.UserData = dict()
 
-        log.showValue(
+        log.showvalue(
             'Config',
             log.Level.INFO,
             '設定檔',

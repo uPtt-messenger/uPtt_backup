@@ -1,3 +1,4 @@
+import os
 import sys
 from time import gmtime, strftime
 
@@ -76,7 +77,7 @@ def show(PreFix, CurrentLogLevel, Msg):
 LastValue = None
 
 
-def showValue(PreFix, CurrentLogLevel, Msg, Value):
+def showvalue(PreFix, CurrentLogLevel, Msg, Value):
 
     global LogLevel
     if LogLevel > CurrentLogLevel:

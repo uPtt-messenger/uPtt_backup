@@ -195,10 +195,45 @@ if __name__ == '__main__':
     # asyncio.get_event_loop().run_until_complete(start_server)
     # asyncio.get_event_loop().run_forever()
 
-    x = None
-    y = None
+    from http.server import HTTPServer, BaseHTTPRequestHandler
 
-    if (x, y) == (None, None):
-        print('!!!!')
-    else:
-        print('QQ')
+    index = '''
+<!DOCTYPE html>
+<html lang="tw">
+    <head>
+        <title></title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <script>
+        function oAuth2() {
+            var URL = 'https://notify-bot.line.me/oauth/authorize?';
+            URL += 'response_type=code';
+            URL += '&client_id=[olcVc4l7mHNHSxij1NYMQt]';
+            URL += '&redirect_uri=[http://localhost:57983/index.html]';
+            URL += '&scope=notify';
+            URL += '&state=NO_STATE';
+            window.location.href = URL;
+        }
+    </script>
+    </head>
+    <body>
+        <button onclick="oAuth2();"> 連結到 LineNotify 按鈕 </button>
+    </body>
+</html>
+'''
+
+    data = {'result': index}
+
+    class Resquest(BaseHTTPRequestHandler):
+        def do_GET(self):
+            self.send_response(200)
+            self.send_header('Content-type', 'text/html')
+            self.end_headers()
+            self.wfile.write(index.encode())
+
+    def run(server_class=HTTPServer, handler_class=Resquest):
+        server_address = ('', 57983)
+        httpd = server_class(server_address, handler_class)
+        httpd.serve_forever()
+
+    run()

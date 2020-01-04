@@ -1,4 +1,6 @@
 
+import os
+import sys
 import time
 import threading
 
@@ -7,6 +9,26 @@ import websocketserver
 from config import Config
 from command import Command
 from pttadapter import PTTAdapter
+
+LogPath = None
+
+
+def log2File(Msg):
+    global LogPath
+    if LogPath is None:
+        desktop = os.path.join(
+            os.path.join(
+                os.environ['USERPROFILE']
+            ),
+            'Desktop'
+        )
+
+        LogPath = f'{desktop}/uPttLog.txt'
+
+        print(LogPath)
+
+    with open(LogPath, 'a', encoding='utf8') as f:
+        f.write(f'{Msg}\n')
 
 
 if __name__ == '__main__':
@@ -17,7 +39,16 @@ if __name__ == '__main__':
     ConfigObj = Config()
     CommObj = Command()
 
-    log.showValue(
+    print(sys.argv)
+
+    if '-debug' in sys.argv or '-trace' in sys.argv:
+        log.Handler = log2File
+        ConfigObj.LogHandler = log2File
+    
+    if '-trace' in sys.argv:
+        ConfigObj.LogHandler = log.Level.TRACE
+
+    log.showvalue(
         'Main',
         log.Level.INFO,
         'uPtt 版本',
@@ -49,5 +80,5 @@ if __name__ == '__main__':
     log.show(
         'Main',
         log.Level.INFO,
-        '終止程序完成'
+        '全部終止程序完成'
     )

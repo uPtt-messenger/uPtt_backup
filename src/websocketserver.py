@@ -75,7 +75,7 @@ async def handler(websocket, path):
 
 
 def ServerSetup():
-    log.showValue(
+    log.showvalue(
         'WebSocket Server',
         log.Level.INFO,
         '啟動伺服器',

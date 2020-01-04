@@ -55,7 +55,10 @@ class PTTAdapter:
             log.Level.INFO,
             '啟動'
         )
-        self.bot = PTT.Library()
+        self.bot = PTT.Library(
+            LogHandler=self.config.PttLogHandler,
+            LogLevel=self.config.PttLogLevel
+        )
 
         while self.RunServer:
 
@@ -137,7 +140,11 @@ class PTTAdapter:
                 EndTime = time.time()
 
             # 慢速輪巡區
-            print('慢速輪巡')
+            log.show(
+                'PTTAdapter',
+                log.Level.INFO,
+                '慢速輪巡'
+            )
 
             if not self.login:
                 continue
@@ -154,15 +161,21 @@ class PTTAdapter:
                     Content = WaterBall.getContent()
                     Date = WaterBall.getDate()
 
-                    print(f'收到來自 {Target} 的水球 [{Content}][{Date}]')
+                    log.showvalue(
+                        'PTTAdapter',
+                        log.Level.INFO,
+                        f'收到來自 {Target} 的水球',
+                        f'[{Content}][{Date}]'
+                    )
 
-                    PushMsg = Msg(opt='recvwaterball')
+                    # print(f'收到來自 {Target} 的水球 [{Content}][{Date}]')
 
                     payload = Msg()
                     payload.add(Msg.Key_PttID, Target)
                     payload.add(Msg.Key_Content, Content)
                     payload.add(Msg.Key_Date, Date)
 
+                    PushMsg = Msg(opt='recvwaterball')
                     PushMsg.add(Msg.Key_Payload, payload)
 
                     self.command.push(PushMsg)
