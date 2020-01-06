@@ -41,13 +41,12 @@ class Config:
     PttLogHandler = None
     PttLogLevel = log.Level.INFO
 
-
     def __init__(self):
         # 不想給使用者改的設定值就寫在這兒
         # 想給使用者改的就透過 setValue
         # 因為會被存起來
 
-        self.ConfigFileName = 'Config.txt'
+        self.ConfigFileName = 'config.txt'
         self.ConfigPath = None
 
         if os.name == 'nt':
@@ -81,6 +80,7 @@ class Config:
         )
 
     def initUser(self, ID):
+        self.id = ID
         self.UserConfigPath = f'{self.ConfigPath}/{ID}/{self.ConfigFileName}'
         if not os.path.exists(f'{self.ConfigPath}/{ID}'):
             os.makedirs(f'{self.ConfigPath}/{ID}')
@@ -121,3 +121,16 @@ class Config:
 
             with open(self.UserConfigPath, 'w', encoding='utf8') as File:
                 json.dump(self.UserData, File, indent=4, ensure_ascii=False)
+
+    def saveDialogue(self, target, msglist):
+        filepath = f'{self.ConfigPath}/{self.id}/dialogue/{target}.txt'
+        if not os.path.exists(f'{self.ConfigPath}/{self.id}/dialogue/'):
+            os.makedirs(f'{self.ConfigPath}/{self.id}/dialogue/')
+
+        with open(filepath, 'w', encoding='utf8') as f:
+            json.dump(
+                msglist,
+                f,
+                indent=4,
+                ensure_ascii=False
+            )

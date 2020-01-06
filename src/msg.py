@@ -14,6 +14,8 @@ class Msg:
     Key_PttPassword = 'pwd'
     Key_Content = 'content'
     Key_Date = 'date'
+    Key_Type = 'type'
+    Key_Date = 'date'
 
     def __init__(self, code=None, msg=None, strobj=None, opt=None):
 

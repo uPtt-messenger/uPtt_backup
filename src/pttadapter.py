@@ -8,6 +8,7 @@ import log
 import command
 from errorcode import ErrorCode
 from msg import Msg
+from dialogue import Dialogue
 
 
 class PTTAdapter:
@@ -17,6 +18,7 @@ class PTTAdapter:
 
         self.RunServer = True
         self.login = False
+        self.dialog = Dialogue()
 
         self.thread = threading.Thread(
             target=self.run,
@@ -121,6 +123,8 @@ class PTTAdapter:
 
                     try:
                         self.bot.throwWaterBall(SendID, SendContent)
+                        self.dialog.send(SendID, SendContent)
+
                         ResMsg = Msg(
                             ErrorCode.Success,
                             '丟水球成功'
@@ -178,6 +182,8 @@ class PTTAdapter:
 
                     PushMsg = Msg(opt='recvwaterball')
                     PushMsg.add(Msg.Key_Payload, payload)
+
+                    self.dialog.recv(Target, Content, Date)
 
                     self.command.push(PushMsg)
 
