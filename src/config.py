@@ -1,5 +1,7 @@
 
 import os
+from os import listdir
+from os.path import isfile, join
 import json
 
 import log
@@ -84,6 +86,22 @@ class Config:
         self.UserConfigPath = f'{self.ConfigPath}/{ID}/{self.ConfigFileName}'
         if not os.path.exists(f'{self.ConfigPath}/{ID}'):
             os.makedirs(f'{self.ConfigPath}/{ID}')
+        else:
+            if os.path.exists(f'{self.ConfigPath}/{self.id}/dialogue/'):
+
+                dialogpath = f'{self.ConfigPath}/{self.id}/dialogue/'
+                self.dialogfiles = [join(dialogpath, f) for f in listdir(
+                    dialogpath) if isfile(join(dialogpath, f))]
+
+                self.dialogfiles = [
+                    x for x in self.dialogfiles if x.endswith('.txt')]
+
+                log.showvalue(
+                    'Config',
+                    log.Level.INFO,
+                    '對話紀錄檔案',
+                    self.dialogfiles
+                )
 
         try:
             with open(self.UserConfigPath, encoding='utf8') as File:

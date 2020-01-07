@@ -79,7 +79,7 @@ def ServerSetup():
         'WebSocket Server',
         log.Level.INFO,
         '啟動伺服器',
-        f'ws://localhost:{Config.Port}'
+        f'ws://127.0.0.1:{Config.Port}'
     )
 
     new_loop = asyncio.new_event_loop()

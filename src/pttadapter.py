@@ -18,7 +18,7 @@ class PTTAdapter:
 
         self.RunServer = True
         self.login = False
-        self.dialog = Dialogue()
+        self.dialog = Dialogue(self.config)
 
         self.thread = threading.Thread(
             target=self.run,
@@ -82,6 +82,10 @@ class PTTAdapter:
                             Password,
                             KickOtherLogin=True
                         )
+
+                        self.config.initUser(ID)
+                        self.dialog.loadDialogue()
+
                         self.login = True
                         self.bot.setCallStatus(PTT.CallStatus.Off)
 
@@ -107,39 +111,40 @@ class PTTAdapter:
                         )
                     self.command.push(ResMsg)
 
-                if self.command.recvlogout():
-                    self.login = False
-                    self.logout()
+                if self.login:
 
-                    ResMsg = Msg(
-                        ErrorCode.Success,
-                        '登出成功'
-                    )
-
-                    self.command.push(ResMsg)
-
-                SendID, SendContent = self.command.sendWaterBall()
-                if (SendID, SendContent) != (None, None):
-
-                    try:
-                        self.bot.throwWaterBall(SendID, SendContent)
-                        self.dialog.send(SendID, SendContent)
+                    if self.command.recvlogout():
+                        self.login = False
+                        self.logout()
 
                         ResMsg = Msg(
                             ErrorCode.Success,
-                            '丟水球成功'
+                            '登出成功'
                         )
-                    except PTT.Exceptions.NoSuchUser:
-                        ResMsg = Msg(
-                            ErrorCode.NoSuchUser,
-                            '無此使用者'
-                        )
-                    except PTT.Exceptions.UserOffline:
-                        ResMsg = Msg(
-                            ErrorCode.UserOffLine,
-                            '使用者離線'
-                        )
-                    self.command.push(ResMsg)
+
+                        self.command.push(ResMsg)
+
+                    SendID, SendContent = self.command.sendWaterBall()
+                    if (SendID, SendContent) != (None, None):
+                        try:
+                            self.bot.throwWaterBall(SendID, SendContent)
+                            self.dialog.send(SendID, SendContent)
+
+                            ResMsg = Msg(
+                                ErrorCode.Success,
+                                '丟水球成功'
+                            )
+                        except PTT.Exceptions.NoSuchUser:
+                            ResMsg = Msg(
+                                ErrorCode.NoSuchUser,
+                                '無此使用者'
+                            )
+                        except PTT.Exceptions.UserOffline:
+                            ResMsg = Msg(
+                                ErrorCode.UserOffLine,
+                                '使用者離線'
+                            )
+                        self.command.push(ResMsg)
 
                 time.sleep(0.05)
                 EndTime = time.time()

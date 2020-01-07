@@ -46,6 +46,7 @@ def show(PreFix, CurrentLogLevel, Msg):
         return
     if len(Msg) == 0:
         return
+
     Msg = merge(Msg)
 
     TotalMessage = '[' + strftime('%m%d %H%M%S') + ']'
@@ -84,9 +85,12 @@ def showvalue(PreFix, CurrentLogLevel, Msg, Value):
         return
     global LastValue
 
-    Msg = merge(Msg)
-    Value = merge(Value)
+    if isinstance(Value, list):
+        Value = Value.copy()
 
+    Msg = merge(Msg)
+
+    Value = merge(Value)
     if len(Msg) == 0:
         return
     # if len(Value) == 0:
