@@ -49,7 +49,10 @@ class Config:
         # 因為會被存起來
 
         self.ConfigFileName = 'config.txt'
+        self.FriendFileName = 'friend.txt'
+
         self.ConfigPath = None
+        self.friendlist = None
 
         if os.name == 'nt':
             log.showvalue(
@@ -102,6 +105,38 @@ class Config:
                     '對話紀錄檔案',
                     self.dialogfiles
                 )
+
+            fname = f'{self.ConfigPath}/{self.id}/{self.FriendFileName}'
+            if os.path.exists(fname):
+                log.showvalue(
+                    'Config',
+                    log.Level.INFO,
+                    '載入朋友清單',
+                    self.dialogfiles
+                )
+
+                try:
+                    with open(fname, encoding='utf8') as f:
+                        self.friendlist = json.load(f)
+                except Exception as e:
+
+                    log.show(
+                        'Config',
+                        log.Level.INFO,
+                        e.__traceback__.__str__()
+                    )
+                    log.show(
+                        'Config',
+                        log.Level.INFO,
+                        e.__str__()
+                    )
+
+                    log.show(
+                        'Config',
+                        log.Level.INFO,
+                        f'無法讀取 {fname}'
+                    )
+                    self.friendlist = None
 
         try:
             with open(self.UserConfigPath, encoding='utf8') as File:

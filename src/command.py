@@ -41,6 +41,10 @@ class Command:
         elif Opt == 'sendwaterball':
             self.sendWBid = RecvMsg.get(Msg.Key_Payload)[Msg.Key_PttID]
             self.sendWBcontent = RecvMsg.get(Msg.Key_Payload)[Msg.Key_Content]
+
+        elif Opt == 'addfriend':
+            self.addfriend_id = RecvMsg.get(Msg.Key_Payload)[Msg.Key_PttID]
+
         else:
             ResMsg = Msg(ErrorCode.Unsupport, 'Unsupported')
             self.push(ResMsg)
@@ -64,3 +68,8 @@ class Command:
         TempID, TempContent = self.sendWBid, self.sendWBcontent
         self.sendWBid, self.sendWBcontent = None, None
         return TempID, TempContent
+
+    def addfriend(self):
+        temp = self.addfriend_id
+        self.addfriend_id = None
+        return temp

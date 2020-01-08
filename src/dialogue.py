@@ -14,9 +14,7 @@ class Dialogue:
 
     def addsave(self, target, dictdata):
 
-        print('5', json.dumps(self.dialoglist, indent=4, ensure_ascii=False))
         self.dialoglist[target].append(dictdata)
-        print('4', json.dumps(self.dialoglist, indent=4, ensure_ascii=False))
 
         self.config.saveDialogue(
             target,
@@ -25,12 +23,8 @@ class Dialogue:
 
     def send(self, target, content):
 
-        print('1', json.dumps(self.dialoglist, indent=4, ensure_ascii=False))
-
         if target not in self.dialoglist:
             self.dialoglist[target] = []
-
-        print('2', json.dumps(self.dialoglist, indent=4, ensure_ascii=False))
 
         msg = Msg()
         msg.add(Msg.Key_Type, 'send')
@@ -103,6 +97,6 @@ class Dialogue:
             '載入對話紀錄完成'
         )
 
-        print(
-            json.dumps(self.dialoglist, indent=4, ensure_ascii=False)
-        )
+        # print(
+        #     json.dumps(self.dialoglist, indent=4, ensure_ascii=False)
+        # )

@@ -146,6 +146,19 @@ class PTTAdapter:
                             )
                         self.command.push(ResMsg)
 
+                    addfriend_id = self.command.addfriend()
+                    if addfriend_id is not None:
+                        try:
+                            user = self.bot.getUser(addfriend_id)
+
+                            ResMsg = Msg(
+                                ErrorCode.Success,
+                                '新增成功'
+                            )
+
+                        except PTT.Exceptions.NoSuchUser:
+                            print('無此使用者')
+
                 time.sleep(0.05)
                 EndTime = time.time()
 
@@ -177,8 +190,6 @@ class PTTAdapter:
                         f'收到來自 {Target} 的水球',
                         f'[{Content}][{Date}]'
                     )
-
-                    # print(f'收到來自 {Target} 的水球 [{Content}][{Date}]')
 
                     payload = Msg()
                     payload.add(Msg.Key_PttID, Target)
