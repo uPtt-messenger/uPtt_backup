@@ -1,3 +1,0 @@
-requests==2.22.0
-websockets==8.1
-PTTLibrary==0.8.27
