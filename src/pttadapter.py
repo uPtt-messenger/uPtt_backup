@@ -171,6 +171,7 @@ class PTTAdapter:
 
             if not self.login:
                 continue
+
             WaterBallList = self.bot.getWaterBall(
                 PTT.WaterBallOperateType.Clear
             )
@@ -202,5 +203,10 @@ class PTTAdapter:
                     self.dialog.recv(Target, Content, Date)
 
                     self.command.push(PushMsg)
+            
+            if self.bot.hasNewMail() > 1:
 
+                PushMsg = Msg(opt='recvwaterball')
+                
+                self.command.push(PushMsg)
         self.logout()
