@@ -1,4 +1,4 @@
-# uPtt 核心
+# uPtt Core
 
 ## 版本
 #### 0.0.1 beta
