@@ -1,7 +1,7 @@
 # uPTT
 [![Package Version](https://img.shields.io/pypi/v/uPTT.svg)](https://pypi.org/project/uPTT/)
 [![Codacy Badge](https://api.codacy.com/project/badge/grade/4da1e92c94f2492588c20f8a8860383b)](https://www.codacy.com/app/Truth0906/uPTT)
-[![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
+[![License: LGPL v3](https://img.shields.io/badge/License-LGPL%20v3-blue.svg)](https://www.gnu.org/licenses/lgpl-3.0)
 [![Gitter](https://badges.gitter.im/PTTPostman/PTTPostman.svg)](https://gitter.im/PTTPostman/PTTPostman?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
 
 ## uPTT, PTT for you.
@@ -17,14 +17,12 @@
 
 ## 回報問題
 #### 請開 [issue](https://github.com/Truth0906/PTTPostman/issues) 也可以在 gitter 上問我 [![Gitter](https://badges.gitter.im/PTTPostman/PTTPostman.svg)](https://gitter.im/PTTPostman/PTTPostman?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
-## 編譯
-#### 參考 [fbs](https://github.com/mherrmann/fbs-tutorial) 的說明文件就可以建立好環境了
 
 ## 創始成員
-#### 開發: CodingMan (CodingMan@uptt.cc)
-#### 美術: Doreen (Doreen@uptt.cc)
-#### 行銷文案: Amber (Amber@uptt.cc)
-#### 出張嘴: Rose (Rose@uptt.cc)
+| <a href="https://github.com/PttCodingMan" target="_blank">**PttCodingMan**</a> | <a href="https://github.com/mobi76" target="_blank">**mobi76**</a> | <a href="https://github.com/amber076" target="_blank">**amber076**</a> |
+| :---: |:---:| :---:|
+| [![](https://avatars2.githubusercontent.com/u/59732316?s=460&v=4)](https://github.com/PttCodingMan)    | [![](https://avatars1.githubusercontent.com/u/13342737?s=460&v=4)](https://github.com/mobi76) | [![](https://avatars0.githubusercontent.com/u/59656236?s=460&v=4)](https://github.com/amber076)  |
+
 
 ## 贊助
 #### 在這個 github 的小園地，用熱血的心為您打造在 PTT 翱翔的翅膀。
