@@ -1,0 +1,24 @@
+<div class="container">
+  <div class="login-container">
+    <div class="logo">
+      <img src="assets/images/Logo.png" />
+    </div>
+    <form [formGroup]="loginForm" class="login-form">
+      <div class="form-group">
+        <div class="form-control">
+          <div class="uptt-input">
+            <input type="text" formControlName="loginPttId" />
+          </div>
+        </div>
+      </div>
+      <div class="form-group">
+        <div class="form-control">
+          <div class="uptt-input">
+              <input type="password" formControlName="loginPwd" />
+          </div>
+        </div>
+      </div>
+      <button type="button" class="login-btn" (click)="login()">登入</button>
+    </form>
+  </div>
+</div>

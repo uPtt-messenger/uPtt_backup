@@ -1,0 +1,58 @@
+/* You can add global styles to this file, and also import other style files */
+$fonts: "Microsoft JhengHei","PMingLiu","Arial";
+
+html, body {
+  height: 100%;
+  margin: 0;
+}
+
+div {
+  box-sizing: border-box;
+}
+
+div, span, button, input {
+  font-family: $fonts!important;
+}
+
+
+.form-group {
+  margin-bottom: 1.5em;
+}
+.uptt-input {
+  input {
+    font-style: inherit;
+    font-variant-ligatures: inherit;
+    font-variant-caps: inherit;
+    font-variant-numeric: inherit;
+    font-variant-east-asian: inherit;
+    font-weight: inherit;
+    font-stretch: inherit;
+    font-size: inherit;
+    line-height: inherit;
+    font-family: inherit;
+    background-image: initial;
+    background-position-x: 0px;
+    background-position-y: 0px;
+    background-size: initial;
+    background-attachment: initial;
+    background-origin: initial;
+    background-clip: initial;
+    background-color: #ffffff;
+    color: currentColor;
+    border: none;
+    outline: 0;
+    padding: 0;
+    margin: 0;
+    width: 100%;
+    max-width: 100%;
+    vertical-align: bottom;
+    text-align: inherit;
+    box-sizing: border-box;
+
+    height: 48px;
+    border-radius: 48px;
+    padding: 0 2em;
+
+    box-shadow: 0px 3px 6px #000000A8;
+  }
+}
