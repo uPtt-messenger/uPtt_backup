@@ -21,7 +21,7 @@
 ## 創始成員
 | <a href="https://github.com/PttCodingMan" target="_blank">**PttCodingMan**</a> | <a href="https://github.com/mobi76" target="_blank">**mobi76**</a> | <a href="https://github.com/amber076" target="_blank">**amber076**</a> |
 | :---: |:---:| :---:|
-| [![](https://avatars2.githubusercontent.com/u/59732316?s=460&v=4 =100x100)](https://github.com/PttCodingMan)    | [![](https://avatars1.githubusercontent.com/u/13342737?s=460&v=4 =100x100)](https://github.com/mobi76) | [![](https://avatars0.githubusercontent.com/u/59656236?s=460&v=4 =100x100)](https://github.com/amber076) |
+| [![](https://avatars2.githubusercontent.com/u/59732316?s=100)](https://github.com/PttCodingMan)    | [![](https://avatars1.githubusercontent.com/u/13342737?s=100)](https://github.com/mobi76) | [![](https://avatars0.githubusercontent.com/u/59656236?s=100)](https://github.com/amber076) |
 
 
 ## 贊助
