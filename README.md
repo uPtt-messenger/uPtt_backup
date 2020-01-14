@@ -1,13 +1,13 @@
-# uPTT
+# uPtt
 [![Package Version](https://img.shields.io/pypi/v/uPTT.svg)](https://pypi.org/project/uPTT/)
 [![Codacy Badge](https://api.codacy.com/project/badge/grade/4da1e92c94f2492588c20f8a8860383b)](https://www.codacy.com/app/Truth0906/uPTT)
 [![License: LGPL v3](https://img.shields.io/badge/License-LGPL%20v3-blue.svg)](https://www.gnu.org/licenses/lgpl-3.0)
 [![Gitter](https://badges.gitter.im/PTTPostman/PTTPostman.svg)](https://gitter.im/PTTPostman/PTTPostman?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
 
-## uPTT, PTT for you.
+## uPtt, PTT for you.
 #### 這是一個為了練習多人合作而啟動的專案。
 #### 原始碼
-#### github: https://github.com/Truth0906/PTTLibrary
+#### github: https://github.com/PttCodingMan/uPtt
 
 ## 版本
 #### 0.0.1 beta
@@ -16,12 +16,12 @@
 #### 請至 [下載區](https://github.com/Truth0906/PTTPostman/releases) 下載 (近期釋出)
 
 ## 回報問題
-#### 請開 [issue](https://github.com/Truth0906/PTTPostman/issues) 也可以在 gitter 上問我 [![Gitter](https://badges.gitter.im/PTTPostman/PTTPostman.svg)](https://gitter.im/PTTPostman/PTTPostman?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
+#### 請開 [issue](https://github.com/Truth0906/PTTPostman/issues) 也可以在 gitter 上找到我們 [![Gitter](https://badges.gitter.im/PTTPostman/PTTPostman.svg)](https://gitter.im/PTTPostman/PTTPostman?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
 
 ## 創始成員
 | <a href="https://github.com/PttCodingMan" target="_blank">**PttCodingMan**</a> | <a href="https://github.com/mobi76" target="_blank">**mobi76**</a> | <a href="https://github.com/amber076" target="_blank">**amber076**</a> |
 | :---: |:---:| :---:|
-| [![](https://avatars2.githubusercontent.com/u/59732316?s=460&v=4)](https://github.com/PttCodingMan)    | [![](https://avatars1.githubusercontent.com/u/13342737?s=460&v=4)](https://github.com/mobi76) | [![](https://avatars0.githubusercontent.com/u/59656236?s=460&v=4)](https://github.com/amber076)  |
+| [![](https://avatars2.githubusercontent.com/u/59732316?s=460&v=4 =100x100)](https://github.com/PttCodingMan)    | [![](https://avatars1.githubusercontent.com/u/13342737?s=460&v=4 =100x100)](https://github.com/mobi76) | [![](https://avatars0.githubusercontent.com/u/59656236?s=460&v=4 =100x100)](https://github.com/amber076) |
 
 
 ## 贊助
