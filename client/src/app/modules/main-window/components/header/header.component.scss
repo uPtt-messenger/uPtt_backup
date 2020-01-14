@@ -1,0 +1,14 @@
+.header-container {
+  background: transparent linear-gradient(100deg, #134278 0%, #0D325E 100%) 0% 0% no-repeat padding-box;
+  opacity: 1;
+  color: #F3F3F3;
+  padding: 10px;
+  .user-photo {
+    img {
+      border-radius: 50%;
+      overflow: hidden;
+      height: 40px;
+      width: 40px;
+    }
+  }
+}
