@@ -8,10 +8,10 @@ https://github.com/pypa/sampleproject
 """
 
 # Always prefer setuptools over distutils
-from setuptools import setup, find_packages
+# from setuptools import setup, find_packages
 # To use a consistent encoding
-from codecs import open
-from os import path
+# from codecs import open
+# from os import path
 
 # here = path.abspath(path.dirname(__file__))
 
@@ -71,7 +71,7 @@ setup(
 
     # This should be a valid email address corresponding to the author listed
     # above.
-    author_email='thetruth0906@gmail.com',  # Optional
+    author_email='CodingMan@uptt.cc',  # Optional
 
     # Classifiers help users find your project by categorizing it.
     #
@@ -82,12 +82,12 @@ setup(
         #   3 - Alpha
         #   4 - Beta
         #   5 - Production/Stable
-        'Development Status :: 4 - Beta',
+        'Development Status :: 3 - Alpha',
 
         # 'Operating System :: POSIX :: Linux',
         'Operating System :: MacOS :: MacOS X',
         'Operating System :: Microsoft :: Windows :: Windows 10',
-
+        
         # Indicate who your project is intended for
         # 'Intended Audience :: Developers',
         'Topic :: Communications :: BBS',
@@ -95,7 +95,7 @@ setup(
         'Topic :: Internet',
         # 'Topic :: Terminals :: Telnet',
         # Pick your license as you wish
-        'License :: OSI Approved :: GNU General Public License v3 (GPLv3)',
+        'License :: OSI Approved :: GNU Lesser General Public License v3 (LGPLv3)',
 
         'Programming Language :: Python :: 3.6',
         # 'Programming Language :: Python :: 3.7',
@@ -130,8 +130,7 @@ setup(
     # For an analysis of "install_requires" vs pip's requirements files see:
     # https://packaging.python.org/en/latest/requirements.html
     install_requires=[
-        'PTTLibrary',
-        'fbs'
+        'PTTLibrary'
     ],  # Optional
 
     # List additional groups of dependencies here (e.g. development
