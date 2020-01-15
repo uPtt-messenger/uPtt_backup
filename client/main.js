@@ -15,7 +15,7 @@ function createWindow () {
   })
 
   // and load the index.html of the app.
-  win.loadFile('dist/uptt-client/index.html')
+  win.loadFile('build/index.html')
 
   // Open the DevTools.
   win.webContents.openDevTools()
