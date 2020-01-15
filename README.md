@@ -3,6 +3,7 @@
 [![Codacy Badge](https://api.codacy.com/project/badge/grade/4da1e92c94f2492588c20f8a8860383b)](https://www.codacy.com/app/Truth0906/uPTT)
 [![License: LGPL v3](https://img.shields.io/badge/License-LGPL%20v3-blue.svg)](https://www.gnu.org/licenses/lgpl-3.0)
 [![Gitter](https://badges.gitter.im/PTTPostman/PTTPostman.svg)](https://gitter.im/PTTPostman/PTTPostman?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
+[![Donate](https://img.shields.io/badge/Donate-PayPal-green.svg)](http://paypal.me/CodingMan)
 
 ## uPtt, PTT for you.
 #### 這是一個為了練習多人合作而啟動的專案。
@@ -28,8 +29,7 @@
 #### 在這個 github 的小園地，用熱血的心為您打造在 PTT 翱翔的翅膀。
 #### 希望您可以贊助這雙翅膀，讓我們一起飛得更遠，
 ####
-#### Paypal
-#### [贊助連結](http://paypal.me/CodingMan)
+#### [![Donate](https://img.shields.io/badge/Donate-PayPal-green.svg)](http://paypal.me/CodingMan)
 ####
 #### XMR
 #### 448CUe2q4Ecf9tx6rwanrqM9kfCwqpNbhJ5jtrTf9FHqHNq7Lvv9uBoQ74SEaAu9FFceNBr6p3W1yhqPcxPPSSTv2ctufnQ
