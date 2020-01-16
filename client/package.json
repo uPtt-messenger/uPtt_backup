@@ -5,15 +5,21 @@
   "build": {
     "appId": "com.uptt.app",
     "directories": {
-      "output":"dist"
+      "output": "dist"
     },
     "mac": {
-      "target": ["dmg","zip"]
+      "target": [
+        "dmg",
+        "zip"
+      ]
     },
     "win": {
-      "target": ["portable","zip"]
+      "target": [
+        "portable",
+        "zip"
+      ]
     }
-},
+  },
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
@@ -35,6 +41,7 @@
     "@angular/platform-browser": "~8.2.14",
     "@angular/platform-browser-dynamic": "~8.2.14",
     "@angular/router": "~8.2.14",
+    "@types/electron": "^1.6.10",
     "rxjs": "~6.4.0",
     "tslib": "^1.10.0",
     "zone.js": "~0.9.1"
