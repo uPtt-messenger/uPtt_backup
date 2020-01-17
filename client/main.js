@@ -41,7 +41,10 @@ ipcMain.on('login-success', () => {
     { label: '設定', type: 'normal' },
     { label: '關於', type: 'normal' },
     { label: '登出', type: 'normal' },
-    { label: '結束', type: 'normal' }
+    { label: '結束', type: 'normal', click: function() {
+      app.isQuiting = true;
+      app.quit();
+    } }
   ])
   tray.setToolTip('uPtt')
   tray.setContextMenu(contextMenu)
@@ -49,6 +52,19 @@ ipcMain.on('login-success', () => {
 
 // ---------------------------------- Function
 function createWindow () {
+
+  // 建立 System Tray
+  tray = new Tray('build/assets/images/uptt.ico')
+  const contextMenu = Menu.buildFromTemplate([
+    { label: '關於', type: 'normal' },
+    { label: '結束', type: 'normal', click: function() {
+      app.isQuiting = true;
+      app.quit();
+    } }
+  ])
+  tray.setToolTip('uPtt')
+  tray.setContextMenu(contextMenu)
+
   // 建立瀏覽器視窗。
   win = new BrowserWindow({
     width: 400,
@@ -72,4 +88,12 @@ function createWindow () {
     // 你可能會將它們存成陣列，現在該是時候清除相關的物件了。
     win = null
   })
+
+  win.on('close', function (event) {
+    if(!app.isQuiting){
+        event.preventDefault();
+        win.hide();
+    }
+    return false;
+  });
 }
