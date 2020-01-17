@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { IpcService } from './services/ipc.service';
+import { ElectronService } from './services/electron.service';
 
 @NgModule({
   declarations: [],
@@ -8,7 +8,7 @@ import { IpcService } from './services/ipc.service';
     CommonModule
   ],
   providers: [
-    IpcService
+    ElectronService
   ]
 })
 export class SharedModule { }

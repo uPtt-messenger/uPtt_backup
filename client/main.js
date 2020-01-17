@@ -1,38 +1,18 @@
 const { app, BrowserWindow } = require('electron')
-
+const { Tray, Menu} = require('electron')
+const { ipcMain } = require('electron')
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
 let win
-
-function createWindow () {
-  // 建立瀏覽器視窗。
-  win = new BrowserWindow({
-    width: 400,
-    height: 700,
-    webPreferences: {
-      nodeIntegration: true
-    }
-  })
-
-  // and load the index.html of the app.
-  win.loadFile('build/index.html')
-
-  // Open the DevTools.
-  win.webContents.openDevTools()
-
-  // 視窗關閉時會觸發。
-  win.on('closed', () => {
-    // 拿掉 window 物件的參照。如果你的應用程式支援多個視窗，
-    // 你可能會將它們存成陣列，現在該是時候清除相關的物件了。
-    win = null
-  })
-}
-
+let tray = null
 
 // 當 Electron 完成初始化，並且準備好建立瀏覽器視窗時
 // 會呼叫這的方法
 // 有些 API 只能在這個事件發生後才能用。
-app.on('ready', createWindow)
+app.on('ready', () => {
+
+  createWindow();
+});
 
 // 在所有視窗都關閉時結束程式。
 app.on('window-all-closed', () => {
@@ -52,5 +32,44 @@ app.on('activate', () => {
   }
 })
 
-// 你可以在這個檔案中繼續寫應用程式主程序要執行的程式碼。
-// 你也可以將它們放在別的檔案裡，再由這裡 require 進來。
+ipcMain.on('login-success', () => {
+  //mainWindow.setSize(width,height)
+  win.hide();
+  tray = new Tray('build/assets/images/uptt.ico')
+  const contextMenu = Menu.buildFromTemplate([
+    { label: '丟水球', type: 'normal' },
+    { label: '設定', type: 'normal' },
+    { label: '關於', type: 'normal' },
+    { label: '登出', type: 'normal' },
+    { label: '結束', type: 'normal' }
+  ])
+  tray.setToolTip('uPtt')
+  tray.setContextMenu(contextMenu)
+});
+
+// ---------------------------------- Function
+function createWindow () {
+  // 建立瀏覽器視窗。
+  win = new BrowserWindow({
+    width: 400,
+    height: 700,
+    title: "uPtt",
+    icon:'build/assets/images/uptt.ico',
+    webPreferences: {
+      nodeIntegration: true
+    }
+  })
+
+  // and load the index.html of the app.
+  win.loadFile('build/index.html')
+
+  // Open the DevTools.
+  // win.webContents.openDevTools()
+
+  // 視窗關閉時會觸發。
+  win.on('closed', () => {
+    // 拿掉 window 物件的參照。如果你的應用程式支援多個視窗，
+    // 你可能會將它們存成陣列，現在該是時候清除相關的物件了。
+    win = null
+  })
+}
