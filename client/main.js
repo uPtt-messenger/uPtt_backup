@@ -35,7 +35,6 @@ app.on('activate', () => {
 ipcMain.on('login-success', () => {
   //mainWindow.setSize(width,height)
   win.hide();
-  tray = new Tray('build/assets/images/uptt.ico')
   const contextMenu = Menu.buildFromTemplate([
     { label: '丟水球', type: 'normal' },
     { label: '設定', type: 'normal' },
@@ -46,7 +45,6 @@ ipcMain.on('login-success', () => {
       app.quit();
     } }
   ])
-  tray.setToolTip('uPtt')
   tray.setContextMenu(contextMenu)
 });
 
@@ -94,6 +92,18 @@ function createWindow () {
         event.preventDefault();
         win.hide();
     }
+    // 建立 System Tray
+    const contextMenu = Menu.buildFromTemplate([
+      { label: '登入', type: 'normal', click: function (){
+        win.show();
+      }},
+      { label: '關於', type: 'normal' },
+      { label: '結束', type: 'normal', click: function() {
+        app.isQuiting = true;
+        app.quit();
+      } }
+    ])
+    tray.setContextMenu(contextMenu)
     return false;
   });
 }
