@@ -36,7 +36,11 @@ ipcMain.on('login-success', () => {
   //mainWindow.setSize(width,height)
   win.hide();
   const contextMenu = Menu.buildFromTemplate([
-    { label: '丟水球', type: 'normal' },
+    { label: '丟水球', type: 'normal', click: function() {
+      win.setSize(350, 450);
+      // win.loadUrl('build/index.html#');
+      win.show();
+    } },
     { label: '設定', type: 'normal' },
     { label: '關於', type: 'normal' },
     { label: '登出', type: 'normal' },
