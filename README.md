@@ -19,10 +19,10 @@
 ## 回報問題
 #### 請開 [issue](https://github.com/Truth0906/PTTPostman/issues) 也可以在 gitter 上找到我們 [![Gitter](https://badges.gitter.im/PTTPostman/PTTPostman.svg)](https://gitter.im/PTTPostman/PTTPostman?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
 
-## 創始成員
-| <a href="https://github.com/PttCodingMan" target="_blank">**PttCodingMan**</a> | <a href="https://github.com/mobi76" target="_blank">**mobi76**</a> |
-| :---: |:---:|
-| [![](https://avatars2.githubusercontent.com/u/59732316?s=100)](https://github.com/PttCodingMan) | [![](https://avatars1.githubusercontent.com/u/13342737?s=100)](https://github.com/mobi76) |
+## 成員
+| <a href="https://github.com/PttCodingMan" target="_blank">**PttCodingMan**</a> | <a href="https://github.com/mobi76" target="_blank">**mobi76**</a> | <a href="https://github.com/amber076" target="_blank">**amber076**</a> | <a href="https://github.com/Arkuyo" target="_blank">**Arkuyo**</a> |
+| :---: | :---: | :---: | :---: |
+| [![](https://avatars2.githubusercontent.com/u/59732316?s=100)](https://github.com/PttCodingMan) | [![](https://avatars1.githubusercontent.com/u/13342737?s=100)](https://github.com/mobi76) | [![](https://avatars1.githubusercontent.com/u/59656236?s=100)](https://github.com/amber076) | [![](https://avatars1.githubusercontent.com/u/37679089?s=100)](https://github.com/Arkuyo) |
 
 
 ## 贊助
