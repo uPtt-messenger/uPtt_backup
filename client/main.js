@@ -4,6 +4,7 @@ const { ipcMain } = require('electron')
 const url = require('url');
 const path = require('path');
 
+const DEBUG_MODE = false;
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
 let win
@@ -40,18 +41,13 @@ ipcMain.on('login-success', () => {
   win.hide();
   const contextMenu = Menu.buildFromTemplate([
     { label: '丟水球', type: 'normal', click: function() {
-      console.log('test');
       win.setSize(350, 450);
-      // win.loadURL('build/index.html#/main-window/new-chat');
       win.loadURL(url.format({
         pathname: path.join(__dirname, './build/index.html'),
         protocol: 'file:',
         slashes: true,
         hash: '/main-window/new-chat'
       }));
-      console.log(win.webContents.getURL());
-
-
       win.show();
     } },
     { label: '設定', type: 'normal' },
@@ -92,17 +88,16 @@ function createWindow () {
   })
 
   // and load the index.html of the app.
-  // win.loadFile('build/index.html')
-  console.log(__dirname);
   win.loadURL(url.format({
     pathname: path.join(__dirname, './build/index.html'),
     protocol: 'file:',
     slashes: true
   }));
-  console.log(win.webContents.getURL());
 
   // Open the DevTools.
-  // win.webContents.openDevTools()
+  if (DEBUG_MODE) {
+    win.webContents.openDevTools();
+  }
 
   // 視窗關閉時會觸發。
   win.on('closed', () => {
