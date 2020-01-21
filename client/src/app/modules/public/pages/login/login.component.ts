@@ -27,7 +27,9 @@ export class LoginComponent implements OnInit {
 
   login() {
     console.log('login');
-    this.electronService.ipcRenderer.send('login-success');
+    if (this.electronService.isElectron) {
+      this.electronService.ipcRenderer.send('login-success');
+    }
     this.router.navigate(['/main-window']);
   }
 }
