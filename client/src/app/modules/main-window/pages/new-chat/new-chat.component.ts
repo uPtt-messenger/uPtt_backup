@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { ElectronService } from 'src/app/modules/shared/services/electron.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-new-chat',
@@ -7,9 +9,20 @@ import { Component, OnInit } from '@angular/core';
 })
 export class NewChatComponent implements OnInit {
 
-  constructor() { }
+  constructor(
+    private electronService: ElectronService,
+    private router: Router
+    ) { }
 
   ngOnInit() {
   }
 
+  submitForm() {
+    console.log('login');
+    if (this.electronService.isElectron) {
+      this.electronService.ipcRenderer.send('new-chat');
+    } else {
+      this.router.navigate(['/chat-window']);
+    }
+  }
 }

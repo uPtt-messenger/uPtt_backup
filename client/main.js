@@ -7,8 +7,9 @@ const path = require('path');
 const DEBUG_MODE = false;
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
-let win
-let tray = null
+let win;
+let chatWins = new Map();
+let tray = null;
 
 // 當 Electron 完成初始化，並且準備好建立瀏覽器視窗時
 // 會呼叫這的方法
@@ -59,6 +60,31 @@ ipcMain.on('login-success', () => {
     } }
   ])
   tray.setContextMenu(contextMenu)
+});
+
+ipcMain.on('new-chat', (data) => {
+  console.log('event: new-chat');
+  console.log(data);
+  win.hide();
+  const chatWin = new BrowserWindow({
+    width: 400,
+    height: 700,
+    title: data.pttId,
+    icon:'build/assets/images/uptt.ico',
+    webPreferences: {
+      nodeIntegration: true
+    }
+  });
+  chatWin.loadURL(url.format({
+    pathname: path.join(__dirname, './build/index.html'),
+    protocol: 'file:',
+    slashes: true,
+    hash: '/chat-window'
+  }));
+
+  chatWin.webContents.openDevTools();
+
+  chatWins.set(data.pttId, chatWin);
 });
 
 // ---------------------------------- Function
