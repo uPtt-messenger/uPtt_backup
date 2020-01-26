@@ -4,7 +4,7 @@
     <span>CodingMan</span>
   </span>
 </div>
-<div>
+<div class="message-box">
   <div>
     <div><div>CodingMan</div><div>2020/01/24 16:42</div></div>
     <div>測試測試測試測試測試測試測試測試測試測試</div>
@@ -18,7 +18,9 @@
     <div>測試測試測試測試測試測試測試</div>
   </div>
 </div>
-<div>
-輸入框
-
+<div class="message-input">
+  <form [formGroup]="chatForm">
+    <textarea formControlName="chatMsg" name="chatMsg"></textarea>
+  </form>
+  <span>{{chatMsgLen}}/25</span>
 </div>
