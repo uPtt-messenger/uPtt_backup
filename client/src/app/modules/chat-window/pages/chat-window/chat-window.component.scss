@@ -43,8 +43,14 @@
     color: #1E1E1E;
     background: #AAE2FF 0% 0% no-repeat padding-box;
     box-shadow: 0px 0px 8px #000000B0;
-    border-radius: 3px 50px 50px 50px;
     padding: .8em;
+  }
+
+  .my-message .message-content {
+    border-radius: 50px 3px 50px 50px;
+  }
+  .other-message .message-content {
+    border-radius: 3px 50px 50px 50px;
   }
 
 
