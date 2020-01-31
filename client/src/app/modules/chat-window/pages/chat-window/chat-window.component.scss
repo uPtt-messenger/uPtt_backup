@@ -23,20 +23,23 @@
   padding: 1em;
   color: #ffffff;
 
-  .chat-message {
-    display: block;
-    margin-bottom: 1em;
-    .message-user {
-      font-size: 10px;
-      color: #BCBCBC;
-    }
-  }
-
   span {
     box-sizing: border-box;
   }
 
-
+  .chat-message {
+    display: block;
+    margin-bottom: 1em;
+    >span {
+      display: inline-block;
+      min-width: 150px;
+    }
+    .message-user {
+      display: block;
+      font-size: 10px;
+      color: #BCBCBC;
+    }
+  }
 
   .message-content {
     display: inline-block;
@@ -46,11 +49,17 @@
     padding: .8em;
   }
 
-  .my-message .message-content {
-    border-radius: 50px 3px 50px 50px;
+  .my-message {
+    text-align: right;
+    .message-content {
+      border-radius: 50px 3px 50px 50px;
+    }
   }
-  .other-message .message-content {
-    border-radius: 3px 50px 50px 50px;
+  .other-message {
+    text-align: left;
+    .message-content {
+      border-radius: 3px 50px 50px 50px;
+    }
   }
 
 
