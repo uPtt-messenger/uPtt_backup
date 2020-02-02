@@ -25,12 +25,22 @@ export class ChatWindowComponent implements OnInit {
       chatMsg: []
     });
     this.chatForm.controls.chatMsg.valueChanges.subscribe(value => {
-      this.chatMsgLen = value.length;
+      this.chatMsgLen = (value) ? value.length : 0;
     });
   }
 
   ngOnInit() {
 
+  }
+
+  submitMsg(event) {
+    event.preventDefault();
+    const chatMsg = this.chatForm.get('chatMsg').value;
+    if (chatMsg) {
+      // TODO: call api
+      this.chatMsgList.push({ msgType: 1, msgTime: '2020/02/03 00:30:16', sender: 'mobi76', msgContent: chatMsg });
+      this.chatForm.reset();
+    }
   }
 
 }
