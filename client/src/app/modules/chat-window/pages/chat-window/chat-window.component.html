@@ -4,7 +4,7 @@
     <span>CodingMan</span>
   </span>
 </div>
-<div class="message-box">
+<div class="message-box" #messageBox>
   <span *ngFor="let cm of chatMsgList" class="chat-message" [ngClass]="{'my-message': cm.msgType === 1, 'other-message':  cm.msgType === 2}">
     <span class="message-body">
       <span class="message-user"><span class="ptt-id">{{cm.sender}}</span><span class="message-time">{{cm.msgTime}}</span></span>
