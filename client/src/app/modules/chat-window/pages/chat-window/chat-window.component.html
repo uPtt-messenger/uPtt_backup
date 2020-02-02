@@ -5,22 +5,10 @@
   </span>
 </div>
 <div class="message-box">
-  <span class="other-message chat-message">
+  <span *ngFor="let cm of chatMsgList" class="chat-message" [ngClass]="{'my-message': cm.msgType === 1, 'other-message':  cm.msgType === 2}">
     <span class="message-body">
-      <span class="message-user"><span class="ptt-id">CodingMan</span><span class="message-time">2020/01/24 16:42</span></span>
-      <span class="message-content">測試測試測試測試測試測試測試測試測試測試</span>
-    </span>
-  </span>
-  <span class="my-message chat-message">
-    <span class="message-body">
-      <span class="message-user"><span class="ptt-id">MOOOOOOOOOOOOO</span><span>2020/01/24 16:45</span></span>
-      <span class="message-content">測試測測試測試</span>
-    </span>
-  </span>
-  <span class="other-message chat-message">
-    <span class="message-body">
-      <span class="message-user"><span class="ptt-id">CodingMan</span><span>2020/01/24 16:52</span></span>
-      <span class="message-content">測試測試測試測試測試測試測試</span>
+      <span class="message-user"><span class="ptt-id">{{cm.sender}}</span><span class="message-time">{{cm.msgTime}}</span></span>
+      <span class="message-content">{{cm.msgContent}}</span>
     </span>
   </span>
 </div>

@@ -20,8 +20,10 @@
   }
 }
 .message-box {
-  height: calc(100% - 146px);
-  padding: 15px;
+  height: calc(100% - 155px);
+  overflow: auto;
+  margin: 0.5em;
+  padding: 0.5em;
   color: #ffffff;
 
   span {
