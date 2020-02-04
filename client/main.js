@@ -37,8 +37,10 @@ app.on('activate', () => {
   }
 })
 
-ipcMain.on('login-success', () => {
+ipcMain.on('login-success', (event, data) => {
   //mainWindow.setSize(width,height)
+  console.log('event: login-success');
+  console.log(data);
   win.hide();
   const contextMenu = Menu.buildFromTemplate([
     { label: '丟水球', type: 'normal', click: function() {
