@@ -14,7 +14,7 @@
 </div>
 <div class="message-input">
   <form [formGroup]="chatForm">
-    <textarea formControlName="chatMsg" name="chatMsg" rows="3" cols="40"
+    <textarea formControlName="chatMsg" name="chatMsg" rows="3" cols="25"
         (keydown.enter)="submitMsg($event)"></textarea>
   </form>
   <span class="message-info">{{chatMsgLen}}/25</span>
