@@ -1,40 +1,134 @@
-// import express 和 ws 套件
-const express = require('express');
-const SocketServer = require('ws').Server;
+var express = require('express');
+var app = express();
+var expressWs = require('express-ws')(app);
 
-// 指定開啟的 port
-const PORT = 50732;
+app.use(function (req, res, next) {
+  console.log('middleware');
+  req.testing = 'testing';
+  return next();
+});
 
-// 創建 express 的物件，並綁定及監聽 3000 port ，且設定開啟後在 console 中提示
-const server = express().listen(PORT, () => console.log(`Listening on ${PORT}`));
+app.get('/', function(req, res, next){
+  console.log('get route', req.testing);
+  res.end();
+});
+
+app.ws('/', function(ws, req) {
+  ws.on('message', function(msg) {
+    console.log(msg);
+  });
+  console.log('socket', req.testing);
+});
+
+app.listen(3000);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 // 將 express 交給 SocketServer 開啟 WebSocket 的服務
-const wss = new SocketServer({ server });
+// const publicWss = new SocketServer({ server: server, path: "/uptt/public" });
 
-// 當 WebSocket 從外部連結時執行
-wss.on('connection', ws => {
+// // 當 WebSocket 從外部連結時執行
+// publicWss.on('connection', ws => {
 
-  // 連結時執行此 console 提示
-  console.log('[' + new Date().toUTCString() + '] Client connected');
+//   // 連結時執行此 console 提示
+//   console.log('[' + new Date().toUTCString() + '] Client connected public');
 
-  ws.on('message', reqDataString => {
-    console.log('[' + new Date().toUTCString() + '] ========= Request ========= ');
-    const reqData = JSON.parse(reqDataString);
-    console.log('[' + new Date().toUTCString() + '] operation = ' + reqData.operation);
-    console.log('[' + new Date().toUTCString() + '] payload = ' + JSON.stringify(reqData.payload));
+//   ws.on('message', reqDataString => {
+//     console.log('[' + new Date().toUTCString() + '] ========= Request ========= ');
+//     const reqData = JSON.parse(reqDataString);
+//     console.log('[' + new Date().toUTCString() + '] operation = ' + reqData.operation);
+//     console.log('[' + new Date().toUTCString() + '] payload = ' + JSON.stringify(reqData.payload));
 
-    // 登入
-    if (reqData.operation === 'login') {
-      const resp = {code: 0, payload: "login success"};
-      console.log('[' + new Date().toUTCString() + '] ========= Response ========= ');
-      console.log('[' + new Date().toUTCString() + '] resp = ' + JSON.stringify(resp));
-      ws.send(JSON.stringify(resp));
-    }
+//     // 登入
+//     if (reqData.operation === 'login') {
+//       const resp = {code: 0, payload: "login success"};
+//       console.log('[' + new Date().toUTCString() + '] ========= Response ========= ');
+//       console.log('[' + new Date().toUTCString() + '] resp = ' + JSON.stringify(resp));
+//       ws.send(JSON.stringify(resp));
+//     }
 
-  });
+//   });
 
-  // 當 WebSocket 的連線關閉時執行
-  ws.on('close', () => {
-      console.log('Close connected')
-  });
-});
+//   // 當 WebSocket 的連線關閉時執行
+//   ws.on('close', () => {
+//       console.log('[' + new Date().toUTCString() + '] Close connected')
+//   });
+
+// });
+
+// const privateWss = new SocketServer({ server: server, path: "/uptt/private" });
+// privateWss.on('connection', ws => {
+
+//   // 連結時執行此 console 提示
+//   console.log('[' + new Date().toUTCString() + '] Client connected private');
+
+//   // 當 WebSocket 的連線關閉時執行
+//     ws.on('close', () => {
+//       console.log('[' + new Date().toUTCString() + '] Close connected')
+//   });
+// });
