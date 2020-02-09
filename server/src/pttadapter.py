@@ -5,20 +5,21 @@ import traceback
 from PTTLibrary import PTT
 
 import log
-import command
 from errorcode import ErrorCode
 from msg import Msg
 from dialogue import Dialogue
 
 
 class PTTAdapter:
-    def __init__(self, config, command):
-        self.config = config
-        self.command = command
+    def __init__(self, config_obj, command_obj):
+        self.config = config_obj
+        self.command = command_obj
 
         self.RunServer = True
         self.login = False
         self.dialog = Dialogue(self.config)
+
+        self.bot = None
 
         self.thread = threading.Thread(
             target=self.run,
@@ -59,8 +60,8 @@ class PTTAdapter:
         )
 
         self.bot = PTT.Library(
-            LogHandler=self.config.PttLogHandler,
-            LogLevel=self.config.PttLogLevel
+            log_handler=self.config.PttLogHandler,
+            log_level=self.config.PttLogLevel
         )
 
         while self.RunServer:
