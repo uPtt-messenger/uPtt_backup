@@ -18,6 +18,7 @@ class Command:
         self.close = False
         self.sendWBid = None
         self.sendWBcontent = None
+        self.add_friend_id = None
 
     def analyze(self, RecvMsgStr: str):
         RecvMsg = Msg(strobj=RecvMsgStr)
@@ -70,6 +71,6 @@ class Command:
         return TempID, TempContent
 
     def addfriend(self):
-        temp = self.addfriend_id
-        self.addfriend_id = None
+        temp = self.add_friend_id
+        self.add_friend_id = None
         return temp

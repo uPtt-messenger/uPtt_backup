@@ -81,11 +81,11 @@ class PTTAdapter:
                         self.bot.login(
                             ptt_id,
                             password,
-                            KickOtherLogin=True
+                            kick_other_login=True
                         )
 
                         self.config.initUser(ptt_id)
-                        self.dialog.loadDialogue()
+                        # self.dialog.loadDialogue()
 
                         self.login = True
                         self.bot.set_call_status(PTT.data_type.call_status.OFF)
@@ -205,7 +205,7 @@ class PTTAdapter:
 
                     self.command.push(push_msg)
             
-            if self.bot.hasNewMail() > 1:
+            if self.bot.has_new_mail() > 1:
 
                 push_msg = Msg(opt='recvwaterball')
                 
