@@ -12,52 +12,52 @@ class Command:
 
         self.PushMsg = []
 
-        self.loginid = None
-        self.loginpassword = None
+        self.login_id = None
+        self.login_password = None
         self.logout = False
         self.close = False
-        self.sendWBid = None
-        self.sendWBcontent = None
+        self.send_waterball_id = None
+        self.send_waterball_content = None
         self.add_friend_id = None
 
-    def analyze(self, RecvMsgStr: str):
-        RecvMsg = Msg(strobj=RecvMsgStr)
+    def analyze(self, recv_msg_str: str):
+        recv_msg = Msg(strobj=recv_msg_str)
 
-        Opt = RecvMsg.get(Msg.Key_Opt)
-        if Opt == 'echo':
-            ResMsg = Msg(ErrorCode.Success, RecvMsg.get(Msg.Key_Msg))
-            self.push(ResMsg)
+        opt = recv_msg.get(Msg.Key_Opt)
+        if opt == 'echo':
+            res_msg = Msg(ErrorCode.Success, recv_msg.get(Msg.Key_Msg))
+            self.push(res_msg)
 
-        elif Opt == 'login':
-            self.loginid = RecvMsg.get(Msg.Key_Payload)[Msg.Key_PttID]
-            self.loginpassword = RecvMsg.get(Msg.Key_Payload)[
+        elif opt == 'login':
+            self.login_id = recv_msg.get(Msg.Key_Payload)[Msg.Key_PttID]
+            self.login_password = recv_msg.get(Msg.Key_Payload)[
                 Msg.Key_PttPassword]
 
-        elif Opt == 'logout':
+        elif opt == 'logout':
             self.logout = True
 
-        elif Opt == 'close':
+        elif opt == 'close':
             self.close = True
 
-        elif Opt == 'sendwaterball':
-            self.sendWBid = RecvMsg.get(Msg.Key_Payload)[Msg.Key_PttID]
-            self.sendWBcontent = RecvMsg.get(Msg.Key_Payload)[Msg.Key_Content]
+        elif opt == 'sendwaterball':
+            self.send_waterball_id = recv_msg.get(Msg.Key_Payload)[Msg.Key_PttID]
+            self.send_waterball_content = recv_msg.get(Msg.Key_Payload)[Msg.Key_Content]
 
-        elif Opt == 'addfriend':
-            self.addfriend_id = RecvMsg.get(Msg.Key_Payload)[Msg.Key_PttID]
+        elif opt == 'addfriend':
+            self.add_friend_id = recv_msg.get(Msg.Key_Payload)[Msg.Key_PttID]
 
         else:
-            ResMsg = Msg(ErrorCode.Unsupport, 'Unsupported')
-            self.push(ResMsg)
+            res_msg = Msg(ErrorCode.Unsupport, 'Unsupported')
+            self.push(res_msg)
 
-    def push(self, PushMsg):
+    def push(self, push_msg):
 
-        self.PushMsg.append(PushMsg.__str__())
+        self.PushMsg.append(push_msg.__str__())
 
     def recvlogin(self):
-        TempID, TempPW = self.loginid, self.loginpassword
-        self.loginid, self.loginpassword = None, None
-        return TempID, TempPW
+        temp_id, temp_pw = self.login_id, self.login_password
+        self.login_id, self.login_password = None, None
+        return temp_id, temp_pw
 
     def recvlogout(self):
         if self.logout:
@@ -66,9 +66,9 @@ class Command:
         return False
 
     def sendWaterBall(self):
-        TempID, TempContent = self.sendWBid, self.sendWBcontent
-        self.sendWBid, self.sendWBcontent = None, None
-        return TempID, TempContent
+        temp_id, temp_content = self.send_waterball_id, self.send_waterball_content
+        self.send_waterball_id, self.send_waterball_content = None, None
+        return temp_id, temp_content
 
     def addfriend(self):
         temp = self.add_friend_id

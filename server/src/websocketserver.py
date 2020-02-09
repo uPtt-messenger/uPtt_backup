@@ -25,10 +25,10 @@ async def consumer_handler(ws, path):
 
     while RunSession:
         try:
-            RecvMsg = await ws.recv()
-            print(f'recv [{RecvMsg}]')
-            Command.analyze(RecvMsg)
-            # await ws.send(RecvMsg)
+            recv_msg = await ws.recv()
+            print(f'recv [{recv_msg}]')
+            Command.analyze(recv_msg)
+            # await ws.send(recv_msg)
             # print(f'echo complete')
         except Exception as e:
             traceback.print_tb(e.__traceback__)
@@ -45,10 +45,10 @@ async def producer_handler(ws, path):
     while RunSession:
         if len(Command.PushMsg) != 0:
             while len(Command.PushMsg) != 0:
-                PushMsg = Command.PushMsg.pop()
+                push_msg = Command.PushMsg.pop()
 
-                print(f'push [{PushMsg}]')
-                await ws.send(PushMsg)
+                print(f'push [{push_msg}]')
+                await ws.send(push_msg)
         else:
             # print(f'asyncio.sleep')
             # No
