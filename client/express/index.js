@@ -26,7 +26,7 @@ app.ws('/uptt/public', function(ws, req) {
 
     // 登入
     if (reqData.operation === 'login') {
-      const resp = {code: 0, msg: "login success", payload: { token: LOGIN_TOKEN }};
+      const resp = { operation: reqData.operation, code: 0, msg: "login success", payload: { token: LOGIN_TOKEN }};
       console.log('[' + new Date().toUTCString() + '] ========= Response ========= ');
       console.log('[' + new Date().toUTCString() + '] resp = ' + JSON.stringify(resp));
       ws.send(JSON.stringify(resp));
