@@ -1,6 +1,7 @@
 import time
 import threading
 import traceback
+import datetime
 
 from PTTLibrary import PTT
 
@@ -182,9 +183,9 @@ class PTTAdapter:
                     if not waterball.type == PTT.data_type.waterball_type.CATCH:
                         continue
 
-                    waterball_target = waterball.getTarget()
-                    waterball_content = waterball.getContent()
-                    waterball_date = waterball.getDate()
+                    waterball_target = waterball.target
+                    waterball_content = waterball.content
+                    waterball_date = waterball.date
 
                     log.showvalue(
                         'PTTAdapter',
@@ -193,21 +194,43 @@ class PTTAdapter:
                         f'[{waterball_content}][{waterball_date}]'
                     )
 
+                    # 01/07/2020 10:46:51
+                    date_part1 = waterball_date.split(' ')[0]
+                    date_part2 = waterball_date.split(' ')[1]
+
+                    year = int(date_part1.split('/')[2])
+                    month = int(date_part1.split('/')[1])
+                    day = int(date_part1.split('/')[0])
+
+                    hour = int(date_part2.split(':')[0])
+                    minute = int(date_part2.split(':')[1])
+                    sec = int(date_part2.split(':')[2])
+
+                    # print(f'waterball_date {waterball_date}')
+                    # print(f'year {year}')
+                    # print(f'month {month}')
+                    # print(f'day {day}')
+                    # print(f'hour {hour}')
+                    # print(f'minute {minute}')
+                    # print(f'sec {sec}')
+
+                    waterball_timestamp = int(datetime.datetime(year, month, day, hour, minute, sec).timestamp())
+                    print(f'waterball_timestamp {waterball_timestamp}')
+
                     payload = Msg()
                     payload.add(Msg.Key_PttID, waterball_target)
                     payload.add(Msg.Key_Content, waterball_content)
-                    payload.add(Msg.Key_Date, waterball_date)
+                    payload.add(Msg.Key_timestamp, waterball_timestamp)
 
                     push_msg = Msg(opt='recvwaterball')
                     push_msg.add(Msg.Key_Payload, payload)
 
-                    self.dialog.recv(waterball_target, waterball_content, waterball_date)
+                    # self.dialog.recv(waterball_target, waterball_content, waterball_date)
 
                     self.command.push(push_msg)
-            
-            if self.bot.has_new_mail() > 1:
 
+            if self.bot.has_new_mail() > 1:
                 push_msg = Msg(opt='recvwaterball')
-                
+
                 self.command.push(push_msg)
         self.logout()
