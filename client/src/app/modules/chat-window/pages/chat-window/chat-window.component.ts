@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild, ElementRef, AfterViewChecked } from '@angular/core';
 import { FormBuilder, FormGroup, FormControl } from '@angular/forms';
-import { ChatMessage } from 'src/app/modules/shared/models/chat-message';
+import { ChatMessage } from 'src/app/modules/core/models/chat-message';
 
 @Component({
   selector: 'app-chat-window',
