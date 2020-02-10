@@ -2,7 +2,7 @@
 [![Package Version](https://img.shields.io/pypi/v/uPTT.svg)](https://pypi.org/project/uPTT/)
 [![Codacy Badge](https://api.codacy.com/project/badge/grade/4da1e92c94f2492588c20f8a8860383b)](https://www.codacy.com/app/Truth0906/uPTT)
 [![License: LGPL v3](https://img.shields.io/badge/License-LGPL%20v3-blue.svg)](https://www.gnu.org/licenses/lgpl-3.0)
-[![Gitter](https://badges.gitter.im/PTTPostman/PTTPostman.svg)](https://gitter.im/PTTPostman/PTTPostman?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
+[![chatroom icon](https://patrolavia.github.io/telegram-badge/chat.png)](https://t.me/uPtt_talk)
 [![Donate](https://img.shields.io/badge/Donate-PayPal-green.svg)](http://paypal.me/CodingMan)
 
 ## uPtt, PTT for you.
@@ -17,7 +17,7 @@
 #### 請至 [下載區](https://github.com/Truth0906/PTTPostman/releases) 下載 (近期釋出)
 
 ## 回報問題
-#### 請開 [issue](https://github.com/Truth0906/PTTPostman/issues) 也可以在 gitter 上找到我們 [![Gitter](https://badges.gitter.im/PTTPostman/PTTPostman.svg)](https://gitter.im/PTTPostman/PTTPostman?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
+#### 請開 [issue](https://github.com/Truth0906/PTTPostman/issues) 也可以直接找我們 [![chatroom icon](https://patrolavia.github.io/telegram-badge/chat.png)](https://t.me/uPtt_talk)
 
 ## 成員
 | <a href="https://github.com/PttCodingMan" target="_blank">**PttCodingMan**</a> | <a href="https://github.com/mobi76" target="_blank">**mobi76**</a> | <a href="https://github.com/amber076" target="_blank">**amber076**</a> | <a href="https://github.com/Arkuyo" target="_blank">**Arkuyo**</a> |
