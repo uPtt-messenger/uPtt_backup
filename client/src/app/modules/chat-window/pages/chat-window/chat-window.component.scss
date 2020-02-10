@@ -1,0 +1,98 @@
+.header-container {
+  display: inline-flex;
+  align-items: center;
+  align-content: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 10px;
+  background: transparent linear-gradient(114deg, #134278 0%, #0D325E 100%) 0% 0% no-repeat padding-box;
+  box-shadow: 0px 0px 8px #00000030;
+  opacity: 1;
+  color: #F3F3F3;
+
+  img.user-photo {
+    vertical-align: middle;
+    border-radius: 50%;
+    overflow: hidden;
+    height: 40px;
+    width: 40px;
+    margin-right: 7px;
+  }
+}
+.message-box {
+  height: calc(100% - 155px);
+  overflow: auto;
+  margin: 0.5em;
+  padding: 0.5em;
+  color: #ffffff;
+
+  span {
+    box-sizing: border-box;
+  }
+
+  .chat-message {
+    display: flex;
+    flex-direction: row;
+    margin-bottom: 1em;
+    &.my-message {
+      justify-content: flex-end;
+      .message-body {
+        text-align: right;
+      }
+      .message-content {
+        border-radius: 50px 3px 50px 50px;
+      }
+    }
+    &.other-message {
+      justify-content: flex-start;
+      .message-body {
+        text-align: left;
+      }
+      .message-content {
+        border-radius: 3px 50px 50px 50px;
+      }
+    }
+    .message-body {
+      min-width: 250px;
+      .message-user {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        margin-bottom: .2em;
+        font-size: 10px;
+        color: #BCBCBC;
+      }
+      .message-content {
+        display: inline-block;
+        color: #1E1E1E;
+        background: #AAE2FF 0% 0% no-repeat padding-box;
+        box-shadow: 0px 0px 8px #000000B0;
+        padding: .8em;
+      }
+    }
+  }
+}
+
+.message-input {
+  height: 70px;
+  margin: 0.5em;
+  background-color: #fff;
+  border: 1px solid #CCCCCC;
+  border-radius: 3px;
+  form {
+    box-sizing: border-box;
+  }
+  textarea {
+    outline: none;
+    resize: none;
+    background: #FFFFFF;
+    border: none;
+    font-size: 16px;
+  }
+  .message-info {
+    position: absolute;
+    right: 10px;
+    color: #9c9c9c;
+    bottom: 10px;
+  }
+}

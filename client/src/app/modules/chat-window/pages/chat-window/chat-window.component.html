@@ -1,0 +1,21 @@
+<div class="header-container">
+  <span class="user-profile">
+    <img class="user-photo" src="assets/images/pic.png" />
+    <span>CodingMan</span>
+  </span>
+</div>
+<div class="message-box uptt-scrollbar thin" #messageBox>
+  <span *ngFor="let cm of chatMsgList" class="chat-message" [ngClass]="{'my-message': cm.msgType === 1, 'other-message':  cm.msgType === 2}">
+    <span class="message-body">
+      <span class="message-user"><span class="ptt-id">{{cm.sender}}</span><span class="message-time">{{cm.msgTime}}</span></span>
+      <span class="message-content">{{cm.msgContent}}</span>
+    </span>
+  </span>
+</div>
+<div class="message-input">
+  <form [formGroup]="chatForm">
+    <textarea formControlName="chatMsg" name="chatMsg" rows="3" cols="25"
+        (keydown.enter)="submitMsg($event)"></textarea>
+  </form>
+  <span class="message-info">{{chatMsgLen}}/25</span>
+</div>

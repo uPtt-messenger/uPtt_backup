@@ -1,10 +1,15 @@
 const { app, BrowserWindow } = require('electron')
 const { Tray, Menu} = require('electron')
 const { ipcMain } = require('electron')
+const url = require('url');
+const path = require('path');
+
+const DEBUG_MODE = false;
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
-let win
-let tray = null
+let win;
+let chatWins = new Map();
+let tray = null;
 
 // 當 Electron 完成初始化，並且準備好建立瀏覽器視窗時
 // 會呼叫這的方法
@@ -32,11 +37,22 @@ app.on('activate', () => {
   }
 })
 
-ipcMain.on('login-success', () => {
+ipcMain.on('login-success', (event, data) => {
   //mainWindow.setSize(width,height)
+  console.log('event: login-success');
+  console.log(data);
   win.hide();
   const contextMenu = Menu.buildFromTemplate([
-    { label: '丟水球', type: 'normal' },
+    { label: '丟水球', type: 'normal', click: function() {
+      win.setSize(350, 450);
+      win.loadURL(url.format({
+        pathname: path.join(__dirname, './build/index.html'),
+        protocol: 'file:',
+        slashes: true,
+        hash: '/main-window/new-chat'
+      }));
+      win.show();
+    } },
     { label: '設定', type: 'normal' },
     { label: '關於', type: 'normal' },
     { label: '登出', type: 'normal' },
@@ -46,6 +62,31 @@ ipcMain.on('login-success', () => {
     } }
   ])
   tray.setContextMenu(contextMenu)
+});
+
+ipcMain.on('new-chat', (data) => {
+  console.log('event: new-chat');
+  console.log(data);
+  win.hide();
+  const chatWin = new BrowserWindow({
+    width: 400,
+    height: 700,
+    title: data.pttId,
+    icon:'build/assets/images/uptt.ico',
+    webPreferences: {
+      nodeIntegration: true
+    }
+  });
+  chatWin.loadURL(url.format({
+    pathname: path.join(__dirname, './build/index.html'),
+    protocol: 'file:',
+    slashes: true,
+    hash: '/chat-window'
+  }));
+
+  chatWin.webContents.openDevTools();
+
+  chatWins.set(data.pttId, chatWin);
 });
 
 // ---------------------------------- Function
@@ -75,10 +116,16 @@ function createWindow () {
   })
 
   // and load the index.html of the app.
-  win.loadFile('build/index.html')
+  win.loadURL(url.format({
+    pathname: path.join(__dirname, './build/index.html'),
+    protocol: 'file:',
+    slashes: true
+  }));
 
   // Open the DevTools.
-  // win.webContents.openDevTools()
+  if (DEBUG_MODE) {
+    win.webContents.openDevTools();
+  }
 
   // 視窗關閉時會觸發。
   win.on('closed', () => {

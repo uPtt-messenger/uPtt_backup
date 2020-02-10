@@ -6,6 +6,10 @@ html, body {
   margin: 0;
 }
 
+body {
+  background-color: #3A3A3A;
+}
+
 div {
   box-sizing: border-box;
 }
@@ -55,4 +59,36 @@ div, span, button, input {
 
     box-shadow: 0px 3px 6px #000000A8;
   }
+}
+
+// ----------------------------------------------- scroll bar style
+.uptt-scrollbar::-webkit-scrollbar-track {
+  -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.1);
+  background-color: #5A5A5A;
+  border-radius: 10px;
+}
+
+.uptt-scrollbar::-webkit-scrollbar {
+  width: 12px;
+  background-color: #5A5A5A;
+}
+
+.uptt-scrollbar::-webkit-scrollbar-thumb {
+  border-radius: 10px;
+  -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.1);
+  background-image: -webkit-gradient(linear, left bottom, left top, from(#28D4D4), to(#499AE9));
+  background-image: -webkit-linear-gradient(bottom, #28D4D4 0%, #499AE9 100%);
+  background-image: linear-gradient(to top, #28D4D4 0%, #499AE9 100%);
+}
+
+.square::-webkit-scrollbar-track {
+  border-radius: 0 !important;
+}
+
+.square::-webkit-scrollbar-thumb {
+  border-radius: 0 !important;
+}
+
+.thin::-webkit-scrollbar {
+  width: 6px;
 }

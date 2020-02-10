@@ -5,6 +5,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { PublicRoutingModule } from './public-routing.module';
 import { LoginComponent } from './pages/login/login.component';
 import { SharedModule } from '../shared/shared.module';
+import { PublicService } from './services/public.service';
 
 
 @NgModule({
@@ -14,6 +15,9 @@ import { SharedModule } from '../shared/shared.module';
     ReactiveFormsModule,
     PublicRoutingModule,
     SharedModule
+  ],
+  providers: [
+    PublicService
   ]
 })
 export class PublicModule { }
