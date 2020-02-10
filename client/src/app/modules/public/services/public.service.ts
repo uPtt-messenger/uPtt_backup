@@ -1,5 +1,7 @@
 import { Injectable } from '@angular/core';
-import { webSocket } from 'rxjs/webSocket';
+import { webSocket, WebSocketSubject } from 'rxjs/webSocket';
+import { Observable } from 'rxjs';
+import { map, catchError } from 'rxjs/operators';
 
 @Injectable()
 export class PublicService {
@@ -9,22 +11,18 @@ export class PublicService {
    // openObserver: open$
   });
 
-  login$ = this.ws.multiplex(
-    () => ({ type: 'subscribe', tag: 'login' }),
-    () => ({ type: 'unsubscribe', tag: 'login' }),
-    (resp: {operation: string}) => resp.operation === 'login'
-  );
-
   constructor() { }
 
-  login(loginCredentials: { pttId: string, pwd: string }): void {
-    this.ws.next({
-      operation: 'login',
-      payload: {
-        pttId: loginCredentials.pttId,
-        pwd: loginCredentials.pwd
-      }
-    });
+  login(loginCredentials: { pttId: string, pwd: string }): Observable<any> {
+    console.log(loginCredentials);
+    return this.ws.multiplex(
+      () => ({ operation: 'login', payload: { pttId: loginCredentials.pttId, pwd: loginCredentials.pwd } }),
+      () => ({ type: 'unsubscribe', tag: 'login' }),
+      (resp: {operation: string}) => resp.operation === 'login'
+    ).pipe(
+      map(resp => resp)
+      // catchError
+    );
   }
 
 

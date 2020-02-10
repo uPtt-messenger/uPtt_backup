@@ -19,8 +19,8 @@ export class LoginComponent implements OnInit {
       private router: Router,
       private publicService: PublicService) {
     this.loginForm = this.fb.group({
-      loginPttId: [''],
-      loginPwd: ['']
+      pttId: [''],
+      pwd: ['']
     });
   }
 
@@ -28,15 +28,17 @@ export class LoginComponent implements OnInit {
   }
 
   login() {
-    console.log('login');
-    // TODO: call login API
-    this.publicService.login(this.loginForm.value);
-    this.publicService.login$.subscribe(message => console.log(message));
-
-    // if (this.electronService.isElectron) {
-    //   this.electronService.ipcRenderer.send('login-success', this.loginForm.value);
-    // } else {
-    //   this.router.navigate(['/main-window']);
-    // }
+    this.publicService.login(this.loginForm.value).subscribe(
+      resp => {
+        if (this.electronService.isElectron) {
+          this.electronService.ipcRenderer.send('login-success', { token: resp.token });
+        } else {
+          this.router.navigate(['/main-window']);
+        }
+      },
+      error => {
+        // TODO: error handle
+      }
+    );
   }
 }
