@@ -12,6 +12,7 @@ import { PublicService } from '../../services/public.service';
 export class LoginComponent implements OnInit {
 
   loginForm: FormGroup;
+  loginFail = false;
 
   constructor(
       private electronService: ElectronService,
@@ -38,6 +39,7 @@ export class LoginComponent implements OnInit {
       },
       error => {
         // TODO: error handle
+        this.loginFail = true;
       }
     );
   }
