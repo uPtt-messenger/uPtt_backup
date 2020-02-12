@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { webSocket, WebSocketSubject } from 'rxjs/webSocket';
-import { Observable } from 'rxjs';
+import { Observable, throwError } from 'rxjs';
 import { map, catchError } from 'rxjs/operators';
 
 @Injectable()
@@ -20,7 +20,13 @@ export class PublicService {
       () => ({ type: 'unsubscribe', tag: 'login' }),
       (resp: {operation: string}) => resp.operation === 'login'
     ).pipe(
-      map(resp => resp)
+      map(resp => {
+        if (resp.code === 0) {
+          return resp.payload;
+        } else {
+          throw resp;
+        }
+      })
       // catchError
     );
   }

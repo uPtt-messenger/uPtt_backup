@@ -26,7 +26,16 @@ app.ws('/uptt/public', function(ws, req) {
 
     // 登入
     if (reqData.operation === 'login') {
-      const resp = { operation: reqData.operation, code: 0, msg: "login success", payload: { token: LOGIN_TOKEN }};
+      let resp = {};
+      if (reqData.payload.pttId === 'test') {
+        if (reqData.payload.pwd === '123123') {
+          resp = { operation: reqData.operation, code: 0, msg: "login success", payload: { token: LOGIN_TOKEN }};
+        } else {
+          resp = { operation: reqData.operation, code: -1, msg: "login fail"};
+        }
+      } else {
+        resp = { operation: reqData.operation, code: -1, msg: "login fail"};
+      }
       console.log('[' + new Date().toUTCString() + '] ========= Response ========= ');
       console.log('[' + new Date().toUTCString() + '] resp = ' + JSON.stringify(resp));
       ws.send(JSON.stringify(resp));

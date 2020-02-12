@@ -11,6 +11,13 @@ let win;
 let chatWins = new Map();
 let tray = null;
 
+let upttData = {
+  currentUser: {
+    pttId: '',
+    token: ''
+  }
+};
+
 // 當 Electron 完成初始化，並且準備好建立瀏覽器視窗時
 // 會呼叫這的方法
 // 有些 API 只能在這個事件發生後才能用。
@@ -41,6 +48,10 @@ ipcMain.on('login-success', (event, data) => {
   //mainWindow.setSize(width,height)
   console.log('event: login-success');
   console.log(data);
+
+  upttData.currentUser.pttId = data.pttId;
+  upttData.currentUser.token = data.token;
+
   win.hide();
   const contextMenu = Menu.buildFromTemplate([
     { label: '丟水球', type: 'normal', click: function() {

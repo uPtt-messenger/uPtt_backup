@@ -32,15 +32,17 @@ export class LoginComponent implements OnInit {
     this.publicService.login(this.loginForm.value).subscribe(
       resp => {
         if (this.electronService.isElectron) {
-          this.electronService.ipcRenderer.send('login-success', { token: resp.token });
+          this.electronService.ipcRenderer.send('login-success', { pttId: this.loginForm.get('pttId').value, token: resp.token });
         } else {
           this.router.navigate(['/main-window']);
         }
       },
       error => {
         // TODO: error handle
+        this.loginForm.reset({pttId: this.loginForm.get('pttId').value});
         this.loginFail = true;
       }
     );
   }
 }
+
