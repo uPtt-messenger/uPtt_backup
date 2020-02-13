@@ -1,10 +1,10 @@
 <h1 style=" color: #ffffff;">丟水球</h1>
 <p style=" color: #ffffff;">請輸入使用者代號:</p>
-<form>
+<form [formGroup]="newChatForm">
   <div class="form-group">
     <div class="form-control">
       <div class="uptt-input">
-        <input type="text" />
+        <input type="text" formControlName="pttId" />
       </div>
     </div>
   </div>

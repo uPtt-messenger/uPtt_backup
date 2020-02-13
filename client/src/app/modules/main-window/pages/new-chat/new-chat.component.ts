@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ElectronService } from 'src/app/modules/shared/services/electron.service';
 import { Router } from '@angular/router';
+import { FormGroup, FormBuilder } from '@angular/forms';
 
 @Component({
   selector: 'app-new-chat',
@@ -9,19 +10,25 @@ import { Router } from '@angular/router';
 })
 export class NewChatComponent implements OnInit {
 
+  newChatForm: FormGroup;
+
   constructor(
-    private electronService: ElectronService,
-    private router: Router
-    ) { }
+      private electronService: ElectronService,
+      private fb: FormBuilder,
+      private router: Router) {
+    this.newChatForm = this.fb.group({
+      pttId: ['']
+    });
+  }
 
   ngOnInit() {
   }
 
   submitForm() {
-    console.log('login');
     if (this.electronService.isElectron) {
-      this.electronService.ipcRenderer.send('new-chat');
+      this.electronService.ipcRenderer.send('new-chat', { pttId: this.newChatForm.get('pttId').value });
     } else {
+      // TODO: Web new chat
       this.router.navigate(['/chat-window']);
     }
   }
