@@ -75,7 +75,7 @@ ipcMain.on('login-success', (event, data) => {
   tray.setContextMenu(contextMenu)
 });
 
-ipcMain.on('new-chat', (data) => {
+ipcMain.on('new-chat', (event, data) => {
   console.log('event: new-chat');
   console.log(data);
   win.hide();
@@ -92,7 +92,10 @@ ipcMain.on('new-chat', (data) => {
     pathname: path.join(__dirname, './build/index.html'),
     protocol: 'file:',
     slashes: true,
-    hash: '/chat-window'
+    hash: '/chat-window',
+    query: {
+      'test': '123123'
+    }
   }));
 
   chatWin.webContents.openDevTools();

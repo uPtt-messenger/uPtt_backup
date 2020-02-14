@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ElectronService } from 'src/app/modules/shared/services/electron.service';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { FormGroup, FormBuilder } from '@angular/forms';
 
 @Component({
@@ -16,6 +16,8 @@ export class NewChatComponent implements OnInit {
       private electronService: ElectronService,
       private fb: FormBuilder,
       private router: Router) {
+
+
     this.newChatForm = this.fb.group({
       pttId: ['']
     });

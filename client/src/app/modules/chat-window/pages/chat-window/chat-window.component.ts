@@ -1,6 +1,7 @@
 import { Component, OnInit, ViewChild, ElementRef, AfterViewChecked } from '@angular/core';
 import { FormBuilder, FormGroup, FormControl } from '@angular/forms';
 import { ChatMessage } from 'src/app/modules/core/models/chat-message';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-chat-window',
@@ -22,7 +23,15 @@ export class ChatWindowComponent implements OnInit, AfterViewChecked {
   chatMsgLen = 0;
   chatForm: FormGroup;
 
-  constructor(private fb: FormBuilder) {
+  constructor(private route: ActivatedRoute, private fb: FormBuilder) {
+
+    console.log('Called Constructor');
+    this.route.queryParams.subscribe(params => {
+      console.log('get query parameter');
+      console.log(params);
+      console.log(params['test']);
+    });
+
     this.chatForm = this.fb.group({
       chatMsg: []
     });
