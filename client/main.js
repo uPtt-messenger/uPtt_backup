@@ -94,12 +94,15 @@ ipcMain.on('new-chat', (event, data) => {
     slashes: true,
     hash: '/chat-window',
     query: {
-      'test': '123123'
+      page: 1,
+      test: 'json'
     }
   }));
 
   chatWin.webContents.openDevTools();
-
+  chatWin.chatData = {
+    pttId: 'test123'
+  };
   chatWins.set(data.pttId, chatWin);
 });
 

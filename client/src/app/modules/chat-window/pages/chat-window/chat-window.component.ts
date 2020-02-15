@@ -2,6 +2,7 @@ import { Component, OnInit, ViewChild, ElementRef, AfterViewChecked } from '@ang
 import { FormBuilder, FormGroup, FormControl } from '@angular/forms';
 import { ChatMessage } from 'src/app/modules/core/models/chat-message';
 import { ActivatedRoute } from '@angular/router';
+import { ElectronService } from 'src/app/modules/shared/services/electron.service';
 
 @Component({
   selector: 'app-chat-window',
@@ -23,13 +24,24 @@ export class ChatWindowComponent implements OnInit, AfterViewChecked {
   chatMsgLen = 0;
   chatForm: FormGroup;
 
-  constructor(private route: ActivatedRoute, private fb: FormBuilder) {
+  constructor(
+      private electronService: ElectronService,
+      private route: ActivatedRoute,
+      private fb: FormBuilder) {
+
+    const currentWindow: any = electronService.remote.getCurrentWindow();
+
+    console.log(currentWindow.chatData);
 
     console.log('Called Constructor');
     this.route.queryParams.subscribe(params => {
+      console.log('window.location.search');
+      console.log(window.location.search);
       console.log('get query parameter');
       console.log(params);
       console.log(params['test']);
+      const firstParam: string = this.route.snapshot.queryParamMap.get('test');
+      console.log(firstParam);
     });
 
     this.chatForm = this.fb.group({
