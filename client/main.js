@@ -92,16 +92,12 @@ ipcMain.on('new-chat', (event, data) => {
     pathname: path.join(__dirname, './build/index.html'),
     protocol: 'file:',
     slashes: true,
-    hash: '/chat-window',
-    query: {
-      page: 1,
-      test: 'json'
-    }
+    hash: '/chat-window'
   }));
 
   chatWin.webContents.openDevTools();
-  chatWin.chatData = {
-    pttId: 'test123'
+  chatWin.chater = {
+    pttId: data.pttId
   };
   chatWins.set(data.pttId, chatWin);
 });

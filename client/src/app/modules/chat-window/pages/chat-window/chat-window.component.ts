@@ -24,25 +24,17 @@ export class ChatWindowComponent implements OnInit, AfterViewChecked {
   chatMsgLen = 0;
   chatForm: FormGroup;
 
+  chater: {
+    pttId: string
+  };
+
   constructor(
       private electronService: ElectronService,
       private route: ActivatedRoute,
       private fb: FormBuilder) {
 
     const currentWindow: any = electronService.remote.getCurrentWindow();
-
-    console.log(currentWindow.chatData);
-
-    console.log('Called Constructor');
-    this.route.queryParams.subscribe(params => {
-      console.log('window.location.search');
-      console.log(window.location.search);
-      console.log('get query parameter');
-      console.log(params);
-      console.log(params['test']);
-      const firstParam: string = this.route.snapshot.queryParamMap.get('test');
-      console.log(firstParam);
-    });
+    this.chater = currentWindow.chater;
 
     this.chatForm = this.fb.group({
       chatMsg: []
