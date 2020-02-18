@@ -1,10 +1,14 @@
-const { app, BrowserWindow } = require('electron')
-const { Tray, Menu} = require('electron')
-const { ipcMain } = require('electron')
+const { webSocket } = require('rxjs/webSocket');
+const { WebSocketSubject } = require('rxjs/webSocket');
+
+const { app, BrowserWindow } = require('electron');
+const { Tray, Menu} = require('electron');
+const { ipcMain } = require('electron');
 const url = require('url');
 const path = require('path');
+const publicWs = null;
 
-const DEBUG_MODE = false;
+const DEBUG_MODE = true;
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
 let win;
@@ -22,7 +26,7 @@ let upttData = {
 // 會呼叫這的方法
 // 有些 API 只能在這個事件發生後才能用。
 app.on('ready', () => {
-
+  initWebsocket();
   createWindow();
 });
 
@@ -43,6 +47,25 @@ app.on('activate', () => {
     createWindow()
   }
 })
+
+ipcMain.on('login', (event, data) => {
+  publicWs.multiplex(
+    () => ({ operation: 'login', payload: { pttId: loginCredentials.pttId, pwd: loginCredentials.pwd } }),
+    () => ({ type: 'unsubscribe', tag: 'login' }),
+    (resp) => resp.operation === 'login'
+  ).pipe(
+    map(resp => {
+      // event.sender.send(resp);
+      event.reply('login-resp', resp);
+      // if (resp.code === 0) {
+      //   return resp.payload;
+      // } else {
+      //   throw resp;
+      // }
+    })
+    // catchError
+  );
+});
 
 ipcMain.on('login-success', (event, data) => {
   //mainWindow.setSize(width,height)
@@ -166,4 +189,8 @@ function createWindow () {
     tray.setContextMenu(contextMenu)
     return false;
   });
+}
+
+function initWebsocket() {
+  // publicWs = webSocket({ url: 'ws://localhost:50732/uptt/public' })
 }
