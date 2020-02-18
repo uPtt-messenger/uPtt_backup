@@ -1,12 +1,13 @@
 const { webSocket } = require('rxjs/webSocket');
 const { WebSocketSubject } = require('rxjs/webSocket');
-
+(global).WebSocket = require('ws');
 const { app, BrowserWindow } = require('electron');
 const { Tray, Menu} = require('electron');
 const { ipcMain } = require('electron');
 const url = require('url');
 const path = require('path');
-const publicWs = null;
+let publicWs = null;
+
 
 const DEBUG_MODE = true;
 // Keep a global reference of the window object, if you don't, the window will
@@ -192,5 +193,5 @@ function createWindow () {
 }
 
 function initWebsocket() {
-  // publicWs = webSocket({ url: 'ws://localhost:50732/uptt/public' })
+  publicWs = webSocket({ url: 'ws://localhost:50732/uptt/public' });
 }
