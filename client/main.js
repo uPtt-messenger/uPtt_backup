@@ -1,13 +1,13 @@
-const { webSocket } = require('rxjs/webSocket');
-const { WebSocketSubject } = require('rxjs/webSocket');
-(global).WebSocket = require('ws');
 const { app, BrowserWindow } = require('electron');
 const { Tray, Menu} = require('electron');
 const { ipcMain } = require('electron');
 const url = require('url');
 const path = require('path');
+const { map } = require('rxjs/operators');
+const { webSocket } = require('rxjs/webSocket');
+const { WebSocketSubject } = require('rxjs/webSocket');
+(global).WebSocket = require('ws');
 let publicWs = null;
-
 
 const DEBUG_MODE = true;
 // Keep a global reference of the window object, if you don't, the window will
@@ -50,8 +50,11 @@ app.on('activate', () => {
 })
 
 ipcMain.on('login', (event, data) => {
+  console.log('event: login-success');
+  console.log(data);
+
   publicWs.multiplex(
-    () => ({ operation: 'login', payload: { pttId: loginCredentials.pttId, pwd: loginCredentials.pwd } }),
+    () => ({ operation: 'login', payload: { pttId: data.pttId, pwd: data.pwd } }),
     () => ({ type: 'unsubscribe', tag: 'login' }),
     (resp) => resp.operation === 'login'
   ).pipe(
@@ -65,7 +68,7 @@ ipcMain.on('login', (event, data) => {
       // }
     })
     // catchError
-  );
+  ).subscribe(x => console.log(x));
 });
 
 ipcMain.on('login-success', (event, data) => {
