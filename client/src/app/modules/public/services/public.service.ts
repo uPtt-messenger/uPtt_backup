@@ -1,23 +1,22 @@
 import { Injectable } from '@angular/core';
-import { webSocket, WebSocketSubject } from 'rxjs/webSocket';
 import { Observable, throwError, Subject } from 'rxjs';
-import { map, catchError } from 'rxjs/operators';
+import { map,  } from 'rxjs/operators';
 import { ElectronService } from '../../shared/services/electron.service';
 
 @Injectable()
 export class PublicService {
 
-  private ws = webSocket({
-    url: 'ws://localhost:50732/uptt/public',
-   // openObserver: open$
-  });
+  // private ws = webSocket({
+  //   url: 'ws://localhost:50732/uptt/public',
+  //  // openObserver: open$
+  // });
 
   constructor(private electronService: ElectronService) { }
 
   login(loginCredentials: { pttId: string, pwd: string }): Observable<any> {
     const rtnSubject = new Subject<any>();
     this.electronService.ipcRenderer.send('login', loginCredentials);
-    this.electronService.ipcRenderer.on('login-resp', (event, resp) => {
+    this.electronService.ipcRenderer.once('login-resp', (event, resp) => {
       console.log(resp);
       rtnSubject.next(resp);
     });
@@ -46,6 +45,5 @@ export class PublicService {
     //   // catchError
     // );
   }
-
 
 }
