@@ -17,15 +17,12 @@ let chatWins = new Map();
 let tray = null;
 
 let upttData = {
-  currentUser: {
+  user: {
     pttId: '',
     token: ''
   }
 };
 
-// 當 Electron 完成初始化，並且準備好建立瀏覽器視窗時
-// 會呼叫這的方法
-// 有些 API 只能在這個事件發生後才能用。
 app.on('ready', () => {
   initWebsocket();
   createWindow();
@@ -52,29 +49,26 @@ app.on('activate', () => {
 ipcMain.on('login', (event, data) => {
   console.log('event: login-success');
   console.log(data);
-
   publicWs.multiplex(
     () => ({ operation: 'login', payload: { pttId: data.pttId, pwd: data.pwd } }),
     () => ({ type: 'unsubscribe', tag: 'login' }),
     (resp) => resp.operation === 'login'
   ).pipe(
     map(resp => {
-      // event.sender.send(resp);
       event.reply('login-resp', resp);
-      // if (resp.code === 0) {
-      //   return resp.payload;
-      // } else {
+      if (resp.code === 0) {
+        upttData.user.pttId = data.pttId;
+        upttData.user.token = resp.payload.token;
+      }
+      //  else {
       //   throw resp;
       // }
     })
-    // catchError
   ).subscribe(x => console.log(x));
 });
 
 ipcMain.on('login-success', (event, data) => {
-  //mainWindow.setSize(width,height)
-  console.log('event: login-success');
-  console.log(data);
+
 
   upttData.currentUser.pttId = data.pttId;
   upttData.currentUser.token = data.token;
