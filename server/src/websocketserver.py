@@ -1,15 +1,11 @@
 import asyncio
 import websockets
-import pathlib
-import ssl
-import logging
-import json
-
 import traceback
 import time
 import threading
 
 import log
+from msg import Msg
 
 RunSession = True
 Command = None
@@ -25,8 +21,9 @@ async def consumer_handler(ws, path):
 
     while RunSession:
         try:
-            recv_msg = await ws.recv()
-            print(f'recv [{recv_msg}]')
+            recv_msg_str = await ws.recv()
+            print(f'recv str [{recv_msg_str}]')
+            recv_msg = Msg(strobj=recv_msg_str)
             Command.analyze(recv_msg)
             # await ws.send(recv_msg)
             # print(f'echo complete')

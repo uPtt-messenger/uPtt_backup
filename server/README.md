@@ -1,4 +1,4 @@
-# uPtt Core
+# uPtt user server
 
 ## 版本
 #### 0.0.1 beta

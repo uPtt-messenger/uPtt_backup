@@ -1,6 +1,4 @@
 
-import json
-
 from errorcode import ErrorCode
 from msg import Msg
 
@@ -20,8 +18,7 @@ class Command:
         self.send_waterball_content = None
         self.add_friend_id = None
 
-    def analyze(self, recv_msg_str: str):
-        recv_msg = Msg(strobj=recv_msg_str)
+    def analyze(self, recv_msg: Msg):
 
         opt = recv_msg.get(Msg.Key_Opt)
         if opt == 'echo':
