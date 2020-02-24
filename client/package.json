@@ -1,10 +1,12 @@
 {
   "name": "uptt-client",
   "version": "0.0.0",
-  "main": "main.js",
+  "main": "desktop/index.js",
   "build": {
     "appId": "com.uptt.app",
+    "productName": "uptt",
     "directories": {
+      "buildResources": "build",
       "output": "dist"
     },
     "mac": {
