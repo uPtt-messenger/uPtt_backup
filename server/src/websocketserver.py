@@ -7,42 +7,42 @@ import threading
 import log
 from msg import Msg
 
-RunSession = True
-Command = None
-Config = None
-ServerStart = False
+run_session = True
+command = None
+config = None
+server_start = False
 
-Thread = None
+thread = None
 
 
 async def consumer_handler(ws, path):
-    global RunSession
-    global Command
+    global run_session
+    global command
 
-    while RunSession:
+    while run_session:
         try:
             recv_msg_str = await ws.recv()
             print(f'recv str [{recv_msg_str}]')
             recv_msg = Msg(strobj=recv_msg_str)
-            Command.analyze(recv_msg)
+            command.analyze(recv_msg)
             # await ws.send(recv_msg)
             # print(f'echo complete')
         except Exception as e:
             traceback.print_tb(e.__traceback__)
             print(e)
             print('Connection Clsoe')
-            RunSession = False
+            run_session = False
             break
 
 
 async def producer_handler(ws, path):
-    global RunSession
-    global Command
+    global run_session
+    global command
 
-    while RunSession:
-        if len(Command.PushMsg) != 0:
-            while len(Command.PushMsg) != 0:
-                push_msg = Command.PushMsg.pop()
+    while run_session:
+        if len(command.PushMsg) != 0:
+            while len(command.PushMsg) != 0:
+                push_msg = command.PushMsg.pop()
 
                 print(f'push [{push_msg}]')
                 await ws.send(push_msg)
@@ -53,10 +53,10 @@ async def producer_handler(ws, path):
 
 
 async def handler(websocket, path):
-    global RunSession
+    global run_session
 
-    RunSession = True
-    while RunSession:
+    run_session = True
+    while run_session:
         consumer_task = asyncio.ensure_future(
             consumer_handler(websocket, path))
 
@@ -71,12 +71,12 @@ async def handler(websocket, path):
             task.cancel()
 
 
-def ServerSetup():
-    log.showvalue(
+def server_setup():
+    log.show_value(
         'WebSocket Server',
-        log.Level.INFO,
+        log.level.INFO,
         '啟動伺服器',
-        f'ws://127.0.0.1:{Config.Port}'
+        f'ws://127.0.0.1:{config.port}'
     )
 
     new_loop = asyncio.new_event_loop()
@@ -85,53 +85,53 @@ def ServerSetup():
     start_server = websockets.serve(
         handler,
         "localhost",
-        Config.Port,
+        config.port,
         # ssl=ssl_context
     )
 
     asyncio.get_event_loop().run_until_complete(start_server)
 
-    global ServerStart
-    ServerStart = True
+    global server_start
+    server_start = True
 
     asyncio.get_event_loop().run_forever()
 
     log.show(
         'WebSocket Server',
-        log.Level.INFO,
+        log.level.INFO,
         '關閉伺服器'
     )
 
 
 def start():
-    global Thread
-    Thread = threading.Thread(target=ServerSetup)
-    Thread.daemon = True
-    Thread.start()
+    global thread
+    thread = threading.Thread(target=server_setup)
+    thread.daemon = True
+    thread.start()
 
 
 def stop():
 
-    global ServerStart
-    global RunSession
-    global Thread
+    global server_start
+    global run_session
+    global thread
 
     log.show(
         'WebSocket Server',
-        log.Level.INFO,
+        log.level.INFO,
         '執行終止程序'
     )
 
-    while not ServerStart:
+    while not server_start:
         time.sleep(0.1)
 
-    RunSession = False
+    run_session = False
     asyncio.get_event_loop().stop()
 
     # Thread.join()
     log.show(
         'WebSocket Server',
-        log.Level.INFO,
+        log.level.INFO,
         '終止程序完成'
     )
 

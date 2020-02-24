@@ -9,11 +9,14 @@ import websocketserver
 from config import Config
 from command import Command
 from pttadapter import PTT_Adapter
+from feedback import Feedback
+from event import EventConsole
+from console import Console
 
 LogPath = None
 
 
-def log2File(Msg):
+def log_to_file(Msg):
     global LogPath
     if LogPath is None:
         desktop = os.path.join(
@@ -36,32 +39,38 @@ if __name__ == '__main__':
     running = threading.Event()
     running.set()
 
-    ConfigObj = Config()
-    CommObj = Command()
+    config_obj = Config()
+
+    event_console = EventConsole()
+    comm_obj = Command(event_console)
+
+    console_obj = Console(config_obj, comm_obj, event_console)
 
     if len(sys.argv) > 1:
         print(sys.argv)
 
     if '-debug' in sys.argv or '-trace' in sys.argv:
-        log.Handler = log2File
-        ConfigObj.LogHandler = log2File
+        log.Handler = log_to_file
+        config_obj.LogHandler = log_to_file
     
     if '-trace' in sys.argv:
-        ConfigObj.LogHandler = log.Level.TRACE
+        config_obj.LogHandler = log.level.TRACE
 
-    log.showvalue(
+    log.show_value(
         'Main',
-        log.Level.INFO,
+        log.level.INFO,
         'uPtt 版本',
-        ConfigObj.Version
+        config_obj.version
     )
 
-    ptt_adapter = PTT_Adapter(ConfigObj, CommObj)
+    feedback = Feedback(console_obj)
+    ptt_adapter = PTT_Adapter(console_obj)
 
-    websocketserver.Config = ConfigObj
-    websocketserver.Command = CommObj
+    # websocketserver 是特例
+    websocketserver.config = config_obj
+    websocketserver.command = comm_obj
     websocketserver.start()
-    while not CommObj.close:
+    while not comm_obj.close:
         try:
             time.sleep(0.1)
         except KeyboardInterrupt:
@@ -69,10 +78,9 @@ if __name__ == '__main__':
 
     log.show(
         'Main',
-        log.Level.INFO,
+        log.level.INFO,
         '執行終止程序'
     )
-    ptt_adapter.stop()
     websocketserver.stop()
 
     # 清除所有潛在
@@ -80,6 +88,6 @@ if __name__ == '__main__':
 
     log.show(
         'Main',
-        log.Level.INFO,
+        log.level.INFO,
         '全部終止程序完成'
     )

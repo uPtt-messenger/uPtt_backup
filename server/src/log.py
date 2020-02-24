@@ -1,4 +1,4 @@
-import os
+
 import sys
 from time import gmtime, strftime
 
@@ -6,105 +6,105 @@ from time import gmtime, strftime
 Handler = None
 
 
-class Level(object):
+class level(object):
 
     TRACE = 1
     DEBUG = 2
     INFO = 3
-    SLIENT = 4
+    SILENT = 4
 
     MinValue = TRACE
-    MaxValue = SLIENT
+    MaxValue = SILENT
 
 
-LogLevel = Level.INFO
+Log_level = level.INFO
 
 
-def merge(Msg) -> str:
-    if isinstance(Msg, list):
-        for i in range(len(Msg)):
-            if len(Msg[i]) == 0:
+def merge(msg) -> str:
+    if isinstance(msg, list):
+        for i in range(len(msg)):
+            if len(msg[i]) == 0:
                 continue
-            if Msg[i][0].upper() != Msg[i][0].lower() and i != 0:
-                Msg[i] = ' ' + Msg[i].lstrip()
-            if (Msg[i][-1].upper() != Msg[i][-1].lower() and
-                    i != len(Msg) - 1):
-                Msg[i] = Msg[i].rstrip() + ' '
+            if msg[i][0].upper() != msg[i][0].lower() and i != 0:
+                msg[i] = ' ' + msg[i].lstrip()
+            if (msg[i][-1].upper() != msg[i][-1].lower() and
+                    i != len(msg) - 1):
+                msg[i] = msg[i].rstrip() + ' '
 
-        Msg = ''.join(Msg)
-    Msg = str(Msg)
-    Msg = Msg.replace('  ', ' ')
+        msg = ''.join(msg)
+    msg = str(msg)
+    msg = msg.replace('  ', ' ')
 
-    return Msg
+    return msg
 
 
-def show(PreFix, CurrentLogLevel, Msg):
+def show(prefix, current_log_level, msg):
 
-    global LogLevel
+    global Log_level
 
-    if LogLevel > CurrentLogLevel:
+    if Log_level > current_log_level:
         return
-    if len(Msg) == 0:
+    if len(msg) == 0:
         return
 
-    Msg = merge(Msg)
+    msg = merge(msg)
 
-    TotalMessage = '[' + strftime('%m%d %H%M%S') + ']'
+    total_message = '[' + strftime('%m%d %H%M%S') + ']'
 
-    if CurrentLogLevel == Level.DEBUG:
-        TotalMessage += '[除錯]'
-    elif CurrentLogLevel == Level.INFO:
-        TotalMessage += '[資訊]'
+    if current_log_level == level.DEBUG:
+        total_message += '[除錯]'
+    elif current_log_level == level.INFO:
+        total_message += '[資訊]'
 
-    if PreFix is not None:
-        TotalMessage += '[' + PreFix + ']'
-    TotalMessage += ' ' + Msg
+    if prefix is not None:
+        total_message += '[' + prefix + ']'
+    total_message += ' ' + msg
 
     try:
-        print(TotalMessage.encode(
+        print(total_message.encode(
             sys.stdin.encoding,
             'replace'
         ).decode(
             sys.stdin.encoding
         ))
     except Exception:
-        print(TotalMessage.encode('utf-8', "replace").decode('utf-8'))
+        print(total_message.encode('utf-8', "replace").decode('utf-8'))
 
     global Handler
     if Handler is not None:
-        Handler(TotalMessage)
+        Handler(total_message)
 
 
 LastValue = None
 
 
-def showvalue(PreFix, CurrentLogLevel, Msg, Value):
+def show_value(prefix, current_log_level, msg, value):
 
-    global LogLevel
-    if LogLevel > CurrentLogLevel:
+    global Log_level
+    if Log_level > current_log_level:
         return
     global LastValue
 
-    if isinstance(Value, list):
-        Value = Value.copy()
+    if isinstance(value, list):
+        value = value.copy()
 
-    Msg = merge(Msg)
+    msg = merge(msg)
 
-    Value = merge(Value)
-    if len(Msg) == 0:
+    value = merge(value)
+    if len(msg) == 0:
         return
     # if len(Value) == 0:
     #     return
 
-    TotalMessage = []
-    TotalMessage.append(Msg)
-    TotalMessage.append(' [')
-    TotalMessage.append(Value)
-    TotalMessage.append(']')
+    total_message = []
+    total_message.append(msg)
+    total_message.append(' [')
+    total_message.append(value)
+    total_message.append(']')
 
-    show(PreFix, LogLevel, ''.join(TotalMessage))
+    show(prefix, Log_level, ''.join(total_message))
 
-    LastValue = Value
+    LastValue = value
 
 #                        ____________
 #                       |            |

@@ -16,7 +16,7 @@ class Dialogue:
 
         self.dialoglist[target].append(dictdata)
 
-        self.config.saveDialogue(
+        self.config.save_dialogue(
             target,
             self.dialoglist[target]
         )
@@ -50,18 +50,18 @@ class Dialogue:
 
     def loadDialogue(self):
 
-        log.showvalue(
+        log.show_value(
             'Dialogue',
-            log.Level.INFO,
+            log.level.INFO,
             '載入對話紀錄',
             self.config.dialogfiles
         )
 
         for fname in self.config.dialogfiles:
 
-            log.showvalue(
+            log.show_value(
                 'Dialogue',
-                log.Level.INFO,
+                log.level.INFO,
                 '開啟對話紀錄檔案',
                 fname
             )
@@ -75,25 +75,25 @@ class Dialogue:
 
                 log.show(
                     'Dialogue',
-                    log.Level.INFO,
+                    log.level.INFO,
                     e.__traceback__.__str__()
                 )
                 log.show(
                     'Dialogue',
-                    log.Level.INFO,
+                    log.level.INFO,
                     e.__str__()
                 )
 
                 log.show(
                     'Dialogue',
-                    log.Level.INFO,
+                    log.level.INFO,
                     f'無法讀取 {fname}'
                 )
                 continue
 
         log.show(
             'Dialogue',
-            log.Level.INFO,
+            log.level.INFO,
             '載入對話紀錄完成'
         )
 

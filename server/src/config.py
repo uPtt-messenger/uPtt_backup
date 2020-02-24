@@ -10,24 +10,6 @@ import log
 LogPath = None
 
 
-def log2File(Msg):
-    global LogPath
-    if LogPath is None:
-        desktop = os.path.join(
-            os.path.join(
-                os.environ['USERPROFILE']
-            ),
-            'Desktop'
-        )
-
-        LogPath = f'{desktop}/uPttLog.txt'
-
-        print(LogPath)
-
-    with open(LogPath, 'a') as f:
-        f.write(f'{Msg}\n')
-
-
 class Type:
     System = 1
     User = 2
@@ -35,15 +17,18 @@ class Type:
 
 class Config:
 
-    Version = '0.0.1'
-    QueryCycle = 3.1
-    RecoverTime = 2
-    Port = 50732
-    HttpPort = 57983
-    PttLogHandler = None
-    PttLogLevel = log.Level.INFO
+    version = '0.0.1'
+    query_cycle = 3.1
+    port = 50732
+    ptt_log_handler = None
+    ptt_log_level = log.level.INFO
+
+    feedback_port = 57983
+    feedback_frequency = 60
 
     def __init__(self):
+
+
         # 不想給使用者改的設定值就寫在這兒
         # 想給使用者改的就透過 setValue
         # 因為會被存起來
@@ -55,9 +40,9 @@ class Config:
         self.friendlist = None
 
         if os.name == 'nt':
-            log.showvalue(
+            log.show_value(
                 'Config',
-                log.Level.INFO,
+                log.level.INFO,
                 '作業系統',
                 'Windows'
             )
@@ -77,18 +62,18 @@ class Config:
 
         self.UserData = dict()
 
-        log.showvalue(
+        log.show_value(
             'Config',
-            log.Level.INFO,
+            log.level.INFO,
             '設定檔',
             '初始化'
         )
 
-    def initUser(self, ID):
-        self.id = ID
-        self.UserConfigPath = f'{self.ConfigPath}/{ID}/{self.ConfigFileName}'
-        if not os.path.exists(f'{self.ConfigPath}/{ID}'):
-            os.makedirs(f'{self.ConfigPath}/{ID}')
+    def init_user(self, ptt_id):
+        self.id = ptt_id
+        self.UserConfigPath = f'{self.ConfigPath}/{ptt_id}/{self.ConfigFileName}'
+        if not os.path.exists(f'{self.ConfigPath}/{ptt_id}'):
+            os.makedirs(f'{self.ConfigPath}/{ptt_id}')
         else:
             if os.path.exists(f'{self.ConfigPath}/{self.id}/dialogue/'):
 
@@ -99,18 +84,18 @@ class Config:
                 self.dialogfiles = [
                     x for x in self.dialogfiles if x.endswith('.txt')]
 
-                log.showvalue(
+                log.show_value(
                     'Config',
-                    log.Level.INFO,
+                    log.level.INFO,
                     '對話紀錄檔案',
                     self.dialogfiles
                 )
 
             fname = f'{self.ConfigPath}/{self.id}/{self.FriendFileName}'
             if os.path.exists(fname):
-                log.showvalue(
+                log.show_value(
                     'Config',
-                    log.Level.INFO,
+                    log.level.INFO,
                     '載入朋友清單',
                     self.dialogfiles
                 )
@@ -122,18 +107,18 @@ class Config:
 
                     log.show(
                         'Config',
-                        log.Level.INFO,
+                        log.level.INFO,
                         e.__traceback__.__str__()
                     )
                     log.show(
                         'Config',
-                        log.Level.INFO,
+                        log.level.INFO,
                         e.__str__()
                     )
 
                     log.show(
                         'Config',
-                        log.Level.INFO,
+                        log.level.INFO,
                         f'無法讀取 {fname}'
                     )
                     self.friendlist = None
@@ -144,45 +129,45 @@ class Config:
         except FileNotFoundError:
             pass
 
-    def getValue(self, inputType, Key):
+    def get_value(self, input_type, key):
 
-        if inputType == Type.System:
-            if Key not in self.SystemData:
+        if input_type == Type.System:
+            if key not in self.SystemData:
                 return None
-            return self.SystemData[Key]
-        elif inputType == Type.User:
-            if Key not in self.UserData:
+            return self.SystemData[key]
+        elif input_type == Type.User:
+            if key not in self.UserData:
                 return None
-            return self.UserData[Key]
+            return self.UserData[key]
 
-    def setValue(self, inputType, Key, Value):
+    def set_value(self, input_type, key, value):
 
-        if inputType == Type.System:
-            if Value is not None:
-                self.SystemData[Key] = Value
-            elif Key in self.SystemData:
-                del self.SystemData[Key]
+        if input_type == Type.System:
+            if value is not None:
+                self.SystemData[key] = value
+            elif key in self.SystemData:
+                del self.SystemData[key]
 
             with open(self.ConfigFullPath, 'w', encoding='utf8') as File:
                 json.dump(self.SystemData, File, indent=4, ensure_ascii=False)
 
-        if inputType == Type.User:
-            if Value is not None:
-                self.UserData[Key] = Value
-            elif Key in self.UserData:
-                del self.UserData[Key]
+        if input_type == Type.User:
+            if value is not None:
+                self.UserData[key] = value
+            elif key in self.UserData:
+                del self.UserData[key]
 
             with open(self.UserConfigPath, 'w', encoding='utf8') as File:
                 json.dump(self.UserData, File, indent=4, ensure_ascii=False)
 
-    def saveDialogue(self, target, msglist):
+    def save_dialogue(self, target, msg_list):
         filepath = f'{self.ConfigPath}/{self.id}/dialogue/{target}.txt'
         if not os.path.exists(f'{self.ConfigPath}/{self.id}/dialogue/'):
             os.makedirs(f'{self.ConfigPath}/{self.id}/dialogue/')
 
         with open(filepath, 'w', encoding='utf8') as f:
             json.dump(
-                msglist,
+                msg_list,
                 f,
                 indent=4,
                 ensure_ascii=False

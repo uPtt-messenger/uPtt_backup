@@ -12,15 +12,20 @@ from dialogue import Dialogue
 
 
 class PTT_Adapter:
-    def __init__(self, config_obj, command_obj):
-        self.config = config_obj
-        self.command = command_obj
+    def __init__(self, console_obj):
+        self.config = console_obj.config
+        self.command = console_obj.command
 
-        self.RunServer = True
-        self.login = False
+        console_obj.event.login.append(self.event_login)
+        console_obj.event.logout.append(self.event_logout)
+        console_obj.event.close.append(self.event_logout)
+        console_obj.event.close.append(self.event_close)
+
         self.dialog = Dialogue(self.config)
 
         self.bot = None
+
+        self.init_bot()
 
         self.thread = threading.Thread(
             target=self.run,
@@ -28,19 +33,22 @@ class PTT_Adapter:
         )
         self.thread.start()
 
-    def logout(self):
+    def init_bot(self):
+        self.ptt_id = None
+        self.ptt_pw = None
+
+        self.recv_logout = False
+
+        self.RunServer = True
+        self.login = False
+
+    def event_logout(self):
+        self.recv_logout = True
+
+    def event_close(self):
         log.show(
             'PTTAdapter',
-            log.Level.INFO,
-            '執行登出'
-        )
-
-        self.bot.logout()
-
-    def stop(self):
-        log.show(
-            'PTTAdapter',
-            log.Level.INFO,
+            log.level.INFO,
             '執行終止程序'
         )
         # self.logout()
@@ -48,44 +56,48 @@ class PTT_Adapter:
         self.thread.join()
         log.show(
             'PTTAdapter',
-            log.Level.INFO,
+            log.level.INFO,
             '終止程序完成'
         )
+
+    def event_login(self, ptt_id, ptt_pw):
+
+        self.ptt_id = ptt_id
+        self.ptt_pw = ptt_pw
 
     def run(self):
 
         log.show(
             'PTTAdapter',
-            log.Level.INFO,
+            log.level.INFO,
             '啟動'
         )
 
         self.bot = PTT.API(
-            log_handler=self.config.PttLogHandler,
-            log_level=self.config.PttLogLevel
+            log_handler=self.config.ptt_log_handler,
+            log_level=self.config.ptt_log_level
         )
 
         while self.RunServer:
 
             # 快速反應區
             start_time = end_time = time.time()
-            while end_time - start_time < self.config.QueryCycle:
+            while end_time - start_time < self.config.query_cycle:
 
-                ptt_id, password = self.command.recvlogin()
-                if (ptt_id, password) != (None, None):
+                if (self.ptt_id, self.ptt_pw) != (None, None):
                     log.show(
                         'PTTAdapter',
-                        log.Level.INFO,
+                        log.level.INFO,
                         '執行登入'
                     )
                     try:
                         self.bot.login(
-                            ptt_id,
-                            password,
+                            self.ptt_id,
+                            self.ptt_pw,
                             kick_other_login=True
                         )
 
-                        self.config.initUser(ptt_id)
+                        self.config.init_user(self.ptt_id)
                         # self.dialog.loadDialogue()
 
                         self.login = True
@@ -116,12 +128,19 @@ class PTT_Adapter:
                             msg='請稍等一下再登入'
                         )
                     self.command.push(res_msg)
+                    self.ptt_id = None
+                    self.ptt_pw = None
 
                 if self.login:
 
-                    if self.command.recvlogout():
-                        self.login = False
-                        self.logout()
+                    if self.recv_logout:
+                        log.show(
+                            'PTTAdapter',
+                            log.level.INFO,
+                            '執行登出'
+                        )
+
+                        self.bot.logout()
 
                         res_msg = Msg(
                             operate=Msg.key_logout,
@@ -130,6 +149,8 @@ class PTT_Adapter:
                         )
 
                         self.command.push(res_msg)
+
+                        self.init_bot()
 
                     target_id, waterball_content = self.command.sendWaterBall()
                     if (target_id, waterball_content) != (None, None):
@@ -175,7 +196,7 @@ class PTT_Adapter:
             # 慢速輪巡區
             log.show(
                 'PTTAdapter',
-                log.Level.INFO,
+                log.level.INFO,
                 '慢速輪巡'
             )
 
@@ -195,9 +216,9 @@ class PTT_Adapter:
                     waterball_content = waterball.content
                     waterball_date = waterball.date
 
-                    log.showvalue(
+                    log.show_value(
                         'PTTAdapter',
-                        log.Level.INFO,
+                        log.level.INFO,
                         f'收到來自 {waterball_target} 的水球',
                         f'[{waterball_content}][{waterball_date}]'
                     )
