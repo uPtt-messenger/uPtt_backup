@@ -27,11 +27,11 @@ class Dialogue:
             self.dialoglist[target] = []
 
         msg = Msg()
-        msg.add(Msg.Key_Type, 'send')
-        msg.add(Msg.Key_PttID, target)
-        msg.add(Msg.Key_Content, content)
+        msg.add(Msg.key_type, 'send')
+        msg.add(Msg.key_ptt_id, target)
+        msg.add(Msg.key_content, content)
         # 01/06 16:13
-        msg.add(Msg.Key_Date, datetime.now().strftime('%m/%d %H:%M'))
+        msg.add(Msg.key_date, datetime.now().strftime('%m/%d %H:%M'))
 
         self.addsave(target, msg.Dict)
 
@@ -41,10 +41,10 @@ class Dialogue:
             self.dialoglist[target] = []
 
         msg = Msg()
-        msg.add(Msg.Key_Type, 'recv')
-        msg.add(Msg.Key_PttID, target)
-        msg.add(Msg.Key_Content, content)
-        msg.add(Msg.Key_Date, date)
+        msg.add(Msg.key_type, 'recv')
+        msg.add(Msg.key_ptt_id, target)
+        msg.add(Msg.key_content, content)
+        msg.add(Msg.key_date, date)
 
         self.addsave(target, msg.Dict)
 

@@ -20,19 +20,19 @@ class Command:
 
     def analyze(self, recv_msg: Msg):
 
-        opt = recv_msg.get(Msg.Key_Opt)
+        opt = recv_msg.get(Msg.key_opt)
         if opt == 'echo':
             res_msg = Msg(
                 operate=opt,
                 code=ErrorCode.Success,
-                msg=recv_msg.get(Msg.Key_Msg)
+                msg=recv_msg.get(Msg.key_msg)
             )
             self.push(res_msg)
 
         elif opt == 'login':
-            self.login_id = recv_msg.get(Msg.Key_Payload)[Msg.Key_PttID]
-            self.login_password = recv_msg.get(Msg.Key_Payload)[
-                Msg.Key_PttPassword]
+            self.login_id = recv_msg.get(Msg.key_payload)[Msg.key_ptt_id]
+            self.login_password = recv_msg.get(Msg.key_payload)[
+                Msg.key_ptt_pass]
 
         elif opt == 'logout':
             self.logout = True
@@ -41,11 +41,11 @@ class Command:
             self.close = True
 
         elif opt == 'sendwaterball':
-            self.send_waterball_id = recv_msg.get(Msg.Key_Payload)[Msg.Key_PttID]
-            self.send_waterball_content = recv_msg.get(Msg.Key_Payload)[Msg.Key_Content]
+            self.send_waterball_id = recv_msg.get(Msg.key_payload)[Msg.key_ptt_id]
+            self.send_waterball_content = recv_msg.get(Msg.key_payload)[Msg.key_content]
 
         elif opt == 'addfriend':
-            self.add_friend_id = recv_msg.get(Msg.Key_Payload)[Msg.Key_PttID]
+            self.add_friend_id = recv_msg.get(Msg.key_payload)[Msg.key_ptt_id]
 
         else:
             res_msg = Msg(

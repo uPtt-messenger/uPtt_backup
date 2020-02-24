@@ -215,26 +215,26 @@ class PTT_Adapter:
                     minute = int(date_part2.split(':')[1])
                     sec = int(date_part2.split(':')[2])
 
-                    print(f'waterball_date {waterball_date}')
-                    print(f'year {year}')
-                    print(f'month {month}')
-                    print(f'day {day}')
-                    print(f'hour {hour}')
-                    print(f'minute {minute}')
-                    print(f'sec {sec}')
+                    # print(f'waterball_date {waterball_date}')
+                    # print(f'year {year}')
+                    # print(f'month {month}')
+                    # print(f'day {day}')
+                    # print(f'hour {hour}')
+                    # print(f'minute {minute}')
+                    # print(f'sec {sec}')
 
                     waterball_timestamp = int(datetime.datetime(year, month, day, hour, minute, sec).timestamp())
-                    print(f'waterball_timestamp {waterball_timestamp}')
+                    # print(f'waterball_timestamp {waterball_timestamp}')
 
                     payload = Msg()
-                    payload.add(Msg.Key_PttID, waterball_target)
-                    payload.add(Msg.Key_Content, waterball_content)
-                    payload.add(Msg.Key_timestamp, waterball_timestamp)
+                    payload.add(Msg.key_ptt_id, waterball_target)
+                    payload.add(Msg.key_content, waterball_content)
+                    payload.add(Msg.key_timestamp, waterball_timestamp)
 
                     push_msg = Msg(
                         operate=Msg.key_recvwaterball
                     )
-                    push_msg.add(Msg.Key_Payload, payload)
+                    push_msg.add(Msg.key_payload, payload)
 
                     # self.dialog.recv(waterball_target, waterball_content, waterball_date)
 
@@ -244,7 +244,7 @@ class PTT_Adapter:
             if new_mail > 0:
                 push_msg = Msg(
                     operate=Msg.key_notify)
-                push_msg.add(Msg.Key_Msg, f'您有 {new_mail} 封新信')
+                push_msg.add(Msg.key_msg, f'您有 {new_mail} 封新信')
 
                 self.command.push(push_msg)
         self.logout()
