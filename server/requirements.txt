@@ -1,3 +1,3 @@
-requests==2.22.0
-websockets==8.1
-PTTLibrary==0.9.1
+requests
+websockets
+PyPtt
