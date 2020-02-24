@@ -22,7 +22,11 @@ class Command:
 
         opt = recv_msg.get(Msg.Key_Opt)
         if opt == 'echo':
-            res_msg = Msg(ErrorCode.Success, recv_msg.get(Msg.Key_Msg))
+            res_msg = Msg(
+                operate=opt,
+                code=ErrorCode.Success,
+                msg=recv_msg.get(Msg.Key_Msg)
+            )
             self.push(res_msg)
 
         elif opt == 'login':
@@ -44,7 +48,11 @@ class Command:
             self.add_friend_id = recv_msg.get(Msg.Key_Payload)[Msg.Key_PttID]
 
         else:
-            res_msg = Msg(ErrorCode.Unsupport, 'Unsupported')
+            res_msg = Msg(
+                operate=opt,
+                code=ErrorCode.Unsupported,
+                msg='Unsupported'
+            )
             self.push(res_msg)
 
     def push(self, push_msg):

@@ -8,7 +8,7 @@ import log
 import websocketserver
 from config import Config
 from command import Command
-from pttadapter import PTTAdapter
+from pttadapter import PTT_Adapter
 
 LogPath = None
 
@@ -56,7 +56,7 @@ if __name__ == '__main__':
         ConfigObj.Version
     )
 
-    pttadapter = PTTAdapter(ConfigObj, CommObj)
+    ptt_adapter = PTT_Adapter(ConfigObj, CommObj)
 
     websocketserver.Config = ConfigObj
     websocketserver.Command = CommObj
@@ -72,7 +72,7 @@ if __name__ == '__main__':
         log.Level.INFO,
         '執行終止程序'
     )
-    pttadapter.stop()
+    ptt_adapter.stop()
     websocketserver.stop()
 
     # 清除所有潛在

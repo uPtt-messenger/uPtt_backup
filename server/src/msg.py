@@ -6,7 +6,11 @@ class Msg:
 
     # 此處的 Key 是跟前端介接的，變數則命名成我習慣的樣子
 
-    Key_Opt = 'operation'
+    Key_Opt: str = 'operation'
+    key_login = 'login'
+    key_logout = 'logout'
+    key_sendwaterball = 'sendwaterball'
+    key_recvwaterball = 'recvwaterball'
     Key_Msg = 'msg'
     Key_Code = 'code'
     Key_Payload = 'payload'
@@ -16,18 +20,21 @@ class Msg:
     Key_Date = 'date'
     Key_Type = 'type'
     Key_timestamp = 'timestamp'
+    key_notify = 'notify'
 
-    def __init__(self, code=None, msg=None, strobj=None, opt=None):
+    def __init__(self, operate=None, code=None, msg=None, strobj=None):
 
         self.Dict = dict()
+
+        if operate is not None:
+            self.add(self.Key_Opt, operate)
 
         if code is not None:
             self.add(self.Key_Code, code)
             self.add(self.Key_Msg, msg)
-        elif strobj is not None:
+
+        if strobj is not None:
             self.Dict = json.loads(strobj)
-        elif opt is not None:
-            self.add(self.Key_Opt, opt)
 
     def add(self, key, value):
 
