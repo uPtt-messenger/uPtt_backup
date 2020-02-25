@@ -13,6 +13,7 @@ from dialogue import Dialogue
 
 class PTT_Adapter:
     def __init__(self, console_obj):
+        self.console = console_obj
         self.config = console_obj.config
         self.command = console_obj.command
 
@@ -20,10 +21,20 @@ class PTT_Adapter:
         console_obj.event.logout.append(self.event_logout)
         console_obj.event.close.append(self.event_logout)
         console_obj.event.close.append(self.event_close)
+        console_obj.event.send_waterball.append(self.event_send_waterball)
 
         self.dialog = Dialogue(self.config)
 
         self.bot = None
+        self.ptt_id = None
+        self.ptt_pw = None
+
+        self.recv_logout = False
+
+        self.RunServer = True
+        self.login = False
+
+        self.send_waterball_list = []
 
         self.init_bot()
 
@@ -41,6 +52,8 @@ class PTT_Adapter:
 
         self.RunServer = True
         self.login = False
+
+        self.send_waterball_list = []
 
     def event_logout(self):
         self.recv_logout = True
@@ -65,6 +78,9 @@ class PTT_Adapter:
         self.ptt_id = ptt_id
         self.ptt_pw = ptt_pw
 
+    def event_send_waterball(self, waterball_id, waterball_content):
+        self.send_waterball_list.append(
+            (waterball_id, waterball_content))
     def run(self):
 
         log.show(
@@ -76,12 +92,15 @@ class PTT_Adapter:
         self.bot = PTT.API(
             log_handler=self.config.ptt_log_handler,
             log_level=self.config.ptt_log_level
+            # log_level=PTT.log.level.TRACE
         )
 
         while self.RunServer:
 
             # 快速反應區
             start_time = end_time = time.time()
+
+            # print(self.config.query_cycle)
             while end_time - start_time < self.config.query_cycle:
 
                 if (self.ptt_id, self.ptt_pw) != (None, None):
@@ -152,11 +171,11 @@ class PTT_Adapter:
 
                         self.init_bot()
 
-                    target_id, waterball_content = self.command.sendWaterBall()
-                    if (target_id, waterball_content) != (None, None):
+                    while self.send_waterball_list:
+                        waterball_id, waterball_content = self.send_waterball_list.pop()
                         try:
-                            self.bot.throw_waterball(target_id, waterball_content)
-                            self.dialog.send(target_id, waterball_content)
+                            self.bot.throw_waterball(waterball_id, waterball_content)
+                            # self.dialog.send(waterball_id, waterball_content)
 
                             res_msg = Msg(
                                 operate=Msg.key_sendwaterball,
@@ -207,19 +226,25 @@ class PTT_Adapter:
                 PTT.data_type.waterball_operate_type.CLEAR
             )
 
+            log.show(
+                'PTTAdapter',
+                log.level.INFO,
+                '取得水球'
+            )
+
             if waterball_list is not None:
                 for waterball in waterball_list:
                     if not waterball.type == PTT.data_type.waterball_type.CATCH:
                         continue
 
-                    waterball_target = waterball.target
+                    waterball_id = waterball.target
                     waterball_content = waterball.content
                     waterball_date = waterball.date
 
                     log.show_value(
                         'PTTAdapter',
                         log.level.INFO,
-                        f'收到來自 {waterball_target} 的水球',
+                        f'收到來自 {waterball_id} 的水球',
                         f'[{waterball_content}][{waterball_date}]'
                     )
 
@@ -248,7 +273,7 @@ class PTT_Adapter:
                     # print(f'waterball_timestamp {waterball_timestamp}')
 
                     payload = Msg()
-                    payload.add(Msg.key_ptt_id, waterball_target)
+                    payload.add(Msg.key_ptt_id, waterball_id)
                     payload.add(Msg.key_content, waterball_content)
                     payload.add(Msg.key_timestamp, waterball_timestamp)
 
@@ -259,9 +284,19 @@ class PTT_Adapter:
 
                     # self.dialog.recv(waterball_target, waterball_content, waterball_date)
 
+                    for e in self.console.event.recv_waterball:
+                        e(waterball_id, waterball_content, waterball_timestamp)
+
                     self.command.push(push_msg)
 
             new_mail = self.bot.has_new_mail()
+
+            log.show(
+                'PTTAdapter',
+                log.level.INFO,
+                '取得新信'
+            )
+
             if new_mail > 0:
                 push_msg = Msg(
                     operate=Msg.key_notify)
