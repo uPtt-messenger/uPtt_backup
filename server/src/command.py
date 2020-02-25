@@ -82,8 +82,21 @@ class Command:
             )
 
         elif opt == 'sendwaterball':
-            self.send_waterball_id = recv_msg.get(Msg.key_payload)[Msg.key_ptt_id]
-            self.send_waterball_content = recv_msg.get(Msg.key_payload)[Msg.key_content]
+            waterball_id = recv_msg.get(Msg.key_payload)[Msg.key_ptt_id]
+            waterball_content = recv_msg.get(Msg.key_payload)[Msg.key_content]
+
+            log.show(
+                'command',
+                log.level.INFO,
+                '執行丟水球程序'
+            )
+            for e in self.event.send_waterball:
+                e(waterball_id, waterball_content)
+            log.show(
+                'command',
+                log.level.INFO,
+                '丟水球程序全數完成'
+            )
 
         elif opt == 'addfriend':
             self.add_friend_id = recv_msg.get(Msg.key_payload)[Msg.key_ptt_id]
@@ -98,13 +111,3 @@ class Command:
 
     def push(self, push_msg):
         self.PushMsg.append(push_msg.__str__())
-
-    def sendWaterBall(self):
-        temp_id, temp_content = self.send_waterball_id, self.send_waterball_content
-        self.send_waterball_id, self.send_waterball_content = None, None
-        return temp_id, temp_content
-
-    def addfriend(self):
-        temp = self.add_friend_id
-        self.add_friend_id = None
-        return temp
