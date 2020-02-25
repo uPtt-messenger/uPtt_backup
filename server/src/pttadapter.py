@@ -190,7 +190,7 @@ class PTT_Adapter:
                     #     except PTT.exceptions.NoSuchUser:
                     #         print('無此使用者')
 
-                time.sleep(0.05)
+                time.sleep(self.config.quick_response_time)
                 end_time = time.time()
 
             # 慢速輪巡區
@@ -268,4 +268,3 @@ class PTT_Adapter:
                 push_msg.add(Msg.key_msg, f'您有 {new_mail} 封新信')
 
                 self.command.push(push_msg)
-        self.logout()

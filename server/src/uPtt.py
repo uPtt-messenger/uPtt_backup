@@ -36,9 +36,6 @@ def log_to_file(Msg):
 
 if __name__ == '__main__':
 
-    running = threading.Event()
-    running.set()
-
     config_obj = Config()
 
     event_console = EventConsole()
@@ -70,24 +67,36 @@ if __name__ == '__main__':
     websocketserver.config = config_obj
     websocketserver.command = comm_obj
     websocketserver.start()
-    while not comm_obj.close:
+
+    run_server = True
+
+    def event_close():
+        global run_server
+        run_server = False
+
+
+    event_console.close.append(websocketserver.stop)
+    event_console.close.append(event_close)
+    while run_server:
         try:
             time.sleep(0.1)
         except KeyboardInterrupt:
+            for e in event_console.close:
+                e()
             break
 
     log.show(
         'Main',
         log.level.INFO,
-        '執行終止程序'
+        '執行最終終止程序'
     )
-    websocketserver.stop()
 
-    # 清除所有潛在
+    running = threading.Event()
+    running.set()
     running.clear()
 
     log.show(
         'Main',
         log.level.INFO,
-        '全部終止程序完成'
+        '最終終止程序全數完成'
     )

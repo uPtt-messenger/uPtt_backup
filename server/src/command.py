@@ -1,7 +1,7 @@
 
 from errorcode import ErrorCode
 from msg import Msg
-
+import log
 
 class Command:
     def __init__(self, event_console):
@@ -36,15 +36,50 @@ class Command:
             ptt_pass = recv_msg.get(Msg.key_payload)[
                 Msg.key_ptt_pass]
 
+            log.show(
+                'command',
+                log.level.INFO,
+                '執行登入程序'
+            )
+
             for e in self.event.login:
                 e(ptt_id, ptt_pass)
 
+            log.show(
+                'command',
+                log.level.INFO,
+                '登入程序全數完成'
+            )
+
         elif opt == 'logout':
+            log.show(
+                'command',
+                log.level.INFO,
+                '執行登出程序'
+            )
+
             for e in self.event.logout:
                 e()
 
+            log.show(
+                'command',
+                log.level.INFO,
+                '登出程序全數完成'
+            )
+
         elif opt == 'close':
-            self.close = True
+            log.show(
+                'command',
+                log.level.INFO,
+                '執行終止程序'
+            )
+            for e in self.event.close:
+                e()
+            log.show(
+                'command',
+                log.level.INFO,
+                '終止程序全數完成'
+            )
 
         elif opt == 'sendwaterball':
             self.send_waterball_id = recv_msg.get(Msg.key_payload)[Msg.key_ptt_id]

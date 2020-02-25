@@ -105,8 +105,10 @@ def server_setup():
 
 def start():
     global thread
-    thread = threading.Thread(target=server_setup)
-    thread.daemon = True
+    thread = threading.Thread(
+        target=server_setup,
+        daemon=True
+    )
     thread.start()
 
 
@@ -128,7 +130,7 @@ def stop():
     run_session = False
     asyncio.get_event_loop().stop()
 
-    # Thread.join()
+    # thread.join()
     log.show(
         'WebSocket Server',
         log.level.INFO,

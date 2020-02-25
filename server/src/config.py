@@ -18,7 +18,8 @@ class Type:
 class Config:
 
     version = '0.0.1'
-    query_cycle = 3.1
+    quick_response_time = 0.05
+    query_cycle = 3.0 + quick_response_time
     port = 50732
     ptt_log_handler = None
     ptt_log_level = log.level.INFO
