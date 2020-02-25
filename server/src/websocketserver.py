@@ -128,8 +128,6 @@ def stop():
         time.sleep(0.1)
 
     run_session = False
-    asyncio.get_event_loop().stop()
-
     # thread.join()
     log.show(
         'WebSocket Server',
