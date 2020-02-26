@@ -1,4 +1,3 @@
-
 import log
 
 
@@ -12,4 +11,3 @@ class FriendList:
     def remove(self, target):
         if target in self.friendlist:
             self.friendlist.remove(target)
-

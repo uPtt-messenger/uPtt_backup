@@ -9,12 +9,10 @@ import traceback
 import time
 import threading
 
-
 greeting = None
 
 
 def testNewMsg():
-
     global greeting
 
     for _ in range(10):
@@ -23,7 +21,6 @@ def testNewMsg():
 
 
 async def hello(websocket, path):
-
     global greeting
 
     name = await websocket.recv()
@@ -44,6 +41,7 @@ async def hello(websocket, path):
         if 'close' == msg:
             break
         greeting = None
+
 
 logging.basicConfig()
 
@@ -224,6 +222,7 @@ if __name__ == '__main__':
 
     data = {'result': index}
 
+
     class Resquest(BaseHTTPRequestHandler):
         def do_GET(self):
             self.send_response(200)
@@ -231,9 +230,11 @@ if __name__ == '__main__':
             self.end_headers()
             self.wfile.write(index.encode())
 
+
     def run(server_class=HTTPServer, handler_class=Resquest):
         server_address = ('', 57983)
         httpd = server_class(server_address, handler_class)
         httpd.serve_forever()
+
 
     run()

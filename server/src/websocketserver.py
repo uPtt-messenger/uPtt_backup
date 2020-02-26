@@ -113,7 +113,6 @@ def start():
 
 
 def stop():
-
     global server_start
     global run_session
     global thread

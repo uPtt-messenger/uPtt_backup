@@ -1,11 +1,9 @@
-
 import os
 from os import listdir
 from os.path import isfile, join
 import json
 
 import log
-
 
 LogPath = None
 
@@ -16,7 +14,6 @@ class Type:
 
 
 class Config:
-
     version = '0.0.1'
     quick_response_time = 0.05
     query_cycle = 3.0 + quick_response_time
@@ -28,7 +25,6 @@ class Config:
     feedback_frequency = 60
 
     def __init__(self):
-
 
         # 不想給使用者改的設定值就寫在這兒
         # 想給使用者改的就透過 setValue
@@ -77,7 +73,6 @@ class Config:
             os.makedirs(f'{self.ConfigPath}/{ptt_id}')
         else:
             if os.path.exists(f'{self.ConfigPath}/{self.id}/dialogue/'):
-
                 dialogpath = f'{self.ConfigPath}/{self.id}/dialogue/'
                 self.dialogfiles = [join(dialogpath, f) for f in listdir(
                     dialogpath) if isfile(join(dialogpath, f))]

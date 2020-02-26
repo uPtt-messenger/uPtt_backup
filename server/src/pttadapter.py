@@ -81,6 +81,7 @@ class PTT_Adapter:
     def event_send_waterball(self, waterball_id, waterball_content):
         self.send_waterball_list.append(
             (waterball_id, waterball_content))
+
     def run(self):
 
         log.show(

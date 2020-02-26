@@ -1,4 +1,3 @@
-
 import os
 import sys
 import time
@@ -12,11 +11,12 @@ from pttadapter import PTT_Adapter
 from feedback import Feedback
 from event import EventConsole
 from console import Console
+from dynamic_data import DynamicData
 
 LogPath = None
 
 
-def log_to_file(Msg):
+def log_to_file(msg):
     global LogPath
     if LogPath is None:
         desktop = os.path.join(
@@ -31,7 +31,7 @@ def log_to_file(Msg):
         print(LogPath)
 
     with open(LogPath, 'a', encoding='utf8') as f:
-        f.write(f'{Msg}\n')
+        f.write(f'{msg}\n')
 
 
 if __name__ == '__main__':
@@ -40,8 +40,9 @@ if __name__ == '__main__':
 
     event_console = EventConsole()
     comm_obj = Command(event_console)
+    dynamic_data_obj = DynamicData()
 
-    console_obj = Console(config_obj, comm_obj, event_console)
+    console_obj = Console(config_obj, comm_obj, event_console, dynamic_data_obj)
 
     if len(sys.argv) > 1:
         print(sys.argv)
@@ -49,7 +50,7 @@ if __name__ == '__main__':
     if '-debug' in sys.argv or '-trace' in sys.argv:
         log.Handler = log_to_file
         config_obj.LogHandler = log_to_file
-    
+
     if '-trace' in sys.argv:
         config_obj.LogHandler = log.level.TRACE
 
@@ -69,6 +70,7 @@ if __name__ == '__main__':
     websocketserver.start()
 
     run_server = True
+
 
     def event_close():
         global run_server

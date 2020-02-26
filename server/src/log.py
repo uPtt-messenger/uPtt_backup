@@ -1,4 +1,3 @@
-
 import sys
 from time import gmtime, strftime
 
@@ -7,7 +6,6 @@ Handler = None
 
 
 class level(object):
-
     TRACE = 1
     DEBUG = 2
     INFO = 3
@@ -39,7 +37,6 @@ def merge(msg) -> str:
 
 
 def show(prefix, current_log_level, msg):
-
     global Log_level
 
     if Log_level > current_log_level:
@@ -79,7 +76,6 @@ LastValue = None
 
 
 def show_value(prefix, current_log_level, msg, value):
-
     global Log_level
     if Log_level > current_log_level:
         return
