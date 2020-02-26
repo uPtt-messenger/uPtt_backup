@@ -18,6 +18,10 @@ const DEBUG_MODE = true;
 module.exports = function() {
   console.log('uptt-client start');
   // Start the app window
+
+  console.log('__dirname');
+  console.log(__dirname);
+
   if ( app.isReady() ) {
     // TODO:
   } else {
