@@ -19,7 +19,7 @@
 ## 回報問題
 #### 請開 [issue](https://github.com/Truth0906/PTTPostman/issues) 也可以直接找我們 [![chatroom icon](https://patrolavia.github.io/telegram-badge/chat.png)](https://t.me/uPtt_talk)
 
-## 成員
+## 成員 (以加入順序排列)
 | <a href="https://github.com/PttCodingMan" target="_blank">**PttCodingMan**</a> | <a href="https://github.com/mobi76" target="_blank">**mobi76**</a> | <a href="https://github.com/amber076" target="_blank">**amber076**</a> | <a href="https://github.com/Arkuyo" target="_blank">**Arkuyo**</a> |
  <a href="https://github.com/desertblackeagle" target="_blank">**desertblackeagle**</a> |
 | :---: | :---: | :---: | :---: | :---: |
