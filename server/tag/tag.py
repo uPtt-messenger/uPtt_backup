@@ -7,4 +7,4 @@ def sha256(s):
     hash = hashlib.sha256(s_lower.encode('utf-8')).hexdigest()
     print(f'[{s}]\n[{s_lower}]\n[{hash}]')
 
-sha256('mobi76')
+sha256('QQ_id')
