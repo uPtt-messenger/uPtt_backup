@@ -1,8 +1,11 @@
 
 
-class ErrorCode:
+class error_code:
     Success = 0
-    LoginFail = 1
-    NoSuchUser = 2
-    UserOffLine = 3
-    Unsupported = 4
+    WrongIDPW = 1
+    LoginTooOften = 2
+    LoginFail = 3
+    BlackList = 4
+    NoSuchUser = 5
+    UserOffLine = 6
+    Unsupported = 7

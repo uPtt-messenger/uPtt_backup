@@ -6,7 +6,7 @@ import datetime
 from PyPtt import PTT
 
 import log
-from errorcode import ErrorCode
+from errorcode import error_code
 from msg import Msg
 from dialogue import Dialogue
 
@@ -125,26 +125,26 @@ class PTT_Adapter:
 
                         res_msg = Msg(
                             operate=Msg.key_login,
-                            code=ErrorCode.Success,
+                            code=error_code.Success,
                             msg='登入成功'
                         )
 
                     except PTT.exceptions.LoginError:
                         res_msg = Msg(
                             operate=Msg.key_login,
-                            code=ErrorCode.LoginFail,
+                            code=error_code.LoginFail,
                             msg='登入失敗'
                         )
                     except PTT.exceptions.WrongIDorPassword:
                         res_msg = Msg(
                             operate=Msg.key_login,
-                            code=ErrorCode.LoginFail,
+                            code=error_code.LoginFail,
                             msg='帳號密碼錯誤'
                         )
                     except PTT.exceptions.LoginTooOften:
                         res_msg = Msg(
                             operate=Msg.key_login,
-                            code=ErrorCode.LoginFail,
+                            code=error_code.LoginFail,
                             msg='請稍等一下再登入'
                         )
                     self.command.push(res_msg)
@@ -164,7 +164,7 @@ class PTT_Adapter:
 
                         res_msg = Msg(
                             operate=Msg.key_logout,
-                            code=ErrorCode.Success,
+                            code=error_code.Success,
                             msg='登出成功'
                         )
 
@@ -180,19 +180,19 @@ class PTT_Adapter:
 
                             res_msg = Msg(
                                 operate=Msg.key_sendwaterball,
-                                code=ErrorCode.Success,
+                                code=error_code.Success,
                                 msg='丟水球成功'
                             )
                         except PTT.exceptions.NoSuchUser:
                             res_msg = Msg(
                                 operate=Msg.key_sendwaterball,
-                                code=ErrorCode.NoSuchUser,
+                                code=error_code.NoSuchUser,
                                 msg='無此使用者'
                             )
                         except PTT.exceptions.UserOffline:
                             res_msg = Msg(
                                 operate=Msg.key_sendwaterball,
-                                code=ErrorCode.UserOffLine,
+                                code=error_code.UserOffLine,
                                 msg='使用者離線'
                             )
                         self.command.push(res_msg)
@@ -203,7 +203,7 @@ class PTT_Adapter:
                     #         user = self.bot.getUser(addfriend_id)
                     #
                     #         res_msg = Msg(
-                    #             ErrorCode.Success,
+                    #             error_code.Success,
                     #             '新增成功'
                     #         )
                     #

@@ -39,8 +39,8 @@ if __name__ == '__main__':
     config_obj = Config()
 
     event_console = EventConsole()
-    comm_obj = Command(event_console)
     dynamic_data_obj = DynamicData()
+    comm_obj = Command(event_console, dynamic_data_obj)
 
     console_obj = Console(config_obj, comm_obj, event_console, dynamic_data_obj)
 

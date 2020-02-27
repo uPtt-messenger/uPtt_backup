@@ -1,10 +1,11 @@
-
-from errorcode import ErrorCode
+from errorcode import error_code
 from msg import Msg
+from black_list import is_black_user
 import log
 
+
 class Command:
-    def __init__(self, event_console):
+    def __init__(self, event_console, dynamic_data_obj):
         self.login = False
         self.logout = False
 
@@ -19,6 +20,7 @@ class Command:
         self.add_friend_id = None
 
         self.event = event_console
+        self.dynamic_data = dynamic_data_obj
 
     def analyze(self, recv_msg: Msg):
 
@@ -26,7 +28,7 @@ class Command:
         if opt == 'echo':
             res_msg = Msg(
                 operate=opt,
-                code=ErrorCode.Success,
+                code=error_code.Success,
                 msg=recv_msg.get(Msg.key_msg)
             )
             self.push(res_msg)
@@ -35,6 +37,22 @@ class Command:
             ptt_id = recv_msg.get(Msg.key_payload)[Msg.key_ptt_id]
             ptt_pass = recv_msg.get(Msg.key_payload)[
                 Msg.key_ptt_pass]
+
+            if is_black_user(self.dynamic_data, ptt_id):
+                log.show_value(
+                    'command',
+                    log.level.INFO,
+                    '黑名單',
+                    ptt_id
+                )
+
+                res_msg = Msg(
+                    operate=opt,
+                    code=error_code.BlackList,
+                    msg='黑名單使用者'
+                )
+                self.push(res_msg)
+                return
 
             log.show(
                 'command',
@@ -104,7 +122,7 @@ class Command:
         else:
             res_msg = Msg(
                 operate=opt,
-                code=ErrorCode.Unsupported,
+                code=error_code.Unsupported,
                 msg='Unsupported'
             )
             self.push(res_msg)
