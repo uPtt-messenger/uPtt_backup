@@ -49,6 +49,7 @@ class PTT_Adapter:
             daemon=True
         )
         self.thread.start()
+        time.sleep(0.5)
 
     def init_bot(self):
         self.ptt_id = None
@@ -234,11 +235,11 @@ class PTT_Adapter:
                 time.sleep(self.config.quick_response_time)
                 end_time = time.time()
 
-            # 慢速輪巡區
+            # 慢速輪詢區
             log.show(
                 'PTTAdapter',
                 log.level.INFO,
-                '慢速輪巡'
+                '慢速輪詢'
             )
 
             if not self.login:

@@ -39,6 +39,13 @@ if __name__ == '__main__':
 
     config_obj = Config()
 
+    log.show_value(
+        'Main',
+        log.level.INFO,
+        'uPtt 版本',
+        config_obj.version
+    )
+
     event_console = EventConsole()
     dynamic_data_obj = DynamicData()
     comm_obj = Command(event_console, dynamic_data_obj)
@@ -56,13 +63,6 @@ if __name__ == '__main__':
 
     if '-trace' in sys.argv:
         config_obj.LogHandler = log.level.TRACE
-
-    log.show_value(
-        'Main',
-        log.level.INFO,
-        'uPtt 版本',
-        config_obj.version
-    )
 
     feedback = Feedback(console_obj)
     ptt_adapter = PTT_Adapter(console_obj)
