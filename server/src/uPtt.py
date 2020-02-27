@@ -81,7 +81,7 @@ if __name__ == '__main__':
     event_console.close.append(event_close)
     while run_server:
         try:
-            time.sleep(0.1)
+            time.sleep(0.5)
         except KeyboardInterrupt:
             for e in event_console.close:
                 e()

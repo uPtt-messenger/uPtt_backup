@@ -1,6 +1,8 @@
 import time
 import threading
 import traceback
+import random
+import string
 import datetime
 
 from PyPtt import PTT
@@ -9,6 +11,7 @@ import log
 from errorcode import error_code
 from msg import Msg
 from dialogue import Dialogue
+from util import sha256
 
 
 class PTT_Adapter:
@@ -34,6 +37,8 @@ class PTT_Adapter:
         self.RunServer = True
         self.login = False
 
+        self.has_new_mail = False
+
         self.send_waterball_list = []
 
         self.init_bot()
@@ -50,10 +55,11 @@ class PTT_Adapter:
 
         self.recv_logout = False
 
-        self.RunServer = True
         self.login = False
 
         self.send_waterball_list = []
+
+        self.has_new_mail = False
 
     def event_logout(self):
         self.recv_logout = True
@@ -128,6 +134,16 @@ class PTT_Adapter:
                             code=error_code.Success,
                             msg='登入成功'
                         )
+
+                        letters = string.ascii_lowercase
+                        rand_str = ''.join(random.choice(letters) for i in range(30))
+
+                        token = sha256(f'{self.ptt_id}{self.ptt_pw}{rand_str}')
+
+                        payload = Msg()
+                        payload.add(Msg.key_token, token)
+
+                        res_msg.add(Msg.key_payload, payload)
 
                     except PTT.exceptions.LoginError:
                         res_msg = Msg(
@@ -298,9 +314,12 @@ class PTT_Adapter:
                 '取得新信'
             )
 
-            if new_mail > 0:
+            if new_mail > 0 and not self.has_new_mail:
+                self.has_new_mail = True
                 push_msg = Msg(
                     operate=Msg.key_notify)
                 push_msg.add(Msg.key_msg, f'您有 {new_mail} 封新信')
 
                 self.command.push(push_msg)
+            else:
+                self.has_new_mail = False
