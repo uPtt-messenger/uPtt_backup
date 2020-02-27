@@ -1,14 +1,17 @@
 import time
 import threading
 import traceback
+import random
+import string
 import datetime
 
 from PyPtt import PTT
 
 import log
-from errorcode import ErrorCode
+from errorcode import error_code
 from msg import Msg
 from dialogue import Dialogue
+from util import sha256
 
 
 class PTT_Adapter:
@@ -34,6 +37,9 @@ class PTT_Adapter:
         self.RunServer = True
         self.login = False
 
+        self.has_new_mail = False
+        self.res_msg = None
+
         self.send_waterball_list = []
 
         self.init_bot()
@@ -50,10 +56,11 @@ class PTT_Adapter:
 
         self.recv_logout = False
 
-        self.RunServer = True
         self.login = False
 
         self.send_waterball_list = []
+
+        self.has_new_mail = False
 
     def event_logout(self):
         self.recv_logout = True
@@ -77,6 +84,11 @@ class PTT_Adapter:
 
         self.ptt_id = ptt_id
         self.ptt_pw = ptt_pw
+
+        while self.ptt_id is not None:
+            time.sleep(self.console.config.quick_response_time)
+
+        return self.res_msg
 
     def event_send_waterball(self, waterball_id, waterball_content):
         self.send_waterball_list.append(
@@ -123,31 +135,40 @@ class PTT_Adapter:
                         self.login = True
                         self.bot.set_call_status(PTT.data_type.call_status.OFF)
 
-                        res_msg = Msg(
+                        self.res_msg = Msg(
                             operate=Msg.key_login,
-                            code=ErrorCode.Success,
+                            code=error_code.Success,
                             msg='登入成功'
                         )
 
+                        letters = string.ascii_lowercase
+                        rand_str = ''.join(random.choice(letters) for i in range(30))
+
+                        token = sha256(f'{self.ptt_id}{self.ptt_pw}{rand_str}')
+
+                        payload = Msg()
+                        payload.add(Msg.key_token, token)
+
+                        self.res_msg.add(Msg.key_payload, payload)
+
                     except PTT.exceptions.LoginError:
-                        res_msg = Msg(
+                        self.res_msg = Msg(
                             operate=Msg.key_login,
-                            code=ErrorCode.LoginFail,
+                            code=error_code.LoginFail,
                             msg='登入失敗'
                         )
                     except PTT.exceptions.WrongIDorPassword:
-                        res_msg = Msg(
+                        self.res_msg = Msg(
                             operate=Msg.key_login,
-                            code=ErrorCode.LoginFail,
+                            code=error_code.LoginFail,
                             msg='帳號密碼錯誤'
                         )
                     except PTT.exceptions.LoginTooOften:
-                        res_msg = Msg(
+                        self.res_msg = Msg(
                             operate=Msg.key_login,
-                            code=ErrorCode.LoginFail,
+                            code=error_code.LoginFail,
                             msg='請稍等一下再登入'
                         )
-                    self.command.push(res_msg)
                     self.ptt_id = None
                     self.ptt_pw = None
 
@@ -164,7 +185,7 @@ class PTT_Adapter:
 
                         res_msg = Msg(
                             operate=Msg.key_logout,
-                            code=ErrorCode.Success,
+                            code=error_code.Success,
                             msg='登出成功'
                         )
 
@@ -180,19 +201,19 @@ class PTT_Adapter:
 
                             res_msg = Msg(
                                 operate=Msg.key_sendwaterball,
-                                code=ErrorCode.Success,
+                                code=error_code.Success,
                                 msg='丟水球成功'
                             )
                         except PTT.exceptions.NoSuchUser:
                             res_msg = Msg(
                                 operate=Msg.key_sendwaterball,
-                                code=ErrorCode.NoSuchUser,
+                                code=error_code.NoSuchUser,
                                 msg='無此使用者'
                             )
                         except PTT.exceptions.UserOffline:
                             res_msg = Msg(
                                 operate=Msg.key_sendwaterball,
-                                code=ErrorCode.UserOffLine,
+                                code=error_code.UserOffLine,
                                 msg='使用者離線'
                             )
                         self.command.push(res_msg)
@@ -203,7 +224,7 @@ class PTT_Adapter:
                     #         user = self.bot.getUser(addfriend_id)
                     #
                     #         res_msg = Msg(
-                    #             ErrorCode.Success,
+                    #             error_code.Success,
                     #             '新增成功'
                     #         )
                     #
@@ -298,9 +319,12 @@ class PTT_Adapter:
                 '取得新信'
             )
 
-            if new_mail > 0:
+            if new_mail > 0 and not self.has_new_mail:
+                self.has_new_mail = True
                 push_msg = Msg(
                     operate=Msg.key_notify)
                 push_msg.add(Msg.key_msg, f'您有 {new_mail} 封新信')
 
                 self.command.push(push_msg)
+            else:
+                self.has_new_mail = False
