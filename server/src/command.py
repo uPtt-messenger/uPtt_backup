@@ -1,6 +1,5 @@
 from errorcode import error_code
 from msg import Msg
-from black_list import is_black_user
 import log
 
 
@@ -26,33 +25,17 @@ class Command:
 
         opt = recv_msg.get(Msg.key_opt)
         if opt == 'echo':
-            res_msg = Msg(
+            current_res_msg = Msg(
                 operate=opt,
                 code=error_code.Success,
                 msg=recv_msg.get(Msg.key_msg)
             )
-            self.push(res_msg)
+            self.push(current_res_msg)
 
         elif opt == 'login':
             ptt_id = recv_msg.get(Msg.key_payload)[Msg.key_ptt_id]
             ptt_pass = recv_msg.get(Msg.key_payload)[
                 Msg.key_ptt_pass]
-
-            if is_black_user(self.dynamic_data, ptt_id):
-                log.show_value(
-                    'command',
-                    log.level.INFO,
-                    '黑名單',
-                    ptt_id
-                )
-
-                res_msg = Msg(
-                    operate=opt,
-                    code=error_code.BlackList,
-                    msg='黑名單使用者'
-                )
-                self.push(res_msg)
-                return
 
             log.show(
                 'command',
@@ -60,8 +43,21 @@ class Command:
                 '執行登入程序'
             )
 
+            res_msg = None
             for e in self.event.login:
-                e(ptt_id, ptt_pass)
+                current_res_msg = e(ptt_id, ptt_pass)
+                if current_res_msg is None:
+                    continue
+                if current_res_msg.get(Msg.key_code) != error_code.Success:
+                    self.push(current_res_msg)
+                    log.show(
+                        'command',
+                        log.level.INFO,
+                        '登入程序中斷'
+                    )
+                    return
+                res_msg = current_res_msg
+            self.push(res_msg)
 
             log.show(
                 'command',
@@ -120,12 +116,12 @@ class Command:
             self.add_friend_id = recv_msg.get(Msg.key_payload)[Msg.key_ptt_id]
 
         else:
-            res_msg = Msg(
+            current_res_msg = Msg(
                 operate=opt,
                 code=error_code.Unsupported,
                 msg='Unsupported'
             )
-            self.push(res_msg)
+            self.push(current_res_msg)
 
     def push(self, push_msg):
         self.PushMsg.append(push_msg.__str__())

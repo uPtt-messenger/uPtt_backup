@@ -38,6 +38,7 @@ class PTT_Adapter:
         self.login = False
 
         self.has_new_mail = False
+        self.res_msg = None
 
         self.send_waterball_list = []
 
@@ -84,6 +85,11 @@ class PTT_Adapter:
         self.ptt_id = ptt_id
         self.ptt_pw = ptt_pw
 
+        while self.ptt_id is not None:
+            time.sleep(self.console.config.quick_response_time)
+
+        return self.res_msg
+
     def event_send_waterball(self, waterball_id, waterball_content):
         self.send_waterball_list.append(
             (waterball_id, waterball_content))
@@ -129,7 +135,7 @@ class PTT_Adapter:
                         self.login = True
                         self.bot.set_call_status(PTT.data_type.call_status.OFF)
 
-                        res_msg = Msg(
+                        self.res_msg = Msg(
                             operate=Msg.key_login,
                             code=error_code.Success,
                             msg='登入成功'
@@ -143,27 +149,26 @@ class PTT_Adapter:
                         payload = Msg()
                         payload.add(Msg.key_token, token)
 
-                        res_msg.add(Msg.key_payload, payload)
+                        self.res_msg.add(Msg.key_payload, payload)
 
                     except PTT.exceptions.LoginError:
-                        res_msg = Msg(
+                        self.res_msg = Msg(
                             operate=Msg.key_login,
                             code=error_code.LoginFail,
                             msg='登入失敗'
                         )
                     except PTT.exceptions.WrongIDorPassword:
-                        res_msg = Msg(
+                        self.res_msg = Msg(
                             operate=Msg.key_login,
                             code=error_code.LoginFail,
                             msg='帳號密碼錯誤'
                         )
                     except PTT.exceptions.LoginTooOften:
-                        res_msg = Msg(
+                        self.res_msg = Msg(
                             operate=Msg.key_login,
                             code=error_code.LoginFail,
                             msg='請稍等一下再登入'
                         )
-                    self.command.push(res_msg)
                     self.ptt_id = None
                     self.ptt_pw = None
 

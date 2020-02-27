@@ -33,7 +33,7 @@ class Dialogue:
         # 01/06 16:13
         msg.add(Msg.key_date, datetime.now().strftime('%m/%d %H:%M'))
 
-        self.addsave(target, msg.Dict)
+        self.addsave(target, msg.msg)
 
     def recv(self, target, content, date):
 
@@ -46,7 +46,7 @@ class Dialogue:
         msg.add(Msg.key_content, content)
         msg.add(Msg.key_date, date)
 
-        self.addsave(target, msg.Dict)
+        self.addsave(target, msg.msg)
 
     def loadDialogue(self):
 

@@ -12,6 +12,7 @@ from feedback import Feedback
 from event import EventConsole
 from console import Console
 from dynamic_data import DynamicData
+from black_list import BlackList
 
 LogPath = None
 
@@ -43,6 +44,8 @@ if __name__ == '__main__':
     comm_obj = Command(event_console, dynamic_data_obj)
 
     console_obj = Console(config_obj, comm_obj, event_console, dynamic_data_obj)
+
+    black_list = BlackList(console_obj)
 
     if len(sys.argv) > 1:
         print(sys.argv)
