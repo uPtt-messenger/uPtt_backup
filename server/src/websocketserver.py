@@ -110,6 +110,7 @@ def start():
         daemon=True
     )
     thread.start()
+    time.sleep(0.5)
 
 
 def stop():
