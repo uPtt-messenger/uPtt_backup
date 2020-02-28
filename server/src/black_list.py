@@ -30,4 +30,4 @@ class BlackList:
     def is_black_user(self, ptt_id):
         current_hash_value = sha256(ptt_id)
 
-        return current_hash_value in self.console.dynamic_data.black_list['black_list']
+        return current_hash_value in self.console.dynamic_data.black_list
