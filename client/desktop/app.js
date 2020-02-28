@@ -10,6 +10,7 @@ const app = electron.app;
  * Uptt lib
  */
 const WindowManager = require('./lib/window-manager');
+const ConfigManager = require('./lib/config-manager');
 
 const DEBUG_MODE = true;
 // Keep a global reference of the window object, if you don't, the window will
@@ -21,6 +22,8 @@ module.exports = function() {
 
   console.log('__dirname');
   console.log(__dirname);
+
+  ConfigManager.init();
 
   if ( app.isReady() ) {
     // TODO:

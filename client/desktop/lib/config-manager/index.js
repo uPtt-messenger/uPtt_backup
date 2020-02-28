@@ -10,6 +10,9 @@
 let config = new Map();
 
 module.exports = {
+  init: function() {
+
+  },
 	get: function(configName) {
     if (configName) {
       return config.get(configName);
