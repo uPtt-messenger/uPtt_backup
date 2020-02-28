@@ -233,15 +233,15 @@ class PTT_Adapter:
                 time.sleep(self.config.quick_response_time)
                 end_time = time.time()
 
+            if not self.login:
+                continue
+
             # 慢速輪詢區
             log.show(
                 'PTTAdapter',
                 log.level.INFO,
                 '慢速輪詢'
             )
-
-            if not self.login:
-                continue
 
             waterball_list = self.bot.get_waterball(
                 PTT.data_type.waterball_operate_type.CLEAR
