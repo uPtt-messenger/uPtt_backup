@@ -46,11 +46,14 @@ if __name__ == '__main__':
         config_obj.version
     )
 
-    event_console = EventConsole()
-    dynamic_data_obj = DynamicData(config_obj, event_console)
-    comm_obj = Command(event_console, dynamic_data_obj)
+    console_obj = Console()
+    console_obj.config = config_obj
 
-    console_obj = Console(config_obj, comm_obj, event_console, dynamic_data_obj)
+    event_console = EventConsole()
+    console_obj.event = event_console
+
+    dynamic_data_obj = DynamicData(console_obj)
+    comm_obj = Command(console_obj)
 
     black_list = BlackList(console_obj)
 

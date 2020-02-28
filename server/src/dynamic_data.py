@@ -7,11 +7,9 @@ import log
 
 
 class DynamicData:
-    def __init__(self, config_obj, event_console):
-        self.config = config_obj
-        self.event = event_console
-
-        self.event.close.append(self.event_close)
+    def __init__(self, console_obj):
+        self.console = console_obj
+        self.console.event.close.append(self.event_close)
 
         self.run_update = True
 
@@ -44,8 +42,8 @@ class DynamicData:
 
         while self.run_update:
             start_time = end_time = time.time()
-            while end_time - start_time < self.config.update_cycle:
-                time.sleep(self.config.quick_response_time)
+            while end_time - start_time < self.console.config.update_cycle:
+                time.sleep(self.console.config.quick_response_time)
                 end_time = time.time()
                 if not self.run_update:
                     break

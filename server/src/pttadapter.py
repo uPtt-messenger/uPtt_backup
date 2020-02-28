@@ -147,6 +147,7 @@ class PTT_Adapter:
                         rand_str = ''.join(random.choice(letters) for i in range(30))
 
                         token = sha256(f'{self.ptt_id}{self.ptt_pw}{rand_str}')
+                        self.console.login_token = token
 
                         payload = Msg()
                         payload.add(Msg.key_token, token)

@@ -4,7 +4,7 @@ import log
 
 
 class Command:
-    def __init__(self, event_console, dynamic_data_obj):
+    def __init__(self, console_obj):
         self.login = False
         self.logout = False
 
@@ -18,8 +18,7 @@ class Command:
         self.send_waterball_content = None
         self.add_friend_id = None
 
-        self.event = event_console
-        self.dynamic_data = dynamic_data_obj
+        self.console = console_obj
 
     def analyze(self, recv_msg: Msg):
 
@@ -44,7 +43,7 @@ class Command:
             )
 
             res_msg = None
-            for e in self.event.login:
+            for e in self.console.event.login:
                 current_res_msg = e(ptt_id, ptt_pass)
                 if current_res_msg is None:
                     continue
@@ -72,7 +71,7 @@ class Command:
                 '執行登出程序'
             )
 
-            for e in self.event.logout:
+            for e in self.console.event.logout:
                 e()
 
             log.show(
@@ -87,7 +86,7 @@ class Command:
                 log.level.INFO,
                 '執行終止程序'
             )
-            for e in self.event.close:
+            for e in self.console.event.close:
                 e()
             log.show(
                 'command',
@@ -104,7 +103,7 @@ class Command:
                 log.level.INFO,
                 '執行丟水球程序'
             )
-            for e in self.event.send_waterball:
+            for e in self.console.event.send_waterball:
                 e(waterball_id, waterball_content)
             log.show(
                 'command',
