@@ -21,11 +21,14 @@ async def consumer_handler(ws, path):
     global command
     global console
 
-    # token=XXXXXXX
-
     while run_session:
         try:
-            recv_msg_str = await ws.recv()
+            try:
+                recv_msg_str = await ws.recv()
+            except Exception as e:
+                print('Connection Clsoe')
+                run_session = False
+                break
 
             log.show_value(
                 'WebSocket Server',

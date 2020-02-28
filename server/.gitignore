@@ -111,3 +111,4 @@ build/
 *.srl
 
 .idea/
+*/account.txt

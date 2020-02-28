@@ -22,6 +22,7 @@ class Msg:
     key_timestamp = 'timestamp'
     key_notify = 'notify'
     key_token = 'token'
+    key_close = 'close'
 
     def __init__(self, operate=None, code=None, msg=None, strobj=None):
 
