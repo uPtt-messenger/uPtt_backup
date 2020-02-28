@@ -17,6 +17,7 @@ class Config:
     version = '0.0.1'
     quick_response_time = 0.05
     query_cycle = 3.0 + quick_response_time
+    update_cycle = 180
     port = 50732
     ptt_log_handler = None
     ptt_log_level = log.level.INFO

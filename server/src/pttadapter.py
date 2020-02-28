@@ -113,8 +113,6 @@ class PTT_Adapter:
 
             # 快速反應區
             start_time = end_time = time.time()
-
-            # print(self.config.query_cycle)
             while end_time - start_time < self.config.query_cycle:
 
                 if (self.ptt_id, self.ptt_pw) != (None, None):
