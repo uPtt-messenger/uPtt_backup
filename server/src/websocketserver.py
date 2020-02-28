@@ -26,7 +26,7 @@ async def consumer_handler(ws, path):
             try:
                 recv_msg_str = await ws.recv()
             except Exception as e:
-                print('Connection Clsoe')
+                print('Connection Close: recv fail')
                 run_session = False
                 break
 
@@ -57,14 +57,14 @@ async def consumer_handler(ws, path):
                 )
                 recv_msg.add(Msg.key_token, token)
 
-            print(str(recv_msg))
+            # print(str(recv_msg))
             command.analyze(recv_msg)
             # await ws.send(recv_msg)
             # print(f'echo complete')
         except Exception as e:
             traceback.print_tb(e.__traceback__)
             print(e)
-            print('Connection Clsoe')
+            print('Connection Close')
             run_session = False
             break
 
@@ -74,9 +74,9 @@ async def producer_handler(ws, path):
     global command
 
     while run_session:
-        if len(command.PushMsg) != 0:
-            while len(command.PushMsg) != 0:
-                push_msg = command.PushMsg.pop()
+        if len(command.push_msg) != 0:
+            while len(command.push_msg) != 0:
+                push_msg = command.push_msg.pop()
 
                 print(f'push [{push_msg}]')
                 await ws.send(push_msg)

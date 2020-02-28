@@ -8,7 +8,7 @@ class Command:
         self.login = False
         self.logout = False
 
-        self.PushMsg = []
+        self.push_msg = []
 
         self.login_id = None
         self.login_password = None
@@ -105,31 +105,34 @@ class Command:
             )
 
         elif opt == 'sendwaterball':
-
             if not self.check_token(recv_msg):
+                log.show(
+                    'command',
+                    log.level.INFO,
+                    '權杖不相符'
+                )
                 res_msg = Msg(
                     operate=opt,
                     code=error_code.TokenNotMatch,
                     msg='權杖不相符'
                 )
                 self.push(res_msg)
-                return
+            else:
+                waterball_id = recv_msg.get(Msg.key_payload)[Msg.key_ptt_id]
+                waterball_content = recv_msg.get(Msg.key_payload)[Msg.key_content]
 
-            waterball_id = recv_msg.get(Msg.key_payload)[Msg.key_ptt_id]
-            waterball_content = recv_msg.get(Msg.key_payload)[Msg.key_content]
-
-            log.show(
-                'command',
-                log.level.INFO,
-                '執行丟水球程序'
-            )
-            for e in self.console.event.send_waterball:
-                e(waterball_id, waterball_content)
-            log.show(
-                'command',
-                log.level.INFO,
-                '丟水球程序全數完成'
-            )
+                log.show(
+                    'command',
+                    log.level.INFO,
+                    '執行丟水球程序'
+                )
+                for e in self.console.event.send_waterball:
+                    e(waterball_id, waterball_content)
+                log.show(
+                    'command',
+                    log.level.INFO,
+                    '丟水球程序全數完成'
+                )
 
         elif opt == 'addfriend':
             self.add_friend_id = recv_msg.get(Msg.key_payload)[Msg.key_ptt_id]
@@ -143,4 +146,4 @@ class Command:
             self.push(current_res_msg)
 
     def push(self, push_msg):
-        self.PushMsg.append(push_msg.__str__())
+        self.push_msg.append(push_msg.__str__())

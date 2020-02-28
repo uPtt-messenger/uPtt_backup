@@ -2,6 +2,8 @@ import sys
 import asyncio
 import websockets
 import json
+import time
+from PyPtt import PTT
 
 import log
 from config import Config
@@ -9,23 +11,61 @@ from msg import Msg
 
 msg_str = None
 recv_msg = None
+token = None
 
 
 async def ws_send():
     global msg_str
     global recv_msg
     global config
-    uri = f"ws://localhost:{config.port}"
+    global token
+    if token is None:
+        uri = f"ws://localhost:{config.port}"
+    else:
+        uri = f"ws://localhost:{config.port}?token={token}"
     async with websockets.connect(uri) as ws:
+        log.show_value(
+            '自我測試',
+            log.level.INFO,
+            '準備送出',
+            msg_str
+        )
         await ws.send(msg_str)
         recv_msg_str = await ws.recv()
+        log.show_value(
+            '自我測試',
+            log.level.INFO,
+            '收到',
+            recv_msg_str
+        )
         recv_msg = Msg(strobj=recv_msg_str)
 
 
 def send(msg: Msg):
     global msg_str
     msg_str = str(msg)
-    asyncio.get_event_loop().run_until_complete(ws_send())
+    try:
+        asyncio.get_event_loop().run_until_complete(ws_send())
+    except websockets.exceptions.ConnectionClosedOK:
+        log.show(
+            '自我測試',
+            log.level.INFO,
+            '連線關閉'
+        )
+
+
+def recv():
+    global recv_msg
+    try:
+        asyncio.get_event_loop().run_until_complete(ws_recv())
+    except websockets.exceptions.ConnectionClosedOK:
+        log.show(
+            '自我測試',
+            log.level.INFO,
+            '連線關閉'
+        )
+        return None
+    return recv_msg
 
 
 def get_password(password_file):
@@ -59,14 +99,128 @@ payload.add(Msg.key_ptt_pass, ptt_pw)
 
 push_msg = Msg(operate=Msg.key_login)
 
-push_msg.add(Msg.key_payload, payload)
+log.show(
+    '自我測試',
+    log.level.INFO,
+    '開始登入'
+)
 
+push_msg.add(Msg.key_payload, payload)
 send(push_msg)
 
+if recv_msg.data[Msg.key_code] != 0:
+    log.show(
+        '自我測試',
+        log.level.INFO,
+        '登入失敗'
+    )
+    sys.exit()
 
+log.show(
+    '自我測試',
+    log.level.INFO,
+    '登入成功'
+)
+
+token = recv_msg.data['payload']['token']
+
+log.show_value(
+    '自我測試',
+    log.level.INFO,
+    '收到權杖',
+    token
+)
+
+time.sleep(3)
+#################################
+
+ptt_bot = PTT.API()
+ptt_id2, ptt_pw2 = get_password('account2.txt')
+try:
+    ptt_bot.login(
+        ptt_id2,
+        ptt_pw2,
+        kick_other_login=True)
+except PTT.exceptions.LoginError:
+    ptt_bot.log('登入失敗')
+    sys.exit()
+except PTT.exceptions.ConnectError:
+    ptt_bot.log('登入失敗')
+    sys.exit()
+time.sleep(3)
+
+log.show(
+    '自我測試',
+    log.level.INFO,
+    '準備丟水球'
+)
+
+test_msg = 'uPtt test waterball msg'
+# ptt_bot.throw_waterball(ptt_id, test_msg)
+#
+# waterball_msg = recv()
+# print(waterball_msg)
+
+# {"operation":"sendwaterball","payload": {"pttId": "DeepLearning","content": "1234567"}}
+
+send_waterball_msg = Msg(operate=Msg.key_sendwaterball)
+payload = Msg()
+payload.add(Msg.key_ptt_id, ptt_id2)
+payload.add(Msg.key_content, test_msg)
+send_waterball_msg.add(Msg.key_payload, payload)
+send(send_waterball_msg)
+
+waterball_list = ptt_bot.get_waterball(PTT.data_type.waterball_operate_type.CLEAR)
+test_send_waterball_result = False
+for waterball in waterball_list:
+    print(waterball.content)
+
+    if test_msg in waterball.content:
+        test_send_waterball_result = True
+
+if test_send_waterball_result:
+    log.show(
+        '自我測試',
+        log.level.INFO,
+        '丟水球測試成功'
+    )
+else:
+    log.show(
+        '自我測試',
+        log.level.INFO,
+        '丟水球測試失敗'
+    )
+
+#################################
+
+ptt_bot.logout()
+
+log.show(
+    '自我測試',
+    log.level.INFO,
+    '準備登出'
+)
 
 logout_msg = Msg(operate=Msg.key_logout)
 send(logout_msg)
 
+log.show(
+    '自我測試',
+    log.level.INFO,
+    '登出成功'
+)
+
+log.show(
+    '自我測試',
+    log.level.INFO,
+    '準備關閉'
+)
+
 close_msg = Msg(operate=Msg.key_close)
 send(close_msg)
+
+log.show(
+    '自我測試',
+    log.level.INFO,
+    '關閉成功'
+)
