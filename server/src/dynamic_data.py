@@ -57,16 +57,65 @@ class DynamicData:
         log.show(
             'DynamicData',
             log.level.INFO,
-            '開始擷取資料'
+            '開始更新資料'
         )
-        self.update_tag()
-        self.update_black_list()
+        with urllib.request.urlopen(
+                "https://raw.githubusercontent.com/PttCodingMan/uPtt_open_data/master/open_data.json") as url:
+            self.data = json.loads(url.read().decode())
 
         log.show(
             'DynamicData',
             log.level.INFO,
             '更新資料完成'
         )
+
+        self.version = self.data['version']
+        self.tag_list = self.data['tag']
+        self.black_list = self.data['black_list']
+        self.announce = self.data['announce']
+
+        log.show_value(
+            'DynamicData',
+            log.level.INFO,
+            '發布版本',
+            self.version
+        )
+
+        del_key_list = []
+        for _, (hash_value, tag) in enumerate(self.tag_list.items()):
+            if hash_value.startswith('//'):
+                del_key_list.append(hash_value)
+                continue
+            if len(hash_value) != 64:
+                del_key_list.append(hash_value)
+                continue
+
+        for del_key in del_key_list:
+            del self.tag_list[del_key]
+
+        for _, (hash_value, tag) in enumerate(self.tag_list.items()):
+            log.show_value(
+                'DynamicData',
+                log.level.INFO,
+                'tag',
+                tag
+            )
+
+        if self.black_list:
+            for block_user in self.black_list:
+                log.show_value(
+                    'DynamicData',
+                    log.level.INFO,
+                    'block_user',
+                    block_user
+                )
+        else:
+            log.show(
+                'DynamicData',
+                log.level.INFO,
+                '無黑名單'
+            )
+
 
     def update_tag(self):
         with urllib.request.urlopen(

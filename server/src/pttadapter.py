@@ -115,6 +115,9 @@ class PTT_Adapter:
             start_time = end_time = time.time()
             while end_time - start_time < self.config.query_cycle:
 
+                if not self.RunServer:
+                    break
+
                 if (self.ptt_id, self.ptt_pw) != (None, None):
                     log.show(
                         'PTTAdapter',
