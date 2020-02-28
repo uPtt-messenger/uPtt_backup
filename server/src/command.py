@@ -20,6 +20,16 @@ class Command:
 
         self.console = console_obj
 
+    def check_token(self, msg):
+        if msg is None:
+            return False
+        if Msg.key_token not in msg.data:
+            return False
+
+        current_token = msg.data[Msg.key_token]
+
+        return self.console.login_token == current_token
+
     def analyze(self, recv_msg: Msg):
 
         opt = recv_msg.get(Msg.key_opt)
@@ -95,6 +105,16 @@ class Command:
             )
 
         elif opt == 'sendwaterball':
+
+            if not self.check_token(recv_msg):
+                res_msg = Msg(
+                    operate=opt,
+                    code=error_code.TokenNotMatch,
+                    msg='權杖不相符'
+                )
+                self.push(res_msg)
+                return
+
             waterball_id = recv_msg.get(Msg.key_payload)[Msg.key_ptt_id]
             waterball_content = recv_msg.get(Msg.key_payload)[Msg.key_content]
 

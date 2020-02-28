@@ -53,7 +53,10 @@ if __name__ == '__main__':
     console_obj.event = event_console
 
     dynamic_data_obj = DynamicData(console_obj)
+    console_obj.dynamic_data = dynamic_data_obj
+
     comm_obj = Command(console_obj)
+    console_obj.command = comm_obj
 
     black_list = BlackList(console_obj)
 

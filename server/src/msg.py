@@ -25,7 +25,7 @@ class Msg:
 
     def __init__(self, operate=None, code=None, msg=None, strobj=None):
 
-        self.msg = dict()
+        self.data = dict()
 
         if operate is not None:
             self.add(self.key_opt, operate)
@@ -35,22 +35,22 @@ class Msg:
             self.add(self.key_msg, msg)
 
         if strobj is not None:
-            self.msg = json.loads(strobj)
+            self.data = json.loads(strobj)
 
     def add(self, key, value):
 
         if isinstance(value, Msg):
-            value = value.msg
+            value = value.data
 
-        self.msg[key] = value
+        self.data[key] = value
 
     def remove(self, key):
-        del self.msg[key]
+        del self.data[key]
 
     def __str__(self):
-        return json.dumps(self.msg, ensure_ascii=False)
+        return json.dumps(self.data, ensure_ascii=False)
 
     def get(self, key):
-        if key not in self.msg:
+        if key not in self.data:
             return None
-        return self.msg[key]
+        return self.data[key]

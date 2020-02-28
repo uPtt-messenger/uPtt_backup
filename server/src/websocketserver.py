@@ -10,6 +10,7 @@ from msg import Msg
 run_session = True
 command = None
 config = None
+console = None
 server_start = False
 
 thread = None
@@ -18,12 +19,42 @@ thread = None
 async def consumer_handler(ws, path):
     global run_session
     global command
+    global console
+
+    # token=XXXXXXX
 
     while run_session:
         try:
             recv_msg_str = await ws.recv()
-            print(f'recv str [{recv_msg_str}]')
+
+            log.show_value(
+                'WebSocket Server',
+                log.level.INFO,
+                '收到字串',
+                recv_msg_str
+            )
+            log.show_value(
+                'WebSocket Server',
+                log.level.INFO,
+                '路徑',
+                path
+            )
+
             recv_msg = Msg(strobj=recv_msg_str)
+
+            if 'token=' in path:
+                token = path[path.find('token=') + len('token='):]
+                if '&' in token:
+                    token = token[:token.find('&')]
+                log.show_value(
+                    'WebSocket Server',
+                    log.level.INFO,
+                    '收到權杖',
+                    token
+                )
+                recv_msg.add(Msg.key_token, token)
+
+            print(str(recv_msg))
             command.analyze(recv_msg)
             # await ws.send(recv_msg)
             # print(f'echo complete')
