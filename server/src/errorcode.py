@@ -9,3 +9,4 @@ class error_code:
     NoSuchUser = 5
     UserOffLine = 6
     Unsupported = 7
+    TokenNotMatch = 8
