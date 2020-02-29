@@ -11,7 +11,8 @@ let config = new Map();
 
 module.exports = {
   init: function() {
-
+    const dirPath = __dirname;
+    this.add('dirPath', dirPath);
   },
 	get: function(configName) {
     if (configName) {
