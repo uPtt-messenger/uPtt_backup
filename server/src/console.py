@@ -6,3 +6,4 @@ class Console:
         self.dynamic_data = None
 
         self.login_token = None
+        self.ptt_id = None

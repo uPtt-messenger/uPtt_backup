@@ -23,6 +23,7 @@ class Msg:
     key_notify = 'notify'
     key_token = 'token'
     key_close = 'close'
+    key_msg_type = 'msgType'
 
     def __init__(self, operate=None, code=None, msg=None, strobj=None):
 

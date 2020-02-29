@@ -34,8 +34,7 @@ class Config:
         self.ConfigFileName = 'config.txt'
         self.FriendFileName = 'friend.txt'
 
-        self.ConfigPath = None
-        self.friendlist = None
+        self.config_path = None
 
         if os.name == 'nt':
             log.show_value(
@@ -44,13 +43,13 @@ class Config:
                 '作業系統',
                 'Windows'
             )
-            self.ConfigPath = 'C:/ProgramData/uPtt'
+            self.config_path = 'C:/ProgramData/uPtt'
 
-        self.ConfigFullPath = self.ConfigPath + self.ConfigFileName
-        self.UserConfigPath = None
+        self.ConfigFullPath = self.config_path + self.ConfigFileName
+        self.user_config_path = None
 
-        if not os.path.exists(self.ConfigPath):
-            os.makedirs(self.ConfigPath)
+        if not os.path.exists(self.config_path):
+            os.makedirs(self.config_path)
 
         try:
             with open(self.ConfigFullPath, encoding='utf8') as File:
@@ -59,6 +58,7 @@ class Config:
             self.SystemData = dict()
 
         self.UserData = dict()
+        self.id = None
 
         log.show_value(
             'Config',
@@ -68,60 +68,26 @@ class Config:
         )
 
     def init_user(self, ptt_id):
+        log.show_value(
+            'Config',
+            log.level.INFO,
+            '使用者空間初始化',
+            ptt_id
+        )
         self.id = ptt_id
-        self.UserConfigPath = f'{self.ConfigPath}/{ptt_id}/{self.ConfigFileName}'
-        if not os.path.exists(f'{self.ConfigPath}/{ptt_id}'):
-            os.makedirs(f'{self.ConfigPath}/{ptt_id}')
-        else:
-            if os.path.exists(f'{self.ConfigPath}/{self.id}/dialogue/'):
-                dialogpath = f'{self.ConfigPath}/{self.id}/dialogue/'
-                self.dialogfiles = [join(dialogpath, f) for f in listdir(
-                    dialogpath) if isfile(join(dialogpath, f))]
+        self.user_config_path = f'{self.config_path}/{ptt_id}/{self.ConfigFileName}'
+        if not os.path.exists(f'{self.config_path}/{ptt_id}'):
+            os.makedirs(f'{self.config_path}/{ptt_id}')
 
-                self.dialogfiles = [
-                    x for x in self.dialogfiles if x.endswith('.txt')]
-
-                log.show_value(
-                    'Config',
-                    log.level.INFO,
-                    '對話紀錄檔案',
-                    self.dialogfiles
-                )
-
-            fname = f'{self.ConfigPath}/{self.id}/{self.FriendFileName}'
-            if os.path.exists(fname):
-                log.show_value(
-                    'Config',
-                    log.level.INFO,
-                    '載入朋友清單',
-                    self.dialogfiles
-                )
-
-                try:
-                    with open(fname, encoding='utf8') as f:
-                        self.friendlist = json.load(f)
-                except Exception as e:
-
-                    log.show(
-                        'Config',
-                        log.level.INFO,
-                        e.__traceback__.__str__()
-                    )
-                    log.show(
-                        'Config',
-                        log.level.INFO,
-                        e.__str__()
-                    )
-
-                    log.show(
-                        'Config',
-                        log.level.INFO,
-                        f'無法讀取 {fname}'
-                    )
-                    self.friendlist = None
+        log.show_value(
+            'Config',
+            log.level.INFO,
+            '使用者設定初始化',
+            ptt_id
+        )
 
         try:
-            with open(self.UserConfigPath, encoding='utf8') as File:
+            with open(self.user_config_path, encoding='utf8') as File:
                 self.UserData = json.load(File)
         except FileNotFoundError:
             pass
@@ -154,18 +120,18 @@ class Config:
             elif key in self.UserData:
                 del self.UserData[key]
 
-            with open(self.UserConfigPath, 'w', encoding='utf8') as File:
+            with open(self.user_config_path, 'w', encoding='utf8') as File:
                 json.dump(self.UserData, File, indent=4, ensure_ascii=False)
 
-    def save_dialogue(self, target, msg_list):
-        filepath = f'{self.ConfigPath}/{self.id}/dialogue/{target}.txt'
-        if not os.path.exists(f'{self.ConfigPath}/{self.id}/dialogue/'):
-            os.makedirs(f'{self.ConfigPath}/{self.id}/dialogue/')
-
-        with open(filepath, 'w', encoding='utf8') as f:
-            json.dump(
-                msg_list,
-                f,
-                indent=4,
-                ensure_ascii=False
-            )
+    # def save_dialogue(self, target, msg_list):
+    #     filepath = f'{self.ConfigPath}/{self.id}/dialogue/{target}.txt'
+    #     if not os.path.exists(f'{self.ConfigPath}/{self.id}/dialogue/'):
+    #         os.makedirs(f'{self.ConfigPath}/{self.id}/dialogue/')
+    #
+    #     with open(filepath, 'w', encoding='utf8') as f:
+    #         json.dump(
+    #             msg_list,
+    #             f,
+    #             indent=4,
+    #             ensure_ascii=False
+    #         )

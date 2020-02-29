@@ -17,8 +17,6 @@ from util import sha256
 class PTT_Adapter:
     def __init__(self, console_obj):
         self.console = console_obj
-        self.config = console_obj.config
-        self.command = console_obj.command
 
         console_obj.event.login.append(self.event_login)
         console_obj.event.logout.append(self.event_logout)
@@ -26,7 +24,7 @@ class PTT_Adapter:
         console_obj.event.close.append(self.event_close)
         console_obj.event.send_waterball.append(self.event_send_waterball)
 
-        self.dialog = Dialogue(self.config)
+        self.dialogue = None
 
         self.bot = None
         self.ptt_id = None
@@ -34,7 +32,7 @@ class PTT_Adapter:
 
         self.recv_logout = False
 
-        self.RunServer = True
+        self.run_server = True
         self.login = False
 
         self.has_new_mail = False
@@ -73,7 +71,7 @@ class PTT_Adapter:
             '執行終止程序'
         )
         # self.logout()
-        self.RunServer = False
+        self.run_server = False
         self.thread.join()
         log.show(
             'PTTAdapter',
@@ -104,18 +102,18 @@ class PTT_Adapter:
         )
 
         self.bot = PTT.API(
-            log_handler=self.config.ptt_log_handler,
-            log_level=self.config.ptt_log_level
+            log_handler=self.console.config.ptt_log_handler,
+            log_level=self.console.config.ptt_log_level
             # log_level=PTT.log.level.TRACE
         )
 
-        while self.RunServer:
+        while self.run_server:
 
             # 快速反應區
             start_time = end_time = time.time()
-            while end_time - start_time < self.config.query_cycle:
+            while end_time - start_time < self.console.config.query_cycle:
 
-                if not self.RunServer:
+                if not self.run_server:
                     break
 
                 if (self.ptt_id, self.ptt_pw) != (None, None):
@@ -131,8 +129,10 @@ class PTT_Adapter:
                             kick_other_login=True
                         )
 
-                        self.config.init_user(self.ptt_id)
-                        # self.dialog.loadDialogue()
+                        self.console.ptt_id = self.ptt_id
+
+                        self.console.config.init_user(self.ptt_id)
+                        self.dialogue = Dialogue(self.console)
 
                         self.login = True
                         self.bot.set_call_status(PTT.data_type.call_status.OFF)
@@ -144,7 +144,7 @@ class PTT_Adapter:
                         )
 
                         letters = string.ascii_lowercase
-                        rand_str = ''.join(random.choice(letters) for i in range(30))
+                        rand_str = ''.join(random.choice(letters) for i in range(256))
 
                         token = sha256(f'{self.ptt_id}{self.ptt_pw}{rand_str}')
                         self.console.login_token = token
@@ -192,12 +192,23 @@ class PTT_Adapter:
                             msg='登出成功'
                         )
 
-                        self.command.push(res_msg)
+                        self.console.command.push(res_msg)
 
                         self.init_bot()
 
                     while self.send_waterball_list:
                         waterball_id, waterball_content = self.send_waterball_list.pop()
+
+                        current_dialogue_msg = Msg()
+                        current_dialogue_msg.add(Msg.key_ptt_id, waterball_id)
+                        current_dialogue_msg.add(Msg.key_content, waterball_content)
+                        current_dialogue_msg.add(Msg.key_msg_type, 'send')
+
+                        timestamp = int(datetime.datetime.now().timestamp())
+                        current_dialogue_msg.add(Msg.key_timestamp, timestamp)
+
+                        self.dialogue.save(current_dialogue_msg)
+
                         try:
                             self.bot.throw_waterball(waterball_id, waterball_content)
                             # self.dialog.send(waterball_id, waterball_content)
@@ -219,7 +230,7 @@ class PTT_Adapter:
                                 code=error_code.UserOffLine,
                                 msg='使用者離線'
                             )
-                        self.command.push(res_msg)
+                        self.console.command.push(res_msg)
 
                     # addfriend_id = self.command.addfriend()
                     # if addfriend_id is not None:
@@ -234,7 +245,7 @@ class PTT_Adapter:
                     #     except PTT.exceptions.NoSuchUser:
                     #         print('無此使用者')
 
-                time.sleep(self.config.quick_response_time)
+                time.sleep(self.console.config.quick_response_time)
                 end_time = time.time()
 
             if not self.login:
@@ -307,12 +318,20 @@ class PTT_Adapter:
                     )
                     push_msg.add(Msg.key_payload, payload)
 
+                    current_dialogue_msg = Msg()
+                    current_dialogue_msg.add(Msg.key_ptt_id, waterball_id)
+                    current_dialogue_msg.add(Msg.key_content, waterball_content)
+                    current_dialogue_msg.add(Msg.key_msg_type, 'receive')
+                    current_dialogue_msg.add(Msg.key_timestamp, waterball_timestamp)
+
+                    self.dialogue.save(current_dialogue_msg)
+
                     # self.dialog.recv(waterball_target, waterball_content, waterball_date)
 
                     for e in self.console.event.recv_waterball:
                         e(waterball_id, waterball_content, waterball_timestamp)
 
-                    self.command.push(push_msg)
+                    self.console.command.push(push_msg)
 
             new_mail = self.bot.has_new_mail()
 
@@ -328,6 +347,6 @@ class PTT_Adapter:
                     operate=Msg.key_notify)
                 push_msg.add(Msg.key_msg, f'您有 {new_mail} 封新信')
 
-                self.command.push(push_msg)
+                self.console.command.push(push_msg)
             else:
                 self.has_new_mail = False
