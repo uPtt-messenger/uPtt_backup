@@ -118,31 +118,44 @@ class Command:
                     msg='權杖不相符'
                 )
                 self.push(res_msg)
-            else:
-                waterball_id = recv_msg.get(Msg.key_payload)[Msg.key_ptt_id]
-                waterball_content = recv_msg.get(Msg.key_payload)[Msg.key_content]
+                return
+            waterball_id = recv_msg.get(Msg.key_payload)[Msg.key_ptt_id]
+            waterball_content = recv_msg.get(Msg.key_payload)[Msg.key_content]
 
-                log.show(
-                    'command',
-                    log.level.INFO,
-                    '執行丟水球程序'
-                )
-                for e in self.console.event.send_waterball:
-                    e(waterball_id, waterball_content)
-                log.show(
-                    'command',
-                    log.level.INFO,
-                    '丟水球程序全數完成'
-                )
+            log.show(
+                'command',
+                log.level.INFO,
+                '執行丟水球程序'
+            )
+            for e in self.console.event.send_waterball:
+                e(waterball_id, waterball_content)
+            log.show(
+                'command',
+                log.level.INFO,
+                '丟水球程序全數完成'
+            )
 
         elif opt == 'getwaterballhistory':
+
+            if not self.check_token(recv_msg):
+                log.show(
+                    'command',
+                    log.level.INFO,
+                    '權杖不相符'
+                )
+                res_msg = Msg(
+                    operate=opt,
+                    code=error_code.TokenNotMatch,
+                    msg='權杖不相符'
+                )
+                self.push(res_msg)
+                return
 
             target_id = recv_msg.data[Msg.key_payload][Msg.key_ptt_id]
             count = recv_msg.data[Msg.key_payload][Msg.key_count]
 
             if Msg.key_index in recv_msg.data[Msg.key_payload]:
                 index = recv_msg.data[Msg.key_payload][Msg.key_index]
-
                 history_list = self.console.dialogue.get(target_id, count, index=index)
             else:
                 history_list = self.console.dialogue.get(target_id, count)
