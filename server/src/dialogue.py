@@ -29,14 +29,15 @@ class Dialogue:
         dialogue_file_list = [x for x in dialogue_file_list if x.endswith('.txt')]
 
         for dialogue_file in dialogue_file_list:
-            log.show(
+            log.show_value(
                 'Dialogue',
                 log.level.INFO,
                 '載入對話紀錄',
                 dialogue_file
             )
 
-            with open(dialogue_file, 'r') as fp:
+            current_path = f'{self.path}/{dialogue_file}'
+            with open(current_path, 'r') as fp:
                 all_lines = fp.readlines()
 
             if not all_lines:
@@ -45,7 +46,9 @@ class Dialogue:
             target_id = dialogue_file[:-4]
 
             for line in all_lines:
+                print(line)
                 current_msg = Msg(strobj=line)
+                print(current_msg)
 
                 if target_id not in self.data:
                     self.data[target_id] = []
@@ -58,15 +61,24 @@ class Dialogue:
             '對話紀錄載入完成'
         )
 
-    def save(self, target_id, current_msg: Msg):
+    def save(self, current_msg: Msg):
+        target_id = current_msg.get(Msg.key_ptt_id)
+
+        log.show_value(
+            'Dialogue',
+            log.level.INFO,
+            '儲存對話紀錄',
+            target_id
+        )
         if target_id not in self.data:
             self.data[target_id] = []
 
         self.data[target_id].append(current_msg)
 
         file_name = f'{target_id}.txt'
+        current_path = f'{self.path}/{file_name}'
 
-        with open(file_name, 'a') as fp:
+        with open(current_path, 'a') as fp:
             fp.write(str(current_msg) + '\n')
 
 
