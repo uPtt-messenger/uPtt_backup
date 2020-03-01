@@ -31,8 +31,8 @@ class Config:
         # 想給使用者改的就透過 setValue
         # 因為會被存起來
 
-        self.ConfigFileName = 'config.txt'
-        self.FriendFileName = 'friend.txt'
+        self.config_file_name = 'config.txt'
+        self.friend_file_name = 'friend.txt'
 
         self.config_path = None
 
@@ -45,19 +45,12 @@ class Config:
             )
             self.config_path = 'C:/ProgramData/uPtt'
 
-        self.ConfigFullPath = self.config_path + self.ConfigFileName
         self.user_config_path = None
 
         if not os.path.exists(self.config_path):
             os.makedirs(self.config_path)
 
-        try:
-            with open(self.ConfigFullPath, encoding='utf8') as File:
-                self.SystemData = json.load(File)
-        except FileNotFoundError:
-            self.SystemData = dict()
-
-        self.UserData = dict()
+        self.user_data = dict()
         self.id = None
 
         log.show_value(
@@ -75,9 +68,11 @@ class Config:
             ptt_id
         )
         self.id = ptt_id
-        self.user_config_path = f'{self.config_path}/{ptt_id}/{self.ConfigFileName}'
+        self.user_config_path = f'{self.config_path}/{ptt_id}/{self.config_file_name}'
         if not os.path.exists(f'{self.config_path}/{ptt_id}'):
             os.makedirs(f'{self.config_path}/{ptt_id}')
+
+            # init user config here
 
         log.show_value(
             'Config',
@@ -88,50 +83,23 @@ class Config:
 
         try:
             with open(self.user_config_path, encoding='utf8') as File:
-                self.UserData = json.load(File)
+                self.user_data = json.load(File)
         except FileNotFoundError:
             pass
 
-    def get_value(self, input_type, key):
+    def get_value(self, key):
 
-        if input_type == Type.System:
-            if key not in self.SystemData:
-                return None
-            return self.SystemData[key]
-        elif input_type == Type.User:
-            if key not in self.UserData:
-                return None
-            return self.UserData[key]
+        if key not in self.user_data:
+            return None
+        return self.user_data[key]
 
-    def set_value(self, input_type, key, value):
+    def set_value(self, key, value):
 
-        if input_type == Type.System:
-            if value is not None:
-                self.SystemData[key] = value
-            elif key in self.SystemData:
-                del self.SystemData[key]
+        if value is not None:
+            self.user_data[key] = value
+        elif key in self.user_data:
+            del self.user_data[key]
 
-            with open(self.ConfigFullPath, 'w', encoding='utf8') as File:
-                json.dump(self.SystemData, File, indent=4, ensure_ascii=False)
+        with open(self.user_config_path, 'w', encoding='utf8') as File:
+            json.dump(self.user_data, File, indent=4, ensure_ascii=False)
 
-        if input_type == Type.User:
-            if value is not None:
-                self.UserData[key] = value
-            elif key in self.UserData:
-                del self.UserData[key]
-
-            with open(self.user_config_path, 'w', encoding='utf8') as File:
-                json.dump(self.UserData, File, indent=4, ensure_ascii=False)
-
-    # def save_dialogue(self, target, msg_list):
-    #     filepath = f'{self.ConfigPath}/{self.id}/dialogue/{target}.txt'
-    #     if not os.path.exists(f'{self.ConfigPath}/{self.id}/dialogue/'):
-    #         os.makedirs(f'{self.ConfigPath}/{self.id}/dialogue/')
-    #
-    #     with open(filepath, 'w', encoding='utf8') as f:
-    #         json.dump(
-    #             msg_list,
-    #             f,
-    #             indent=4,
-    #             ensure_ascii=False
-    #         )
