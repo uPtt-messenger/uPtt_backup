@@ -1,7 +1,7 @@
 import os
 from os import walk
-from datetime import datetime
-import json
+# from datetime import datetime
+# import json
 
 import log
 from msg import Msg
@@ -81,8 +81,16 @@ class Dialogue:
         with open(current_path, 'a') as fp:
             fp.write(str(current_msg) + '\n')
 
+    def get(self, target_id: str, count: int, index: int = 0):
+        if target_id not in self.data:
+            return []
+        if count == 0:
+            return []
+        if index == 0:
+            return self.data[target_id][-count:]
 
+        if index >= len(self.data[target_id]):
+            return []
 
-
-
-
+        current_data = self.data[target_id][:(index + 1)]
+        return current_data[-count:]

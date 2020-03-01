@@ -133,6 +133,7 @@ class PTT_Adapter:
 
                         self.console.config.init_user(self.ptt_id)
                         self.dialogue = Dialogue(self.console)
+                        self.console.dialogue = self.dialogue
 
                         self.login = True
                         self.bot.set_call_status(PTT.data_type.call_status.OFF)

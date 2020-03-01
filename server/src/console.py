@@ -7,3 +7,4 @@ class Console:
 
         self.login_token = None
         self.ptt_id = None
+        self.dialogue = None

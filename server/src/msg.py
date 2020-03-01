@@ -24,6 +24,10 @@ class Msg:
     key_token = 'token'
     key_close = 'close'
     key_msg_type = 'msgType'
+    key_count = 'count'
+    key_index = 'index'
+    key_tag = 'tag'
+    key_list = 'list'
 
     def __init__(self, operate=None, code=None, msg=None, strobj=None):
 

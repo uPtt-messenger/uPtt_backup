@@ -1,6 +1,7 @@
+import log
 from errorcode import error_code
 from msg import Msg
-import log
+from tag import Tag
 
 
 class Command:
@@ -134,9 +135,37 @@ class Command:
                     '丟水球程序全數完成'
                 )
 
+        elif opt == 'getwaterballhistory':
+
+            target_id = recv_msg.data[Msg.key_payload][Msg.key_ptt_id]
+            count = recv_msg.data[Msg.key_payload][Msg.key_count]
+
+            if Msg.key_index in recv_msg.data[Msg.key_payload]:
+                index = recv_msg.data[Msg.key_payload][Msg.key_index]
+
+                history_list = self.console.dialogue.get(target_id, count, index=index)
+            else:
+                history_list = self.console.dialogue.get(target_id, count)
+
+            current_res_msg = Msg(
+                operate=opt,
+                code=error_code.Success,
+                msg='取得歷史水球訊息成功'
+            )
+
+            payload = Msg()
+
+            tag_name = Tag(self.console).get_tag(target_id)
+            if tag_name is None:
+                tag_name = ''
+
+            payload.add(Msg.key_tag, tag_name)
+            payload.add(Msg.key_list, history_list)
+            current_res_msg.add(Msg.key_payload, payload)
+
+            self.push(current_res_msg)
         elif opt == 'addfriend':
             self.add_friend_id = recv_msg.get(Msg.key_payload)[Msg.key_ptt_id]
-
         else:
             current_res_msg = Msg(
                 operate=opt,
