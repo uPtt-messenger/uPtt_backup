@@ -3,6 +3,7 @@
 /**
  * External Dependencies
  */
+const path = require('path');
 
 /**
  * Module variables
@@ -11,8 +12,10 @@ let config = new Map();
 
 module.exports = {
   init: function() {
-    const dirPath = __dirname;
+    let dirPath = __dirname;
+    dirPath = dirPath.substring(0, dirPath.indexOf('desktop'));
     this.add('dirPath', dirPath);
+    console.log('dirPath', path.join(__dirname, './build/index.html'),);
   },
 	get: function(configName) {
     if (configName) {
@@ -23,7 +26,7 @@ module.exports = {
   },
   add: function(configName, configValue) {
     if (configName) {
-      config.add(configName, configValue);
+      config.set(configName, configValue);
     }
   }
 };
