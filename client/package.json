@@ -1,14 +1,18 @@
 {
   "name": "uptt-client",
   "version": "0.0.0",
-  "main": "desktop/index.js",
+  "main": "main.js",
   "build": {
     "appId": "com.uptt.app",
     "productName": "uptt",
     "directories": {
-      "buildResources": "build",
-      "output": "dist"
+      "output": "build"
     },
+    "files": [
+      "**/*",
+      "!**/node_modules",
+      "!**/tslint.json"
+    ],
     "mac": {
       "target": [
         "dmg",
@@ -44,6 +48,7 @@
     "@angular/platform-browser-dynamic": "~8.2.14",
     "@angular/router": "~8.2.14",
     "@types/electron": "^1.6.10",
+    "electron-log": "^4.0.7",
     "rxjs": "~6.4.0",
     "tslib": "^1.10.0",
     "zone.js": "~0.9.1"

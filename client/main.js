@@ -4,10 +4,12 @@ const { ipcMain } = require('electron');
 const url = require('url');
 const path = require('path');
 const { map } = require('rxjs/operators');
-const { webSocket } = require('rxjs/webSocket');
-const { WebSocketSubject } = require('rxjs/webSocket');
-(global).WebSocket = require('ws');
-let publicWs = null;
+// const { webSocket } = require('rxjs/webSocket');
+// const { WebSocketSubject } = require('rxjs/webSocket');
+const logger = require('./desktop/lib/log-manager');
+
+// (global).WebSocket = require('ws');
+// let publicWs = null;
 
 const DEBUG_MODE = true;
 // Keep a global reference of the window object, if you don't, the window will
@@ -24,7 +26,7 @@ let upttData = {
 };
 
 app.on('ready', () => {
-  initWebsocket();
+  // initWebsocket();
   createWindow();
 });
 
@@ -127,7 +129,7 @@ ipcMain.on('new-chat', (event, data) => {
 function createWindow () {
 
   // 建立 System Tray
-  tray = new Tray('build/assets/images/uptt.ico')
+  tray = new Tray(path.join(__dirname, './build/assets/images/uptt.ico'))
   const contextMenu = Menu.buildFromTemplate([
     { label: '關於', type: 'normal' },
     { label: '結束', type: 'normal', click: function() {
@@ -148,6 +150,8 @@ function createWindow () {
       nodeIntegration: true
     }
   })
+
+  logger.debug('test __dirname:' + path.join(__dirname, './build/index.html'));
 
   // and load the index.html of the app.
   win.loadURL(url.format({
@@ -189,6 +193,6 @@ function createWindow () {
   });
 }
 
-function initWebsocket() {
-  publicWs = webSocket({ url: 'ws://localhost:50732/uptt/public' });
-}
+// function initWebsocket() {
+//   publicWs = webSocket({ url: 'ws://localhost:50732/uptt/public' });
+// }

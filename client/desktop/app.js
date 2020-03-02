@@ -9,6 +9,7 @@ const app = electron.app;
  /**
  * Uptt lib
  */
+const logger = require('./lib/log-manager');
 const WindowManager = require('./lib/window-manager');
 const ConfigManager = require('./lib/config-manager');
 
@@ -17,11 +18,11 @@ const DEBUG_MODE = true;
 // be closed automatically when the JavaScript object is garbage collected.
 
 module.exports = function() {
-  console.log('uptt-client start');
+  logger.debug('uptt-client start');
   // Start the app window
 
-  console.log('__dirname');
-  console.log(__dirname);
+  logger.debug('__dirname');
+  logger.debug(__dirname);
 
   ConfigManager.init();
 
