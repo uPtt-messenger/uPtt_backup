@@ -46,7 +46,7 @@ class Dialogue:
             target_id = dialogue_file[:-4]
 
             for line in all_lines:
-                print(line)
+                # print(line)
                 current_msg = Msg(strobj=line)
                 print(current_msg)
 

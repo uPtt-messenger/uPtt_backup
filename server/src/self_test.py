@@ -163,12 +163,13 @@ test_msg = 'uPtt test waterball msg'
 
 # {"operation":"sendwaterball","payload": {"pttId": "DeepLearning","content": "1234567"}}
 
-send_waterball_msg = Msg(operate=Msg.key_sendwaterball)
-payload = Msg()
-payload.add(Msg.key_ptt_id, ptt_id2)
-payload.add(Msg.key_content, test_msg)
-send_waterball_msg.add(Msg.key_payload, payload)
-send(send_waterball_msg)
+for index in range(1):
+    send_waterball_msg = Msg(operate=Msg.key_sendwaterball)
+    payload = Msg()
+    payload.add(Msg.key_ptt_id, ptt_id2)
+    payload.add(Msg.key_content, f'{test_msg} {index}')
+    send_waterball_msg.add(Msg.key_payload, payload)
+    send(send_waterball_msg)
 
 waterball_list = ptt_bot.get_waterball(PTT.data_type.waterball_operate_type.CLEAR)
 test_send_waterball_result = False
