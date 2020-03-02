@@ -1,7 +1,7 @@
 # uPtt
 [![Package Version](https://img.shields.io/pypi/v/uPTT.svg)](https://pypi.org/project/uPTT/)
 [![Codacy Badge](https://api.codacy.com/project/badge/grade/4da1e92c94f2492588c20f8a8860383b)](https://www.codacy.com/app/Truth0906/uPTT)
-[![License: LGPL v3](https://img.shields.io/badge/License-LGPL%20v3-blue.svg)](https://www.gnu.org/licenses/lgpl-3.0)
+[![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 [![chatroom icon](https://patrolavia.github.io/telegram-badge/chat.png)](https://t.me/uPtt_talk)
 [![Donate](https://img.shields.io/badge/Donate-PayPal-green.svg)](http://paypal.me/CodingMan)
 
