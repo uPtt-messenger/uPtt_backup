@@ -9,9 +9,8 @@
       "output": "build"
     },
     "files": [
-      "**/*",
-      "!**/node_modules",
-      "!**/tslint.json"
+      "main.js",
+      "**/dist/**/*"
     ],
     "mac": {
       "target": [
