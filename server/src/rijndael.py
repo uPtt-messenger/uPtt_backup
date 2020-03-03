@@ -9,7 +9,8 @@
 #
 
 import base64
-
+import random
+import string
 
 class Rijndael(object):
     """

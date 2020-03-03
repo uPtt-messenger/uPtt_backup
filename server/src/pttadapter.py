@@ -39,6 +39,8 @@ class PTT_Adapter:
         self.res_msg = None
 
         self.send_waterball_list = []
+        self.send_waterball_complete = True
+        self.send_waterball = False
 
         self.init_bot()
 
@@ -90,8 +92,17 @@ class PTT_Adapter:
         return self.res_msg
 
     def event_send_waterball(self, waterball_id, waterball_content):
+
+        self.send_waterball_complete = False
+
         self.send_waterball_list.append(
             (waterball_id, waterball_content))
+
+        self.send_waterball = True
+
+        while not self.send_waterball_complete:
+            time.sleep(self.console.config.quick_response_time)
+
 
     def run(self):
 
@@ -197,41 +208,44 @@ class PTT_Adapter:
 
                         self.init_bot()
 
-                    while self.send_waterball_list:
-                        waterball_id, waterball_content = self.send_waterball_list.pop()
+                    if self.send_waterball:
+                        while self.send_waterball_list:
+                            waterball_id, waterball_content = self.send_waterball_list.pop()
 
-                        current_dialogue_msg = Msg()
-                        current_dialogue_msg.add(Msg.key_ptt_id, waterball_id)
-                        current_dialogue_msg.add(Msg.key_content, waterball_content)
-                        current_dialogue_msg.add(Msg.key_msg_type, 'send')
+                            try:
+                                self.bot.throw_waterball(waterball_id, waterball_content)
 
-                        timestamp = int(datetime.datetime.now().timestamp())
-                        current_dialogue_msg.add(Msg.key_timestamp, timestamp)
+                                current_dialogue_msg = Msg()
+                                current_dialogue_msg.add(Msg.key_ptt_id, waterball_id)
+                                current_dialogue_msg.add(Msg.key_content, waterball_content)
+                                current_dialogue_msg.add(Msg.key_msg_type, 'send')
 
-                        self.dialogue.save(current_dialogue_msg)
+                                timestamp = int(datetime.datetime.now().timestamp())
+                                current_dialogue_msg.add(Msg.key_timestamp, timestamp)
 
-                        try:
-                            self.bot.throw_waterball(waterball_id, waterball_content)
-                            # self.dialog.send(waterball_id, waterball_content)
+                                self.dialogue.save(current_dialogue_msg)
 
-                            res_msg = Msg(
-                                operate=Msg.key_sendwaterball,
-                                code=error_code.Success,
-                                msg='丟水球成功'
-                            )
-                        except PTT.exceptions.NoSuchUser:
-                            res_msg = Msg(
-                                operate=Msg.key_sendwaterball,
-                                code=error_code.NoSuchUser,
-                                msg='無此使用者'
-                            )
-                        except PTT.exceptions.UserOffline:
-                            res_msg = Msg(
-                                operate=Msg.key_sendwaterball,
-                                code=error_code.UserOffLine,
-                                msg='使用者離線'
-                            )
-                        self.console.command.push(res_msg)
+                                res_msg = Msg(
+                                    operate=Msg.key_sendwaterball,
+                                    code=error_code.Success,
+                                    msg='丟水球成功'
+                                )
+                            except PTT.exceptions.NoSuchUser:
+                                res_msg = Msg(
+                                    operate=Msg.key_sendwaterball,
+                                    code=error_code.NoSuchUser,
+                                    msg='無此使用者'
+                                )
+                            except PTT.exceptions.UserOffline:
+                                res_msg = Msg(
+                                    operate=Msg.key_sendwaterball,
+                                    code=error_code.UserOffLine,
+                                    msg='使用者離線'
+                                )
+                            self.console.command.push(res_msg)
+
+                        self.send_waterball_complete = True
+                        self.send_waterball = False
 
                     # addfriend_id = self.command.addfriend()
                     # if addfriend_id is not None:

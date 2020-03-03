@@ -5,7 +5,8 @@ from os import walk
 
 import log
 from msg import Msg
-
+from config import Config
+import rijndael
 
 class Dialogue:
     def __init__(self, console_obj):
@@ -13,53 +14,56 @@ class Dialogue:
         self.path = f'{self.console.config.config_path}/{self.console.ptt_id}/dialogue'
         if not os.path.exists(self.path):
             os.makedirs(self.path)
-        self.data = dict()
+        else:
+            self.data = dict()
 
-        log.show(
-            'Dialogue',
-            log.level.INFO,
-            '載入對話紀錄'
-        )
+            aes_key = self.console.config.get_value(Config.key_aes_key)
 
-        dialogue_file_list = []
-        for (dirpath, dirnames, filenames) in walk(self.path):
-            dialogue_file_list.extend(filenames)
-            break
-
-        dialogue_file_list = [x for x in dialogue_file_list if x.endswith('.txt')]
-
-        for dialogue_file in dialogue_file_list:
-            log.show_value(
+            log.show(
                 'Dialogue',
                 log.level.INFO,
-                '載入對話紀錄',
-                dialogue_file
+                '載入對話紀錄'
             )
 
-            current_path = f'{self.path}/{dialogue_file}'
-            with open(current_path, 'r') as fp:
-                all_lines = fp.readlines()
+            dialogue_file_list = []
+            for (dirpath, dirnames, filenames) in walk(self.path):
+                dialogue_file_list.extend(filenames)
+                break
 
-            if not all_lines:
-                continue
+            dialogue_file_list = [x for x in dialogue_file_list if x.endswith('.txt')]
 
-            target_id = dialogue_file[:-4]
+            for dialogue_file in dialogue_file_list:
+                log.show_value(
+                    'Dialogue',
+                    log.level.INFO,
+                    '載入對話紀錄',
+                    dialogue_file
+                )
 
-            for line in all_lines:
-                # print(line)
-                current_msg = Msg(strobj=line)
-                print(current_msg)
+                current_path = f'{self.path}/{dialogue_file}'
+                with open(current_path, 'r') as fp:
+                    all_lines = fp.readlines()
 
-                if target_id not in self.data:
-                    self.data[target_id] = []
+                if not all_lines:
+                    continue
 
-                self.data[target_id].append(current_msg)
+                target_id = dialogue_file[:-4]
 
-        log.show(
-            'Dialogue',
-            log.level.INFO,
-            '對話紀錄載入完成'
-        )
+                for line in all_lines:
+                    # print(line)
+                    current_msg = Msg(strobj=line)
+                    print(current_msg)
+
+                    if target_id not in self.data:
+                        self.data[target_id] = []
+
+                    self.data[target_id].append(current_msg)
+
+            log.show(
+                'Dialogue',
+                log.level.INFO,
+                '對話紀錄載入完成'
+            )
 
     def save(self, current_msg: Msg):
         target_id = current_msg.get(Msg.key_ptt_id)
@@ -77,6 +81,12 @@ class Dialogue:
 
         file_name = f'{target_id}.txt'
         current_path = f'{self.path}/{file_name}'
+
+        aes_key = self.console.config.get_value(Config.key_aes_key)
+        if aes_key is None:
+            aes_key = rijndael.gen_key()
+            self.console.config.set_value(Config.key_aes_key, aes_key)
+        # print(aes_key)
 
         with open(current_path, 'a') as fp:
             fp.write(str(current_msg) + '\n')

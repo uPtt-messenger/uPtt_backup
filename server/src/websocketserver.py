@@ -79,7 +79,11 @@ async def producer_handler(ws, path):
                 push_msg = command.push_msg.pop()
 
                 print(f'push [{push_msg}]')
-                await ws.send(push_msg)
+                try:
+                    await ws.send(push_msg)
+                except websockets.exceptions.ConnectionClosedOK:
+                    print(f'push fail')
+                    break
         else:
             # print(f'asyncio.sleep')
             # No

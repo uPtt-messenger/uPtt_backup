@@ -1,6 +1,4 @@
 import os
-from os import listdir
-from os.path import isfile, join
 import json
 
 import log
@@ -8,12 +6,10 @@ import log
 LogPath = None
 
 
-class Type:
-    System = 1
-    User = 2
-
-
 class Config:
+
+    key_aes_key = 'aes_key'
+
     version = '0.0.1'
     quick_response_time = 0.05
     query_cycle = 3.0 + quick_response_time
@@ -102,4 +98,3 @@ class Config:
 
         with open(self.user_config_path, 'w', encoding='utf8') as File:
             json.dump(self.user_data, File, indent=4, ensure_ascii=False)
-
