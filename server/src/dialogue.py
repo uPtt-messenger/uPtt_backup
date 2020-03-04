@@ -6,18 +6,28 @@ from os import walk
 import log
 from msg import Msg
 from config import Config
-import rijndael
+import aes
+
 
 class Dialogue:
     def __init__(self, console_obj):
         self.console = console_obj
         self.path = f'{self.console.config.config_path}/{self.console.ptt_id}/dialogue'
+        self.data = dict()
+
         if not os.path.exists(self.path):
             os.makedirs(self.path)
+            self.aes_key = None
         else:
-            self.data = dict()
 
-            aes_key = self.console.config.get_value(Config.key_aes_key)
+            self.aes_key = self.console.config.get_value(Config.key_aes_key)
+
+            log.show_value(
+                'Dialogue',
+                log.level.INFO,
+                '載入金鑰',
+                self.aes_key
+            )
 
             log.show(
                 'Dialogue',
@@ -82,14 +92,20 @@ class Dialogue:
         file_name = f'{target_id}.txt'
         current_path = f'{self.path}/{file_name}'
 
-        aes_key = self.console.config.get_value(Config.key_aes_key)
-        if aes_key is None:
-            aes_key = rijndael.gen_key()
-            self.console.config.set_value(Config.key_aes_key, aes_key)
-        # print(aes_key)
+        if self.aes_key is None:
+            self.aes_key = self.console.config.get_value(Config.key_aes_key)
+            if self.aes_key is None:
+                self.aes_key = aes.gen_key()
+                self.console.config.set_value(Config.key_aes_key, self.aes_key)
+
+        encrypt_msg = aes.encrypt(self.aes_key, str(current_msg))
+
+        restore_msg = Msg()
+        restore_msg.add(Msg.key_api_version, 1)
+        restore_msg.add(Msg.key_cipher_msg, encrypt_msg)
 
         with open(current_path, 'a') as fp:
-            fp.write(str(current_msg) + '\n')
+            fp.write(str(restore_msg) + '\n')
 
     def get(self, target_id: str, count: int, index: int = 0):
         if target_id not in self.data:

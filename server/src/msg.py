@@ -28,6 +28,11 @@ class Msg:
     key_index = 'index'
     key_tag = 'tag'
     key_list = 'list'
+    key_cipher_text = 'cipher_text'
+    key_cipher_tag = 'cipher_tag'
+    key_cipher_nonce = 'cipher_nonce'
+    key_cipher_msg = 'cipher_msg'
+    key_api_version = 'api_version'
 
     def __init__(self, operate=None, code=None, msg=None, strobj=None):
 
