@@ -19,12 +19,11 @@ class Dialogue:
             os.makedirs(self.path)
             self.aes_key = None
         else:
-
             self.aes_key = self.console.config.get_value(Config.key_aes_key)
 
             log.show_value(
                 'Dialogue',
-                log.level.INFO,
+                log.level.DEBUG,
                 '載入金鑰',
                 self.aes_key
             )
@@ -76,15 +75,13 @@ class Dialogue:
                         decrypt_data = aes.decrypt(self.aes_key, cipher_msg)
                         decrypt_msg = Msg(strobj=decrypt_data)
 
-                        log.show_value(
-                            'Dialogue',
-                            log.level.INFO,
-                            '解密資料',
-                            decrypt_msg
-                        )
-
+                    log.show_value(
+                        'Dialogue',
+                        log.level.DEBUG,
+                        '解密對話',
+                        decrypt_msg
+                    )
                     self.data[target_id].append(decrypt_msg)
-
 
             log.show(
                 'Dialogue',
