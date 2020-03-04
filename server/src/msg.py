@@ -34,9 +34,12 @@ class Msg:
     key_cipher_msg = 'cipher_msg'
     key_api_version = 'api_version'
 
-    def __init__(self, operate=None, code=None, msg=None, strobj=None):
+    def __init__(self, operate=None, code=None, msg=None, strobj=None, dictobj=None):
 
-        self.data = dict()
+        if dictobj is None:
+            self.data = dict()
+        else:
+            self.data = dictobj
 
         if operate is not None:
             self.add(self.key_opt, operate)

@@ -62,12 +62,29 @@ class Dialogue:
                 for line in all_lines:
                     # print(line)
                     current_msg = Msg(strobj=line)
-                    print(current_msg)
 
                     if target_id not in self.data:
                         self.data[target_id] = []
 
-                    self.data[target_id].append(current_msg)
+                    # print(current_msg)
+                    if current_msg.data[Msg.key_api_version] == 1:
+                        cipher_msg_str = current_msg.data[Msg.key_cipher_msg]
+                        # print(cipher_msg_str)
+                        cipher_msg = Msg(dictobj=cipher_msg_str)
+                        # print(cipher_msg)
+
+                        decrypt_data = aes.decrypt(self.aes_key, cipher_msg)
+                        decrypt_msg = Msg(strobj=decrypt_data)
+
+                        log.show_value(
+                            'Dialogue',
+                            log.level.INFO,
+                            '解密資料',
+                            decrypt_msg
+                        )
+
+                    self.data[target_id].append(decrypt_msg)
+
 
             log.show(
                 'Dialogue',
