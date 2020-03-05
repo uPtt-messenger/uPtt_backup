@@ -76,25 +76,34 @@ if __name__ == '__main__':
     # websocketserver 是特例
     websocketserver.config = config_obj
     websocketserver.command = comm_obj
-    websocketserver.start()
 
     run_server = True
-
-
     def event_close():
         global run_server
         run_server = False
 
-
     event_console.close.append(websocketserver.stop)
     event_console.close.append(event_close)
-    while run_server:
-        try:
-            time.sleep(0.5)
-        except KeyboardInterrupt:
-            for e in event_console.close:
-                e()
-            break
+
+    websocketserver.start()
+
+    if websocketserver.start_error:
+        log.show(
+            'Main',
+            log.level.INFO,
+            'websocket server startup error'
+        )
+        for e in event_console.close:
+            e()
+    else:
+        while run_server:
+            try:
+                print('1')
+                time.sleep(0.5)
+            except KeyboardInterrupt:
+                for e in event_console.close:
+                    e()
+                break
 
     log.show(
         'Main',

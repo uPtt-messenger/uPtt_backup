@@ -12,7 +12,7 @@ command = None
 config = None
 console = None
 server_start = False
-
+start_error = False
 thread = None
 
 
@@ -110,6 +110,8 @@ async def handler(websocket, path):
 
 
 def server_setup():
+    global start_error
+
     log.show_value(
         'WebSocket Server',
         log.level.INFO,
@@ -127,10 +129,16 @@ def server_setup():
         # ssl=ssl_context
     )
 
-    asyncio.get_event_loop().run_until_complete(start_server)
+    try:
+        asyncio.get_event_loop().run_until_complete(start_server)
+    except OSError:
+        start_error = True
 
     global server_start
     server_start = True
+
+    if start_error:
+        return
 
     asyncio.get_event_loop().run_forever()
 
@@ -148,7 +156,7 @@ def start():
         daemon=True
     )
     thread.start()
-    time.sleep(0.5)
+    time.sleep(2)
 
 
 def stop():
