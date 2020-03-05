@@ -151,12 +151,25 @@ def server_setup():
 
 def start():
     global thread
+    global start_error
     thread = threading.Thread(
         target=server_setup,
         daemon=True
     )
     thread.start()
     time.sleep(2)
+    if start_error:
+        log.show(
+            'WebSocket Server',
+            log.level.INFO,
+            '啟動失敗'
+        )
+    else:
+        log.show(
+            'WebSocket Server',
+            log.level.INFO,
+            '啟動成功'
+        )
 
 
 def stop():

@@ -98,7 +98,6 @@ if __name__ == '__main__':
     else:
         while run_server:
             try:
-                print('1')
                 time.sleep(0.5)
             except KeyboardInterrupt:
                 for e in event_console.close:

@@ -1,16 +1,15 @@
-import time
-import threading
-import traceback
+import datetime
 import random
 import string
-import datetime
+import threading
+import time
 
 from PyPtt import PTT
 
 import log
+from dialogue import Dialogue
 from errorcode import error_code
 from msg import Msg
-from dialogue import Dialogue
 from util import sha256
 
 
@@ -103,7 +102,6 @@ class PTT_Adapter:
         while not self.send_waterball_complete:
             time.sleep(self.console.config.quick_response_time)
 
-
     def run(self):
 
         log.show(
@@ -117,14 +115,16 @@ class PTT_Adapter:
             log_level=self.console.config.ptt_log_level
             # log_level=PTT.log.level.TRACE
         )
-
+        print(-1)
         while self.run_server:
-
+            print(-1.1)
             # 快速反應區
             start_time = end_time = time.time()
             while end_time - start_time < self.console.config.query_cycle:
 
+                print(-1.2)
                 if not self.run_server:
+                    print(-1.3)
                     break
 
                 if (self.ptt_id, self.ptt_pw) != (None, None):
@@ -187,6 +187,7 @@ class PTT_Adapter:
                     self.ptt_id = None
                     self.ptt_pw = None
 
+                print(0)
                 if self.login:
 
                     if self.recv_logout:
@@ -208,12 +209,26 @@ class PTT_Adapter:
 
                         self.init_bot()
 
+                    print('1')
                     if self.send_waterball:
+                        print('2')
+                        print(len(self.send_waterball_list))
                         while self.send_waterball_list:
+                            print('3')
                             waterball_id, waterball_content = self.send_waterball_list.pop()
 
                             try:
+                                log.show(
+                                    'PTTAdapter',
+                                    log.level.INFO,
+                                    '準備丟水球'
+                                )
                                 self.bot.throw_waterball(waterball_id, waterball_content)
+                                log.show(
+                                    'PTTAdapter',
+                                    log.level.INFO,
+                                    '丟水球完畢，準備儲存'
+                                )
 
                                 current_dialogue_msg = Msg()
                                 current_dialogue_msg.add(Msg.key_ptt_id, waterball_id)
@@ -348,8 +363,9 @@ class PTT_Adapter:
 
                     self.console.command.push(push_msg)
 
+            print(7)
             new_mail = self.bot.has_new_mail()
-
+            print(8)
             log.show(
                 'PTTAdapter',
                 log.level.INFO,

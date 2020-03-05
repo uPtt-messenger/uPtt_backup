@@ -48,10 +48,10 @@ def show(prefix, current_log_level, msg):
 
     total_message = '[' + strftime('%m%d %H%M%S') + ']'
 
-    if current_log_level == level.DEBUG:
-        total_message += '[除錯]'
-    elif current_log_level == level.INFO:
-        total_message += '[資訊]'
+    # if current_log_level == level.DEBUG:
+    #     total_message += '[除錯]'
+    # elif current_log_level == level.INFO:
+    #     total_message += '[資訊]'
 
     if prefix is not None:
         total_message += '[' + prefix + ']'
