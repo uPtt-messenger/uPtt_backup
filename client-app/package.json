@@ -8,6 +8,29 @@
   },
   "author": "doreen",
   "license": "ISC",
+  "build": {
+    "appId": "com.uptt.app",
+    "productName": "uptt",
+    "directories": {
+      "output": "build"
+    },
+    "files": [
+      "main.js",
+      "**/dist/**/*"
+    ],
+    "mac": {
+      "target": [
+        "dmg",
+        "zip"
+      ]
+    },
+    "win": {
+      "target": [
+        "portable",
+        "zip"
+      ]
+    }
+  },
   "dependencies": {},
   "devDependencies": {
     "electron": "^8.0.3",
