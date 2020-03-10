@@ -80,7 +80,7 @@ ipcMain.on('login-success', (event, data) => {
     { label: '丟水球', type: 'normal', click: function() {
       win.setSize(350, 450);
       win.loadURL(url.format({
-        pathname: path.join(__dirname, './build/index.html'),
+        pathname: path.join(__dirname, './resource/index.html'),
         protocol: 'file:',
         slashes: true,
         hash: '/main-window/new-chat'
@@ -106,13 +106,13 @@ ipcMain.on('new-chat', (event, data) => {
     width: 400,
     height: 700,
     title: data.pttId,
-    icon:'build/assets/images/uptt.ico',
+    icon:'resource/assets/images/uptt.ico',
     webPreferences: {
       nodeIntegration: true
     }
   });
   chatWin.loadURL(url.format({
-    pathname: path.join(__dirname, './build/index.html'),
+    pathname: path.join(__dirname, './resource/index.html'),
     protocol: 'file:',
     slashes: true,
     hash: '/chat-window'
@@ -129,7 +129,7 @@ ipcMain.on('new-chat', (event, data) => {
 function createWindow () {
 
   // 建立 System Tray
-  tray = new Tray(path.join(__dirname, './build/assets/images/uptt.ico'))
+  tray = new Tray(path.join(__dirname, './resource/assets/images/uptt.ico'))
   const contextMenu = Menu.buildFromTemplate([
     { label: '關於', type: 'normal' },
     { label: '結束', type: 'normal', click: function() {
@@ -145,17 +145,17 @@ function createWindow () {
     width: 400,
     height: 700,
     title: "uPtt",
-    icon:'build/assets/images/uptt.ico',
+    icon:'resource/assets/images/uptt.ico',
     webPreferences: {
       nodeIntegration: true
     }
   })
 
-  logger.debug('test __dirname:' + path.join(__dirname, './build/index.html'));
+  logger.debug('test __dirname:' + path.join(__dirname, './resource/index.html'));
 
   // and load the index.html of the app.
   win.loadURL(url.format({
-    pathname: path.join(__dirname, './build/index.html'),
+    pathname: path.join(__dirname, './resource/index.html'),
     protocol: 'file:',
     slashes: true
   }));
