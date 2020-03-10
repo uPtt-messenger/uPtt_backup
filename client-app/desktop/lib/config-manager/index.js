@@ -15,9 +15,11 @@ module.exports = {
     let dirPath = __dirname;
     dirPath = dirPath.substring(0, dirPath.indexOf('desktop'));
     this.add('dirPath', dirPath);
-    console.log('dirPath', path.join(__dirname, './build/index.html'),);
+    console.log(config);
+    //  console.log('dirPath', path.join(dirPath, './resource/index.html'),);
   },
 	get: function(configName) {
+    console.log(config);
     if (configName) {
       return config.get(configName);
     } else {

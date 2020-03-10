@@ -14,6 +14,11 @@ const app = electron.app;
 const Tray = electron.Tray;
 const Menu = electron.Menu;
 
+ /**
+ * Uptt lib
+ */
+const ConfigManager = require('../config-manager');
+
 // app.on('ready', () => {
 //   screen = electron.screen;
 //   // initWebsocket();
@@ -29,13 +34,13 @@ const path = require('path');
 let tray = null;
 const windows = {
   login: {
-    url: './build/index.html',
+    url: './resource/index.html',
     window: null,
     options: {
       width: 400,
       height: 700,
       title: "uPtt",
-      icon:'build/assets/images/uptt.ico',
+      icon:'resource/assets/images/uptt.ico',
       webPreferences: {
         nodeIntegration: true
       }
@@ -48,22 +53,13 @@ function openWindow(windowName) {
     const window = windows[windowName];
     if (window.window === null) {
       windows[windowName].window = new BrowserWindow(window.options);
-      console.log('__dirname');
-      console.log(__dirname);
-      console.log('window.url');
-      console.log(window.url);
 
 
-
-      let exePath = path.dirname (app.getPath ('exe'));
-      console.log('exe path: ' + exePath);
-
-      let execPath = path.dirname (process.execPath);
-      console.log('execPath: ' + execPath);
-//pathname: path.join(execPath, 'resources/default_app.asar/index.html'),
-// pathname: path.join(__dirname, 'resources/app.asar/build/index.html'),
+      // pathname: path.join(execPath, 'resources/default_app.asar/index.html'),
+      // pathname: path.join(__dirname, 'resources/app.asar/resource/index.html'),
+      
       windows[windowName].window.loadURL(url.format({
-        pathname: 'C:/git/uPtt/client/build/index.html',
+        pathname: path.join(ConfigManager.get('dirPath'), './resource/index.html'),
         protocol: 'file:',
         slashes: true
       }));
@@ -110,7 +106,7 @@ module.exports = {
 	openLogin: function() {
     if (windows['login'].window === null) {
       // 建立 System Tray
-      // tray = new Tray('build/assets/images/uptt.ico')
+      // tray = new Tray('resource/assets/images/uptt.ico')
       // const contextMenu = Menu.buildFromTemplate([
       //   { label: '關於', type: 'normal' },
       //   { label: '結束', type: 'normal', click: function() {
