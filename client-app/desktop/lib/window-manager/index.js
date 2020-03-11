@@ -14,7 +14,7 @@ const app = electron.app;
 const Tray = electron.Tray;
 const Menu = electron.Menu;
 
- /**
+/**
  * Uptt lib
  */
 const ConfigManager = require('../config-manager');
@@ -53,11 +53,6 @@ function openWindow(windowName) {
     const window = windows[windowName];
     if (window.window === null) {
       windows[windowName].window = new BrowserWindow(window.options);
-
-
-      // pathname: path.join(execPath, 'resources/default_app.asar/index.html'),
-      // pathname: path.join(__dirname, 'resources/app.asar/resource/index.html'),
-      
       windows[windowName].window.loadURL(url.format({
         pathname: path.join(ConfigManager.get('dirPath'), './resource/index.html'),
         protocol: 'file:',
@@ -106,16 +101,16 @@ module.exports = {
 	openLogin: function() {
     if (windows['login'].window === null) {
       // 建立 System Tray
-      // tray = new Tray('resource/assets/images/uptt.ico')
-      // const contextMenu = Menu.buildFromTemplate([
-      //   { label: '關於', type: 'normal' },
-      //   { label: '結束', type: 'normal', click: function() {
-      //     app.isQuiting = true;
-      //     app.quit();
-      //   } }
-      // ]);
-      // tray.setToolTip('uPtt');
-      // tray.setContextMenu(contextMenu);
+      tray = new Tray('resource/assets/images/uptt.ico')
+      const contextMenu = Menu.buildFromTemplate([
+        { label: '關於', type: 'normal' },
+        { label: '結束', type: 'normal', click: function() {
+          app.isQuiting = true;
+          app.quit();
+        } }
+      ]);
+      tray.setToolTip('uPtt');
+      tray.setContextMenu(contextMenu);
     }
 		openWindow('login');
   }

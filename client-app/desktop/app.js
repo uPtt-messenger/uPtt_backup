@@ -19,10 +19,6 @@ const DEBUG_MODE = true;
 
 module.exports = function() {
   logger.debug('uptt-client start');
-  // Start the app window
-
-  logger.debug('__dirname');
-  logger.debug(__dirname);
 
   ConfigManager.init();
 
