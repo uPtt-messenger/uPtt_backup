@@ -13,7 +13,7 @@ let config = new Map();
 module.exports = {
   init: function() {
     let dirPath = __dirname;
-    dirPath = dirPath.substring(0, dirPath.indexOf('desktop'));
+    dirPath = dirPath.substring(0, dirPath.indexOf('src'));
     this.add('dirPath', dirPath);
     console.log(config);
     //  console.log('dirPath', path.join(dirPath, './resource/index.html'),);
