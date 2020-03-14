@@ -1,9 +1,10 @@
+import os
 import base64
 
-from Crypto.Cipher import AES
-from Crypto.Random import get_random_bytes
+from pyaes import *
 
 from msg import Msg
+
 
 # https://pycryptodome.readthedocs.io/en/latest/src/introduction.html
 # key = get_random_bytes(32)
@@ -17,58 +18,52 @@ from msg import Msg
 
 
 def gen_key():
-    aes_key = get_random_bytes(32)
+    aes_key = os.urandom(32)
     aes_key = base64.b64encode(aes_key).decode('utf8')
+
     return aes_key
 
-def encrypt(key, data):
-    encrypt_cipher = AES.new(base64.b64decode(key), AES.MODE_EAX)
-    cipher_text, tag = encrypt_cipher.encrypt_and_digest(data.encode())
 
+def encrypt(key, data):
+    aes = AESModeOfOperationCTR(base64.b64decode(key))
+
+    cipher_text = aes.encrypt(data.encode('utf8'))
     cipher_text = base64.b64encode(cipher_text).decode('utf8')
-    tag = base64.b64encode(tag).decode('utf8')
-    nonce = base64.b64encode(encrypt_cipher.nonce).decode('utf8')
 
     encrypt_msg = Msg()
     encrypt_msg.add(Msg.key_cipher_text, cipher_text)
-    encrypt_msg.add(Msg.key_cipher_tag, tag)
-    encrypt_msg.add(Msg.key_cipher_nonce, nonce)
 
     return encrypt_msg
-
 
 def decrypt(key, encrypt_msg):
     key = base64.b64decode(key.encode('utf8'))
 
     cipher_text = base64.b64decode(
         encrypt_msg.data[Msg.key_cipher_text].encode('utf8'))
-    tag = base64.b64decode(
-        encrypt_msg.data[Msg.key_cipher_tag].encode('utf8'))
-    nonce = base64.b64decode(
-        encrypt_msg.data[Msg.key_cipher_nonce].encode('utf8'))
 
-    cipher = AES.new(key, AES.MODE_EAX, nonce)
-    data = cipher.decrypt_and_verify(cipher_text, tag).decode('utf8')
+    aes = AESModeOfOperationCTR(key)
+    data = aes.decrypt(cipher_text)
 
+    data = data.decode()
     return data
 
+
 if __name__ == '__main__':
-    data = 'test string 123'
+    data = 'test string 123 ' * 5
 
-    key = gen_key()
-    print(f'key [{key}]')
+    # key = gen_key()
+    # print(f'key [{key}]')
+    #
+    # encrypt_msg = encrypt(key, data)
+    # print(f'cipher_text [{encrypt_msg.data[Msg.key_cipher_text]}]')
 
-    encrypt_msg = encrypt(key, data)
-    print(f'cipher_text [{encrypt_msg.data[Msg.key_cipher_text]}]')
-    print(f'tag [{encrypt_msg.data[Msg.key_cipher_tag]}]')
-    print(f'nonce [{encrypt_msg.data[Msg.key_cipher_nonce]}]')
+    key = 'Jz0pa88iMsYoTYI2T/9EK1SEoCBCWQQOBaplzDOkv6w='
+    cipher_text = 'eD7W6lJ7oJvQ22F4Ovf2jRi5Lbu2K4qIjHIxHy5c66mSAUcorWmTWgm3gt0ILlk4fuT5cBi1RFdW7mej4dAiTK3o29XAbj4wJudz5ECE4X0='
 
-    # key = 'TPf9VIM2UkNUO3FWeRrrfSGT/GOuF0SHCMlyw2U7f9U='
-    # cipher_text = 'glVma7g8mnvhq5JZRoHJ'
-    # tag = 'ZpcE+OWzlNqylnPxmREtWA=='
-    # nonce = 'gRcqgW/B1n2HgZlCbjfdFg=='
+    encrypt_msg = Msg()
+    encrypt_msg.add(Msg.key_cipher_text, cipher_text)
 
     data2 = decrypt(key, encrypt_msg)
-
     print(data2)
-
+    data2 = decrypt(key, encrypt_msg)
+    print(data2)
