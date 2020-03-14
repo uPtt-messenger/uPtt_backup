@@ -6,7 +6,6 @@ const path = require('path');
 const { map } = require('rxjs/operators');
 // const { webSocket } = require('rxjs/webSocket');
 // const { WebSocketSubject } = require('rxjs/webSocket');
-const logger = require('./desktop/lib/log-manager');
 
 // (global).WebSocket = require('ws');
 // let publicWs = null;
@@ -151,8 +150,7 @@ function createWindow () {
     }
   })
 
-  logger.debug('test __dirname:' + path.join(__dirname, './resource/index.html'));
-
+ 
   // and load the index.html of the app.
   win.loadURL(url.format({
     pathname: path.join(__dirname, './resource/index.html'),
