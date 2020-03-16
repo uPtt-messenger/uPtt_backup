@@ -2,12 +2,16 @@
   "name": "uptt-client-desktop",
   "version": "1.0.0",
   "description": "",
-  "main": "dist/index.bundle.js",
+  "main": "src/index.js",
   "scripts": {
     "start": "electron .",
     "webpack": "webpack",
-    "build": "electron-builder --win --x64",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "electron-build": "electron-builder --win --x64",
+
+    "build": "tsc",
+    "watch": "tsc -w",
+    "lint": "tslint -c tslint.json -p tsconfig.json",
+    "start": "npm run build && electron ./dist/main.js"
   },
   "author": "doreen",
   "license": "ISC",
@@ -31,12 +35,18 @@
       ]
     }
   },
+  "keywords": [
+    "ptt",
+    "uptt"
+  ],
   "dependencies": {
-    "electron": "^8.0.3",
-    "electron-log": "^4.0.7",
-    "rxjs": "^6.4.0"
+    "rxjs": "^6.4.0",
+    "electron-log": "^4.0.7"
   },
   "devDependencies": {
+    "electron": "^8.0.3",
+    "tslint": "^5.19.0",
+    "typescript": "^3.6.0",
     "electron-builder": "^22.4.0",
     "webpack": "^4.42.0",
     "webpack-cli": "^3.3.11"
