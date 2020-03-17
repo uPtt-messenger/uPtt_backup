@@ -71,6 +71,7 @@ class DynamicData:
         self.tag_list = self.data['tag']
         self.black_list = self.data['black_list']
         self.announce = self.data['announce']
+        self.online_server = self.data['online_server']
 
         log.show_value(
             'DynamicData',
@@ -111,5 +112,10 @@ class DynamicData:
             log.show(
                 'DynamicData',
                 log.level.INFO,
-                '無黑名單'
-            )
+                '無黑名單')
+
+        log.show_value(
+            'DynamicData',
+            log.level.INFO,
+            'online_server',
+            self.online_server)

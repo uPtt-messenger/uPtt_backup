@@ -79,17 +79,13 @@ class Command:
             log.show(
                 'command',
                 log.level.INFO,
-                '執行登出程序'
-            )
-
+                '執行登出程序')
             for e in self.console.event.logout:
                 e()
-
             log.show(
                 'command',
                 log.level.INFO,
-                '登出程序全數完成'
-            )
+                '登出程序全數完成')
 
         elif opt == 'close':
             log.show(

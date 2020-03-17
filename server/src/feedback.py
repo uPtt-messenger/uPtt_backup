@@ -46,8 +46,7 @@ class Feedback:
             log.show(
                 'Feedback',
                 log.level.INFO,
-                '更新上線狀態'
-            )
+                '更新上線狀態')
 
             start_time = end_time = time.time()
             while end_time - start_time < self.console.config.feedback_frequency:

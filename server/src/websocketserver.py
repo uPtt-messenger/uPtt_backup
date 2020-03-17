@@ -74,20 +74,17 @@ async def producer_handler(ws, path):
     global command
 
     while run_session:
-        if len(command.push_msg) != 0:
-            while len(command.push_msg) != 0:
-                push_msg = command.push_msg.pop()
+        while command.push_msg:
+            push_msg = command.push_msg.pop()
 
-                print(f'push [{push_msg}]')
-                try:
-                    await ws.send(push_msg)
-                except websockets.exceptions.ConnectionClosedOK:
-                    print(f'push fail')
-                    break
-        else:
-            # print(f'asyncio.sleep')
-            # No
-            await asyncio.sleep(0.1)
+            print(f'push [{push_msg}]')
+            try:
+                await ws.send(push_msg)
+            except websockets.exceptions.ConnectionClosedOK:
+                print(f'push fail')
+                break
+        await asyncio.sleep(0.1)
+
 
 
 async def handler(websocket, path):

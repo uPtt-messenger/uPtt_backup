@@ -115,16 +115,12 @@ class PTT_Adapter:
             log_level=self.console.config.ptt_log_level
             # log_level=PTT.log.level.TRACE
         )
-        print(-1)
         while self.run_server:
-            print(-1.1)
             # 快速反應區
             start_time = end_time = time.time()
             while end_time - start_time < self.console.config.query_cycle:
 
-                print(-1.2)
                 if not self.run_server:
-                    print(-1.3)
                     break
 
                 if (self.ptt_id, self.ptt_pw) != (None, None):
@@ -187,7 +183,6 @@ class PTT_Adapter:
                     self.ptt_id = None
                     self.ptt_pw = None
 
-                print(0)
                 if self.login:
 
                     if self.recv_logout:
@@ -209,12 +204,9 @@ class PTT_Adapter:
 
                         self.init_bot()
 
-                    print('1')
                     if self.send_waterball:
-                        print('2')
-                        print(len(self.send_waterball_list))
+
                         while self.send_waterball_list:
-                            print('3')
                             waterball_id, waterball_content = self.send_waterball_list.pop()
 
                             try:
@@ -363,9 +355,7 @@ class PTT_Adapter:
 
                     self.console.command.push(push_msg)
 
-            print(7)
             new_mail = self.bot.has_new_mail()
-            print(8)
             log.show(
                 'PTTAdapter',
                 log.level.INFO,
@@ -381,3 +371,8 @@ class PTT_Adapter:
                 self.console.command.push(push_msg)
             else:
                 self.has_new_mail = False
+
+        log.show(
+            'PTTAdapter',
+            log.level.INFO,
+            '關閉成功')
