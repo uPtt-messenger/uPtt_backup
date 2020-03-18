@@ -1,33 +1,28 @@
-'use strict';
-
-/**
- * Dependencies
- */
-const electron = require( 'electron' );
-const app = electron.app;
-
- /**
- * Uptt lib
- */
-const logger = require('./lib/log-manager');
-const WindowManager = require('./lib/window-manager');
-const ConfigManager = require('./lib/config-manager');
+import { app } from 'electron';
+import { LogManager } from './lib/log-manager';
+import { ConfigManager } from './lib/config-manager';
+import { WindowManager } from './lib/window-manager';
 
 const DEBUG_MODE = true;
-// Keep a global reference of the window object, if you don't, the window will
-// be closed automatically when the JavaScript object is garbage collected.
 
-module.exports = function() {
-  logger.debug('uptt-client start');
+export class App {
 
-  ConfigManager.init();
+  constructor(
+      private logger: LogManager,
+      private configManager: ConfigManager,
+      private windowManager: WindowManager) {
 
-  if ( app.isReady() ) {
-    // TODO:
-  } else {
-    app.on('ready', function() {
-      console.log('app ready');
-      WindowManager.openLogin()
-    });
+    this.logger.debug('uptt-client start');
+    this.configManager.init();
+
+    if ( app.isReady() ) {
+      // TODO:
+    } else {
+      app.on('ready', () => {
+        console.log('app ready');
+        this.windowManager.openLogin();
+      });
+    }
   }
-};
+
+}
