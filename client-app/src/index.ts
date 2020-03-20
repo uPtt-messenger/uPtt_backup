@@ -8,3 +8,4 @@ const configManager = new ConfigManager();
 const windowManager = new WindowManager(configManager);
 
 const upttClient = new App(logger, configManager, windowManager);
+upttClient.start();

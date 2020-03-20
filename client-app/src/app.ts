@@ -14,7 +14,9 @@ export class App {
 
     this.logger.debug('uptt-client start');
     this.configManager.init();
+  }
 
+  public start(): void {
     if ( app.isReady() ) {
       // TODO:
     } else {
