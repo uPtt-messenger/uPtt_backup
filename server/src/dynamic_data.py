@@ -57,8 +57,12 @@ class DynamicData:
             log.level.INFO,
             '開始更新資料'
         )
-        with urllib.request.urlopen(
-                "https://raw.githubusercontent.com/PttCodingMan/uPtt_open_data/master/open_data.json") as url:
+
+        if self.console.run_mode == 'dev':
+            update_url = 'https://raw.githubusercontent.com/PttCodingMan/uPtt/develop/data/open_data.json'
+        elif self.console.run_mode == 'release':
+            update_url = 'https://raw.githubusercontent.com/PttCodingMan/uPtt/master/data/open_data.json'
+        with urllib.request.urlopen(update_url) as url:
             self.data = json.loads(url.read().decode())
 
         log.show(
