@@ -3,6 +3,7 @@ import * as path from 'path';
 import * as url from 'url';
 import { ConfigManager } from '../config-manager';
 import { WindowItem } from './window-item';
+import { LogManager } from '../log-manager';
 
 const DEBUG_MODE = true;
 
@@ -23,7 +24,7 @@ export class WindowManager {
     {
       name: 'login',
       url: './resource/index.html',
-      window: '',
+      window: null,
       options: {
         width: 400,
         height: 700,
@@ -36,11 +37,12 @@ export class WindowManager {
     }
   ];
 
-  constructor(private configManager: ConfigManager) { }
+  constructor(private logger: LogManager, private configManager: ConfigManager) { }
 
   public openLogin(): void {
     const loginWindow = this.windowPool.find((item) => item.name === 'login');
     if (loginWindow) {
+      this.logger.debug('create tray');
       // 建立 System Tray
       tray = new Tray('resource/assets/images/uptt.ico');
       const contextMenu = Menu.buildFromTemplate([
@@ -57,6 +59,7 @@ export class WindowManager {
       tray.setToolTip('uPtt');
       tray.setContextMenu(contextMenu);
     }
+    this.logger.debug('open window');
     this.openWindow('login');
   }
 
@@ -65,6 +68,7 @@ export class WindowManager {
       const windowItem = this.windowPool.find((item) => item.name === windowName);
       if (windowItem) {
         if (windowItem.window === null) {
+          this.logger.debug(`window ${windowName} is null.`);
           windowItem.window = new BrowserWindow(windowItem.options);
           windowItem.window.loadURL(url.format({
             pathname: path.join(this.configManager.get('dirPath'), './resource/index.html'),
@@ -103,6 +107,7 @@ export class WindowManager {
             return false;
           });
         } else {
+          this.logger.debug(`window ${windowName} is exist.`);
           windowItem.window.show();
         }
       }

@@ -5,7 +5,7 @@ import { WindowManager } from './lib/window-manager';
 
 const logger = new LogManager();
 const configManager = new ConfigManager();
-const windowManager = new WindowManager(configManager);
+const windowManager = new WindowManager(logger, configManager);
 
 const upttClient = new App(logger, configManager, windowManager);
 upttClient.start();

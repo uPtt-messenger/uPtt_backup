@@ -21,7 +21,7 @@ export class App {
       // TODO:
     } else {
       app.on('ready', () => {
-        console.log('app ready');
+        this.logger.debug('app ready');
         this.windowManager.openLogin();
       });
     }
