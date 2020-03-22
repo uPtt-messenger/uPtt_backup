@@ -39,6 +39,9 @@ if __name__ == '__main__':
 
     config_obj = Config()
 
+    console_obj = Console()
+    console_obj.config = config_obj
+
     log.show_value(
         'Main',
         log.level.INFO,
@@ -46,8 +49,25 @@ if __name__ == '__main__':
         config_obj.version
     )
 
-    console_obj = Console()
-    console_obj.config = config_obj
+    if len(sys.argv) > 1:
+        print(sys.argv)
+
+    if '-debug' in sys.argv or '-trace' in sys.argv:
+        log.Handler = log_to_file
+        config_obj.LogHandler = log_to_file
+
+    if '-trace' in sys.argv:
+        config_obj.LogHandler = log.level.TRACE
+
+    if '-dev' in sys.argv:
+        console_obj.run_mode = 'dev'
+
+    log.show_value(
+        'Main',
+        log.level.INFO,
+        '執行模式',
+        console_obj.run_mode
+    )
 
     event_console = EventConsole()
     console_obj.event = event_console
@@ -59,16 +79,6 @@ if __name__ == '__main__':
     console_obj.command = comm_obj
 
     black_list = BlackList(console_obj)
-
-    if len(sys.argv) > 1:
-        print(sys.argv)
-
-    if '-debug' in sys.argv or '-trace' in sys.argv:
-        log.Handler = log_to_file
-        config_obj.LogHandler = log_to_file
-
-    if '-trace' in sys.argv:
-        config_obj.LogHandler = log.level.TRACE
 
     feedback = Feedback(console_obj)
     ptt_adapter = PTT_Adapter(console_obj)
