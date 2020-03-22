@@ -3,8 +3,6 @@ import { LogManager } from './lib/log-manager';
 import { ConfigManager } from './lib/config-manager';
 import { WindowManager } from './lib/window-manager';
 
-const DEBUG_MODE = true;
-
 export class App {
 
   constructor(

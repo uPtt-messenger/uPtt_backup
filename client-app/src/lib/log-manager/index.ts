@@ -2,30 +2,44 @@ import log from 'electron-log';
 
 export class LogManager {
 
+  private DEBUG_MODE = true;
+
   constructor() {}
 
   public error(logContent: string): void {
-    log.error(logContent);
+    if (this.DEBUG_MODE) {
+      log.error(logContent);
+    }
   }
 
   public warn(logContent: string): void {
-    log.warn(logContent);
+    if (this.DEBUG_MODE) {
+      log.warn(logContent);
+    }
   }
 
   public info(logContent: string): void {
-    log.info(logContent);
+    if (this.DEBUG_MODE) {
+      log.info(logContent);
+    }
   }
 
   public verbose(logContent: string): void {
-    log.verbose(logContent);
+    if (this.DEBUG_MODE) {
+      log.verbose(logContent);
+    }
   }
 
   public debug(logContent: string): void {
-    log.debug(logContent);
+    if (this.DEBUG_MODE) {
+      log.debug(logContent);
+    }
   }
 
   public silly(logContent: string): void {
-    log.silly(logContent);
+    if (this.DEBUG_MODE) {
+      log.silly(logContent);
+    }
   }
 
 }
