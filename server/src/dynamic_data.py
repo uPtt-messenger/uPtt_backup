@@ -4,10 +4,11 @@ import threading
 import time
 
 import log
+from config import Config
 
 
 class DynamicData:
-    def __init__(self, console_obj):
+    def __init__(self, console_obj, run=True):
         self.console = console_obj
         self.console.event.close.append(self.event_close)
 
@@ -15,11 +16,12 @@ class DynamicData:
 
         self.update()
 
-        self.update_thread = threading.Thread(
-            target=self.run,
-            daemon=True)
+        if run:
+            self.update_thread = threading.Thread(
+                target=self.run,
+                daemon=True)
 
-        self.update_thread.start()
+            self.update_thread.start()
 
     def event_close(self):
 
@@ -71,6 +73,8 @@ class DynamicData:
             '更新資料完成'
         )
 
+        if self.data['version'] != self.version:
+            self.console.config.set_value(Config.key_version, self.data['version'])
         self.version = self.data['version']
         self.tag_list = self.data['tag']
         self.black_list = self.data['black_list']

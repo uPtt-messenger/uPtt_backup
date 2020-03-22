@@ -7,8 +7,8 @@ LogPath = None
 
 
 class Config:
-
     key_aes_key = 'aes_key'
+    key_version = 'version'
 
     version = '0.0.1'
     quick_response_time = 0.05
@@ -91,10 +91,20 @@ class Config:
 
     def set_value(self, key, value):
 
+        value_change = False
         if value is not None:
+            if key not in self.user_data:
+                value_change = True
+            elif self.user_data[key] != value:
+                value_change = True
+
             self.user_data[key] = value
         elif key in self.user_data:
+            # value is None
+            if key in self.user_data:
+                value_change = True
             del self.user_data[key]
 
-        with open(self.user_config_path, 'w', encoding='utf8') as File:
-            json.dump(self.user_data, File, indent=4, ensure_ascii=False)
+        if value_change:
+            with open(self.user_config_path, 'w', encoding='utf8') as f:
+                json.dump(self.user_data, f, indent=4, ensure_ascii=False)
