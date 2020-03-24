@@ -1,12 +1,46 @@
-import os
 import json
+import os
 
 import log
 
 LogPath = None
 
 
+def get_value_func(data, key):
+    if key not in data:
+        return None
+    return data[key]
+
+
+def set_value_func(data, key, value):
+    value_change = False
+    if value is not None:
+        if key not in data:
+            value_change = True
+        elif data[key] != value:
+            value_change = True
+
+        data[key] = value
+    elif key in data:
+        # value is None
+        if key in data:
+            value_change = True
+        del data[key]
+
+    return value_change
+
+
+def write_config(path, data):
+    if path is None or data is None:
+        return
+    with open(path, 'w', encoding='utf8') as f:
+        json.dump(data, f, indent=4, ensure_ascii=False)
+
+
 class Config:
+    level_USER = 0
+    level_SYSTEM = 1
+
     key_aes_key = 'aes_key'
     key_version = 'version'
 
@@ -52,7 +86,7 @@ class Config:
                 self.system_data = json.load(f)
         except FileNotFoundError:
             self.system_data = dict()
-            
+            self.set_value(self.level_SYSTEM, self.key_version, self.version)
 
         self.user_data = dict()
         self.id = None
@@ -91,28 +125,25 @@ class Config:
         except FileNotFoundError:
             pass
 
-    def get_value(self, key):
+    def get_value(self, level, key):
 
-        if key not in self.user_data:
-            return None
-        return self.user_data[key]
+        if level == self.level_SYSTEM:
+            return get_value_func(self.system_data, key)
+        elif level == self.level_USER:
+            return get_value_func(self.user_data, key)
+        else:
+            raise ValueError()
 
-    def set_value(self, key, value):
+    def set_value(self, level, key, value):
 
-        value_change = False
-        if value is not None:
-            if key not in self.user_data:
-                value_change = True
-            elif self.user_data[key] != value:
-                value_change = True
+        if level == self.level_SYSTEM:
+            value_change = set_value_func(self.system_data, key, value)
+            if value_change:
+                write_config(self.system_config_path, self.system_data)
 
-            self.user_data[key] = value
-        elif key in self.user_data:
-            # value is None
-            if key in self.user_data:
-                value_change = True
-            del self.user_data[key]
-
-        if value_change:
-            with open(self.user_config_path, 'w', encoding='utf8') as f:
-                json.dump(self.user_data, f, indent=4, ensure_ascii=False)
+        elif level == self.level_USER:
+            value_change = set_value_func(self.user_data, key, value)
+            if value_change:
+                write_config(self.user_config_path, self.user_data)
+        else:
+            raise ValueError()

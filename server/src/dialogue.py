@@ -19,7 +19,7 @@ class Dialogue:
             os.makedirs(self.path)
             self.aes_key = None
         else:
-            self.aes_key = self.console.config.get_value(Config.key_aes_key)
+            self.aes_key = self.console.config.get_value(Config.level_USER, Config.key_aes_key)
 
             log.show_value(
                 'Dialogue',
@@ -107,10 +107,10 @@ class Dialogue:
         current_path = f'{self.path}/{file_name}'
 
         if self.aes_key is None:
-            self.aes_key = self.console.config.get_value(Config.key_aes_key)
+            self.aes_key = self.console.config.get_value(Config.level_USER, Config.key_aes_key)
             if self.aes_key is None:
                 self.aes_key = aes.gen_key()
-                self.console.config.set_value(Config.key_aes_key, self.aes_key)
+                self.console.config.set_value(Config.level_USER, Config.key_aes_key, self.aes_key)
 
         encrypt_msg = aes.encrypt(self.aes_key, str(current_msg))
 

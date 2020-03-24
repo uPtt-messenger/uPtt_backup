@@ -162,6 +162,17 @@ class PTT_Adapter:
 
                         self.res_msg.add(Msg.key_payload, payload)
 
+                        log.show(
+                            'PTTAdapter',
+                            log.level.INFO,
+                            '執行登入成功程序')
+                        for e in self.console.event.login_success:
+                            e()
+                        log.show(
+                            'PTTAdapter',
+                            log.level.INFO,
+                            '登入成功程序全數完成')
+
                     except PTT.exceptions.LoginError:
                         self.res_msg = Msg(
                             operate=Msg.key_login,

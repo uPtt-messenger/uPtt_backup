@@ -1,7 +1,7 @@
 import json
-import urllib.request
 import threading
 import time
+import urllib.request
 
 import log
 from config import Config
@@ -73,8 +73,8 @@ class DynamicData:
             '更新資料完成'
         )
 
-        if self.data['version'] != self.version:
-            self.console.config.set_value(Config.key_version, self.data['version'])
+        self.console.config.set_value(Config.level_USER, Config.key_version, self.data['version'])
+
         self.version = self.data['version']
         self.tag_list = self.data['tag']
         self.black_list = self.data['black_list']
