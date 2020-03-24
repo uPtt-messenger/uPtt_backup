@@ -4,14 +4,13 @@
   "description": "",
   "main": "src/index.js",
   "scripts": {
-    "start": "electron .",
+    "des-start": "electron .",
     "webpack": "webpack",
-    "electron-build": "electron-builder --win --x64",
-
+    "des-electron-build": "electron-builder --win --x64",
     "build": "tsc",
     "watch": "tsc -w",
     "lint": "tslint -c tslint.json -p tsconfig.json",
-    "start": "npm run build && electron ./dist/main.js"
+    "start": "npm run build && electron ./dist/index.js"
   },
   "author": "doreen",
   "license": "ISC",
