@@ -41,10 +41,18 @@ class Config:
             )
             self.config_path = 'C:/ProgramData/uPtt'
 
+        self.system_config_path = f'{self.config_path}/{self.config_file_name}'
         self.user_config_path = None
 
         if not os.path.exists(self.config_path):
             os.makedirs(self.config_path)
+
+        try:
+            with open(self.system_config_path, encoding='utf8') as f:
+                self.system_data = json.load(f)
+        except FileNotFoundError:
+            self.system_data = dict()
+            
 
         self.user_data = dict()
         self.id = None
