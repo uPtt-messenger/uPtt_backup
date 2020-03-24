@@ -3,8 +3,6 @@ import os
 
 import log
 
-LogPath = None
-
 
 def get_value_func(data, key):
     if key not in data:
@@ -61,7 +59,7 @@ class Config:
         # 想給使用者改的就透過 setValue
         # 因為會被存起來
 
-        self.config_file_name = 'config.txt'
+        self.config_file_name = 'config.json'
         self.friend_file_name = 'friend.txt'
 
         self.config_path = None

@@ -117,8 +117,7 @@ if __name__ == '__main__':
     log.show(
         'Main',
         log.level.INFO,
-        '執行最終終止程序'
-    )
+        '執行最終終止程序')
 
     running = threading.Event()
     running.set()
