@@ -7,6 +7,7 @@ cd ..
 
 rem pyinstaller -w --onefile --icon="..\client\src\assets\images\uptt.ico" .\src\uPtt.py
 pyinstaller -w --onefile .\src\uPtt.py
+pyinstaller -w --onefile .\src\uLauncher.py
 
 IF EXIST "dist\uPtt.exe" (
   REM Do one thing
