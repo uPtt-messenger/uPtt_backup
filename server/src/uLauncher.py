@@ -1,3 +1,4 @@
+import os
 from io import BytesIO
 import zipfile
 from urllib.request import urlopen
@@ -52,6 +53,4 @@ if version_compare_result < 0 or not file_exist:
     zip_file = zipfile.ZipFile(BytesIO(resp.read()))
     zip_file.extractall(path=config_obj.config_path)
 
-# resp = urlopen(url)
-# zipfile = ZipFile(BytesIO(resp.read()))
-# print(zipfile.namelist())
+os.startfile(f'{config_obj.config_path}/uPtt.exe')
