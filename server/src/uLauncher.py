@@ -22,13 +22,13 @@ console_obj.event = event_console
 dynamic_data_obj = DynamicData(console_obj, run=False)
 
 log.show_value(
-    'Launcher',
+    'uLauncher',
     log.level.INFO,
     'Local version',
     config_obj.version)
 
 log.show_value(
-    'Launcher',
+    'uLauncher',
     log.level.INFO,
     'Dynamic version',
     dynamic_data_obj.data['version'])
@@ -42,12 +42,12 @@ file_exist = Path(f'{config_obj.config_path}/uPtt.exe').is_file()
 if version_compare_result < 0 or not file_exist:
     url = 'https://github.com/PttCodingMan/uPtt/raw/develop/server/package/uPtt.zip'
     log.show(
-        'Launcher',
+        'uLauncher',
         log.level.INFO,
         '開始更新')
     resp = urlopen(url)
     log.show(
-        'Launcher',
+        'uLauncher',
         log.level.INFO,
         '更新完成')
     zip_file = zipfile.ZipFile(BytesIO(resp.read()))
