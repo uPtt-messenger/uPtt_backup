@@ -9,7 +9,6 @@ __pycache__/
 # Distribution / packaging
 .Python
 develop-eggs/
-dist/
 downloads/
 eggs/
 .eggs/
@@ -112,3 +111,4 @@ build/
 
 .idea/
 */account*.txt
+*.exe
