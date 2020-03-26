@@ -9,5 +9,5 @@ const configManager = new ConfigManager();
 const windowManager = new WindowManager(logger, configManager);
 const ipcEventManager = new IpcEventManager(logger);
 
-const upttClient = new App(logger, configManager, windowManager);
+const upttClient = new App(logger, configManager, windowManager, ipcEventManager);
 upttClient.start();
