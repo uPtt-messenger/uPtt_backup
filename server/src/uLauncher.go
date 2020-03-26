@@ -118,10 +118,10 @@ func main() {
 		}
 	}
 
-	cmd := exec.Command("cmd.exe", "/c", "start C:/ProgramData/uPtt/uPtt.exe")
+	cmd := exec.Command("cmd.exe", "/C", "C:\\ProgramData\\uPtt\\uPtt.exe")
 	fmt.Println("Starting command")
 
-	cmd.Run()
+	cmd.Start()
 	fmt.Println("DONE")
 }
 

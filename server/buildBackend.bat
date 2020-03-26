@@ -5,9 +5,11 @@ cd dist
 del /f uPtt.exe
 cd ..
 
+rem nuitka --windows-disable-console --recurse-all src/uPtt.py
+
 rem pyinstaller -w --onefile --icon="..\client\src\assets\images\uptt.ico" .\src\uPtt.py
-pyinstaller --onefile .\src\uPtt.py
-REM pyinstaller -w --onefile .\src\uLauncher.py
+pyinstaller -w --onefile .\src\uPtt.py
+rem pyinstaller -w --onefile .\src\uLauncher.py
 
 IF EXIST "dist\uPtt.exe" (
   REM Do one thing
