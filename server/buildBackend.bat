@@ -19,6 +19,8 @@ IF EXIST "uPtt.exe" (
 )
 
 nuitka --windows-disable-console --recurse-all src/uLauncher.py
+signtool sign /a /tr http://timestamp.comodoca.com uLauncher.exe
+rem signtool sign /as /tr http://timestamp.comodoca.com /td sha256 /fd sha256 uLauncher.exe
 
 IF EXIST "uLauncher.exe" (
   REM Do one thing
