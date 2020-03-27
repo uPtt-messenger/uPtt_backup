@@ -27,10 +27,7 @@ IF EXIST "uLauncher.exe" (
     goto end
 )
 
-
-cd dist
 python zip.py
-cd ..
 
 move uPtt.zip package
 move uLauncher.zip package
