@@ -13,9 +13,9 @@ def unzip(output_path, zip_file):
         z.extractall(path=output_path)
 
 
-files = [
-    './uPtt.exe'
-]
-
+files = ['./uPtt.exe']
 zip_files('./uPtt.zip', files)
-unzip('./output/', './uPtt.zip')
+
+files = ['./uLauncher.exe']
+zip_files('./uLauncher.zip', files)
+# unzip('./output/', './uPtt.zip')
