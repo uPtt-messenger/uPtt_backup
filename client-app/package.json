@@ -39,8 +39,9 @@
     "uptt"
   ],
   "dependencies": {
+    "electron-log": "^4.0.7",
     "rxjs": "^6.4.0",
-    "electron-log": "^4.0.7"
+    "ws": "^7.2.3"
   },
   "devDependencies": {
     "electron": "^8.0.3",

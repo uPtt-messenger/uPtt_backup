@@ -2,6 +2,7 @@ import { LogManager } from '../log-manager';
 import { ipcMain } from 'electron';
 import { map } from 'rxjs/operators';
 import { webSocket, WebSocketSubject } from 'rxjs/webSocket';
+(global as any).WebSocket = require('ws');
 
 export class IpcEventManager {
 
@@ -12,8 +13,8 @@ export class IpcEventManager {
     }
 
     public initPublic(): void {
-        ipcMain.on('login-success', (event, data) => {
-            this.logger.debug('event: login-success');
+        ipcMain.on('login', (event, data) => {
+            this.logger.debug('event: login');
             this.logger.debug(data);
             this.publicWs.multiplex(
                 () => ({ operation: 'login', payload: { pttId: data.pttId, pwd: data.pwd } }),
@@ -22,9 +23,10 @@ export class IpcEventManager {
             ).pipe(
                 map((resp: any) => {
                     event.reply('login-resp', resp);
+                    this.logger.debug('login-resp: ' + data);
                     if (resp.code === 0) {
-                        upttData.user.pttId = data.pttId;
-                        upttData.user.token = resp.payload.token;
+                        // upttData.user.pttId = data.pttId;
+                        // upttData.user.token = resp.payload.token;
                     }
                     //  else {
                     //   throw resp;
