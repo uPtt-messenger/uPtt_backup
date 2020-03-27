@@ -2,6 +2,7 @@
 cls
 
 del /f uPtt.exe
+del /f uLauncher.exe
 
 rem nuitka --windows-disable-console --recurse-all src/uPtt.py
 
