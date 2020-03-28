@@ -1,4 +1,5 @@
-import os
+from sys import argv
+from os import startfile
 from io import BytesIO
 import zipfile
 from urllib.request import urlopen
@@ -53,4 +54,15 @@ if version_compare_result < 0 or not file_exist:
     zip_file = zipfile.ZipFile(BytesIO(resp.read()))
     zip_file.extractall(path=config_obj.config_path)
 
-os.startfile(f'{config_obj.config_path}/uPtt.exe')
+a = ''
+if len(argv) > 1:
+    print(argv)
+    a = ' ' + ' '.join(argv[1:])
+
+    process = argv.copy()
+    process[0] = f'{config_obj.config_path}/uPtt.exe'
+
+import subprocess
+subprocess.Popen(process)
+
+# startfile(f'{config_obj.config_path}/uPtt.exe{a}')
