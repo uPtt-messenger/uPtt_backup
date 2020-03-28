@@ -98,6 +98,7 @@ venv.bak/
 # mkdocs documentation
 /site
 
+
 # mypy
 .mypy_cache/
 *.autosave
@@ -112,3 +113,5 @@ build/
 .idea/
 */account*.txt
 *.exe
+dist/
+*.build/
