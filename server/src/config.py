@@ -71,7 +71,8 @@ class Config:
                 '作業系統',
                 'Windows'
             )
-            self.config_path = 'C:/ProgramData/uPtt'
+
+        self.config_path = os.path.abspath(os.getcwd())
 
         self.system_config_path = f'{self.config_path}/{self.config_file_name}'
         self.user_config_path = None

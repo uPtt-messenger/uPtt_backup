@@ -1,4 +1,5 @@
 from zipfile import ZipFile, ZIP_DEFLATED
+import sys
 
 
 def zip_files(output_path, files):
@@ -13,9 +14,20 @@ def unzip(output_path, zip_file):
         z.extractall(path=output_path)
 
 
-files = ['./uPtt.exe']
-zip_files('./uPtt.zip', files)
+print(sys.argv)
+if len(sys.argv) != 2:
+    print('python zip.py target_file')
+    sys.exit()
 
-files = ['./uLauncher.exe']
-zip_files('./uLauncher.zip', files)
-# unzip('./output/', './uPtt.zip')
+target_file = sys.argv[1]
+
+files = [target_file]
+file_name = target_file[:target_file.find('.')]
+file_name = f'{file_name}.zip'
+print(file_name)
+
+zip_files(file_name, files)
+#
+# files = ['./uLauncher.exe']
+# zip_files('./uLauncher.zip', files)
+

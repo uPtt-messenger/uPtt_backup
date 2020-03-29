@@ -1,8 +1,10 @@
 from sys import argv
-from os import startfile
+import os
+import sys
 from io import BytesIO
 import zipfile
 from urllib.request import urlopen
+from urllib.error import HTTPError
 from pathlib import Path
 
 import log
@@ -12,10 +14,45 @@ from dynamic_data import DynamicData
 from event import EventConsole
 import util
 
+
+def log_to_file(msg):
+    global LogPath
+    if LogPath is None:
+        desktop = os.path.join(
+            os.path.join(
+                os.environ['USERPROFILE']
+            ),
+            'Desktop'
+        )
+
+        LogPath = f'{desktop}/uPttLog.txt'
+
+        print(LogPath)
+
+    with open(LogPath, 'a', encoding='utf8') as f:
+        f.write(f'{msg}\n')
+
 config_obj = Config()
 
 console_obj = Console()
 console_obj.config = config_obj
+
+if '-debug' in sys.argv or '-trace' in sys.argv:
+    log.Handler = log_to_file
+    config_obj.LogHandler = log_to_file
+
+if '-trace' in sys.argv:
+    config_obj.LogHandler = log.level.TRACE
+
+if '-dev' in sys.argv:
+    console_obj.run_mode = 'dev'
+
+log.show_value(
+    'uPtt',
+    log.level.INFO,
+    '執行模式',
+    console_obj.run_mode
+)
 
 event_console = EventConsole()
 console_obj.event = event_console
@@ -23,13 +60,13 @@ console_obj.event = event_console
 dynamic_data_obj = DynamicData(console_obj, run=False)
 
 log.show_value(
-    'uLauncher',
+    'uPtt',
     log.level.INFO,
     'Local version',
     config_obj.version)
 
 log.show_value(
-    'uLauncher',
+    'uPtt',
     log.level.INFO,
     'Dynamic version',
     dynamic_data_obj.data['version'])
@@ -41,14 +78,26 @@ version_compare_result = util.compare_version(version_local, version_dynamic)
 file_exist = Path(f'{config_obj.config_path}/uPtt.exe').is_file()
 
 if version_compare_result < 0 or not file_exist:
-    url = 'https://github.com/PttCodingMan/uPtt/raw/develop/server/package/uPtt.zip'
+
+    if console_obj.run_mode == 'dev':
+        url = 'https://github.com/PttCodingMan/uPtt/raw/develop/server/package/core.zip'
+    else:
+        url = 'https://github.com/PttCodingMan/uPtt/raw/master/server/package/core.zip'
     log.show(
-        'uLauncher',
+        'uPtt',
         log.level.INFO,
         '開始更新')
-    resp = urlopen(url)
+
+    try:
+        resp = urlopen(url)
+    except HTTPError:
+        log.show(
+            'uPtt',
+            log.level.INFO,
+            '取得 core 檔案失敗')
+        sys.exit()
     log.show(
-        'uLauncher',
+        'uPtt',
         log.level.INFO,
         '更新完成')
     zip_file = zipfile.ZipFile(BytesIO(resp.read()))
@@ -60,9 +109,12 @@ if len(argv) > 1:
     a = ' ' + ' '.join(argv[1:])
 
     process = argv.copy()
-    process[0] = f'{config_obj.config_path}/uPtt.exe'
+    process[0] = f'{config_obj.config_path}/core.exe'
+else:
+    process = []
+    process.append(f'{config_obj.config_path}/core.exe')
 
 import subprocess
-subprocess.Popen(process)
 
-# startfile(f'{config_obj.config_path}/uPtt.exe{a}')
+print(process)
+subprocess.Popen(process)
