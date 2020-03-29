@@ -14,6 +14,8 @@ from dynamic_data import DynamicData
 from event import EventConsole
 import util
 
+LogPath = None
+
 
 def log_to_file(msg):
     global LogPath
@@ -75,7 +77,7 @@ version_local = config_obj.version
 version_dynamic = dynamic_data_obj.data['version']
 
 version_compare_result = util.compare_version(version_local, version_dynamic)
-file_exist = Path(f'{config_obj.config_path}/uPtt.exe').is_file()
+file_exist = Path(f'{config_obj.config_path}/uCore.exe').is_file()
 
 if version_compare_result < 0 or not file_exist:
 

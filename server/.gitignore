@@ -116,3 +116,5 @@ build/
 dist/
 *.build/
 /python36.dll
+*/config.json
+test/
