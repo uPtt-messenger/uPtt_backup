@@ -80,9 +80,9 @@ file_exist = Path(f'{config_obj.config_path}/uPtt.exe').is_file()
 if version_compare_result < 0 or not file_exist:
 
     if console_obj.run_mode == 'dev':
-        url = 'https://github.com/PttCodingMan/uPtt/raw/develop/server/package/core.zip'
+        url = 'https://github.com/PttCodingMan/uPtt/raw/develop/server/package/uCore.zip'
     else:
-        url = 'https://github.com/PttCodingMan/uPtt/raw/master/server/package/core.zip'
+        url = 'https://github.com/PttCodingMan/uPtt/raw/master/server/package/uCore.zip'
     log.show(
         'uPtt',
         log.level.INFO,
@@ -94,7 +94,7 @@ if version_compare_result < 0 or not file_exist:
         log.show(
             'uPtt',
             log.level.INFO,
-            '取得 core 檔案失敗')
+            '取得 uCore 檔案失敗')
         sys.exit()
     log.show(
         'uPtt',
@@ -109,10 +109,10 @@ if len(argv) > 1:
     a = ' ' + ' '.join(argv[1:])
 
     process = argv.copy()
-    process[0] = f'{config_obj.config_path}/core.exe'
+    process[0] = f'{config_obj.config_path}/uCore.exe'
 else:
     process = []
-    process.append(f'{config_obj.config_path}/core.exe')
+    process.append(f'{config_obj.config_path}/uCore.exe')
 
 import subprocess
 

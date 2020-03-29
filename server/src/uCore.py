@@ -43,7 +43,7 @@ if __name__ == '__main__':
     console_obj.config = config_obj
 
     log.show_value(
-        'Core',
+        'uCore',
         log.level.INFO,
         'uPtt 版本',
         config_obj.version
@@ -63,7 +63,7 @@ if __name__ == '__main__':
         console_obj.run_mode = 'dev'
 
     log.show_value(
-        'Core',
+        'uCore',
         log.level.INFO,
         '執行模式',
         console_obj.run_mode
@@ -99,7 +99,7 @@ if __name__ == '__main__':
 
     if websocketserver.start_error:
         log.show(
-            'Core',
+            'uCore',
             log.level.INFO,
             'websocket server startup error'
         )
@@ -115,7 +115,7 @@ if __name__ == '__main__':
                 break
 
     log.show(
-        'Core',
+        'uCore',
         log.level.INFO,
         '執行最終終止程序')
 
@@ -124,7 +124,7 @@ if __name__ == '__main__':
     running.clear()
 
     log.show(
-        'Core',
+        'uCore',
         log.level.INFO,
         '最終終止程序全數完成'
     )
