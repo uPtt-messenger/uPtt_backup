@@ -5,8 +5,8 @@
 [![chatroom icon](https://patrolavia.github.io/telegram-badge/chat.png)](https://t.me/uPtt_talk)
 [![Donate](https://img.shields.io/badge/Donate-PayPal-green.svg)](http://paypal.me/CodingMan)
 
-## uPtt, PTT for you.
-#### 這是一個為了練習多人合作而啟動的專案。
+## uPtt, Upgrade PTT
+#### 我們把你的批踢踢升級了!
 #### 原始碼
 #### github: https://github.com/PttCodingMan/uPtt
 
