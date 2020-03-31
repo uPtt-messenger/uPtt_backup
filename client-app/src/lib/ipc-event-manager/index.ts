@@ -7,33 +7,35 @@ import { webSocket, WebSocketSubject } from 'rxjs/webSocket';
 
 export class IpcEventManager {
 
-    private publicWs: WebSocketSubject<unknown>;
+  private publicWs: WebSocketSubject<unknown>;
 
-    constructor(private logger: LogManager, private storageManager: StorageManager) {
-        this.publicWs = webSocket({ url: 'ws://localhost:50732/uptt/public' });
-    }
+  constructor(private logger: LogManager, private storageManager: StorageManager) {
+    this.publicWs = webSocket({ url: 'ws://localhost:50732/uptt/public' });
+  }
 
-    public initPublic(): void {
-        ipcMain.on('login', (event, data) => {
-            this.logger.debug('event: login');
-            this.logger.debug(data);
-            this.publicWs.multiplex(
-                () => ({ operation: 'login', payload: { pttId: data.pttId, pwd: data.pwd } }),
-                () => ({ type: 'unsubscribe', tag: 'login' }),
-                (resp: any) => resp.operation === 'login'
-            ).pipe(
-                map((resp: any) => {
-                    event.reply('login-resp', resp);
-                    this.logger.debug('login-resp: ' + data);
-                    if (resp.code === 0) {
-                        this.storageManager.setUser({ pttId: data.pttId, token: resp.payload.token });
-                    }
-                    //  else {
-                    //   throw resp;
-                    // }
-                })
-            ).subscribe((x: any) => this.logger.debug(x));
+  public initPublic(): void {
+    ipcMain.on('login', (event, data) => {
+      this.logger.debug('event: login');
+      this.logger.debug(data);
+      this.publicWs.multiplex(
+          () => ({ operation: 'login', payload: { pttId: data.pttId, pwd: data.pwd } }),
+          () => ({ type: 'unsubscribe', tag: 'login' }),
+          (resp: any) => resp.operation === 'login'
+        ).pipe(
+          map((resp: any) => {
+            event.reply('login-resp', resp);
+            this.logger.debug('login-resp: ' + data);
+            if (resp.code === 0) {
+              this.storageManager.setUser({ pttId: data.pttId, token: resp.payload.token });
+            } else {
+              throw resp;
+            }
+          })
+        ).subscribe({
+            next: (x: any) => this.logger.debug(x),
+            error: e => this.logger.error(e)
         });
-    }
+    });
+  }
 
 }
