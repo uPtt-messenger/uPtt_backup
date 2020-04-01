@@ -27,12 +27,19 @@ export class IpcEventManager {
             this.logger.debug('login-resp: ' + data);
             if (resp.code === 0) {
               this.storageManager.setUser({ pttId: data.pttId, token: resp.payload.token });
+              return resp;
             } else {
               throw resp;
             }
           })
         ).subscribe({
-            next: (x: any) => this.logger.debug(x),
+            next: (resp: any) => {
+              this.logger.debug('login-resp: ' + data);
+              if (resp.code === 0) {
+                this.storageManager.setUser({ pttId: data.pttId, token: resp.payload.token });
+              }
+              event.reply('login-resp', resp);
+            },
             error: e => this.logger.error(e)
         });
     });
