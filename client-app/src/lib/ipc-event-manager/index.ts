@@ -3,13 +3,17 @@ import { StorageManager } from '../storage-manager';
 import { ipcMain } from 'electron';
 import { map } from 'rxjs/operators';
 import { webSocket, WebSocketSubject } from 'rxjs/webSocket';
+import { WindowManager } from '../window-manager';
 (global as any).WebSocket = require('ws');
 
 export class IpcEventManager {
 
   private publicWs: WebSocketSubject<unknown>;
 
-  constructor(private logger: LogManager, private storageManager: StorageManager) {
+  constructor(
+    private logger: LogManager,
+    private storageManager: StorageManager,
+    private windowManager: WindowManager) {
     this.publicWs = webSocket({ url: 'ws://localhost:50732/uptt/public' });
   }
 
@@ -42,6 +46,10 @@ export class IpcEventManager {
             },
             error: e => this.logger.error(e)
         });
+    });
+
+    ipcMain.on('login-success', (event, data) => {
+      this.windowManager.hideWindow('login');
     });
   }
 

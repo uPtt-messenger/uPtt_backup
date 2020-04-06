@@ -9,7 +9,7 @@ const logger = new LogManager();
 const configManager = new ConfigManager();
 const windowManager = new WindowManager(logger, configManager);
 const storageManager = new StorageManager();
-const ipcEventManager = new IpcEventManager(logger, storageManager);
+const ipcEventManager = new IpcEventManager(logger, storageManager, windowManager);
 
 const upttClient = new App(logger, configManager, windowManager, ipcEventManager);
 upttClient.start();

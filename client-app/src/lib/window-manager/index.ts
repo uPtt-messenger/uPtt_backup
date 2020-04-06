@@ -113,4 +113,16 @@ export class WindowManager {
       }
     }
   }
+
+  public hideWindow(windowName: string): void {
+    if (windowName) {
+      const windowItem = this.windowPool.find((item) => item.name === windowName);
+      if (windowItem) {
+        if (windowItem.window != null) {
+          windowItem.window.hide();
+        }
+      }
+    }
+  }
+
 }
