@@ -1,5 +1,5 @@
 import { LogManager } from '../log-manager';
-import { StorageManager } from '../storage-manager';
+import { LoginSubject } from '../login-subject';
 import { ipcMain } from 'electron';
 import { map } from 'rxjs/operators';
 import { webSocket, WebSocketSubject } from 'rxjs/webSocket';
@@ -12,7 +12,7 @@ export class IpcEventManager {
 
   constructor(
     private logger: LogManager,
-    private storageManager: StorageManager,
+    private loginSubject: LoginSubject,
     private windowManager: WindowManager) {
     this.publicWs = webSocket({ url: 'ws://localhost:50732/uptt/public' });
   }
@@ -30,7 +30,7 @@ export class IpcEventManager {
             event.reply('login-resp', resp);
             this.logger.debug('login-resp: ' + data);
             if (resp.code === 0) {
-              this.storageManager.setUser({ pttId: data.pttId, token: resp.payload.token });
+              this.loginSubject.setUser({ pttId: data.pttId, token: resp.payload.token });
               return resp;
             } else {
               throw resp;
@@ -40,7 +40,7 @@ export class IpcEventManager {
             next: (resp: any) => {
               this.logger.debug('login-resp: ' + data);
               if (resp.code === 0) {
-                this.storageManager.setUser({ pttId: data.pttId, token: resp.payload.token });
+                this.loginSubject.setUser({ pttId: data.pttId, token: resp.payload.token });
               }
               event.reply('login-resp', resp);
             },
