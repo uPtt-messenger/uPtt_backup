@@ -3,6 +3,7 @@ import { LogManager } from './lib/log-manager';
 import { ConfigManager } from './lib/config-manager';
 import { WindowManager } from './lib/window-manager';
 import { IpcEventManager } from './lib/ipc-event-manager';
+import { TrayManager } from './lib/tray-manager';
 
 export class App {
 
@@ -10,6 +11,7 @@ export class App {
       private logger: LogManager,
       private configManager: ConfigManager,
       private windowManager: WindowManager,
+      private trayManager: TrayManager,
       private ipcEventManager: IpcEventManager) {
 
     this.logger.debug('uptt-client start');
@@ -23,6 +25,7 @@ export class App {
       app.on('ready', () => {
         this.logger.debug('app ready');
         this.ipcEventManager.initPublic();
+        this.trayManager.initTray();
         this.windowManager.openLogin();
       });
     }
