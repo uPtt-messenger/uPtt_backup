@@ -13,11 +13,6 @@ const DEBUG_MODE = true;
 //   // createWindow();
 // });
 
-/**
- * Module variables
- */
-let tray = null;
-
 export class WindowManager {
 
   private windowPool: WindowItem[] = [
