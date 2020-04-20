@@ -40,26 +40,6 @@ export class WindowManager {
   constructor(private logger: LogManager, private configManager: ConfigManager) { }
 
   public openLogin(): void {
-    const loginWindow = this.windowPool.find((item) => item.name === 'login');
-    if (loginWindow) {
-      this.logger.debug('create tray');
-      // 建立 System Tray
-      tray = new Tray('resource/assets/images/uptt.ico');
-      const contextMenu = Menu.buildFromTemplate([
-        { label: '關於', type: 'normal' },
-        {
-          label: '結束',
-          type: 'normal',
-          click() {
-            // app.isQuiting = true;
-            app.quit();
-          },
-        },
-      ]);
-      tray.setToolTip('uPtt');
-      tray.setContextMenu(contextMenu);
-    }
-    this.logger.debug('open window');
     this.openWindow('login');
   }
 
