@@ -8,8 +8,8 @@ import { TrayManager } from './lib/tray-manager';
 
 const logger = new LogManager();
 const configManager = new ConfigManager();
-const windowManager = new WindowManager(logger, configManager);
 const loginSubject = new LoginSubject();
+const windowManager = new WindowManager(logger, configManager, loginSubject);
 const ipcEventManager = new IpcEventManager(logger, loginSubject, windowManager);
 const trayManager = new TrayManager(logger, loginSubject);
 

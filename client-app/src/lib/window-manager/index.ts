@@ -4,6 +4,7 @@ import * as url from 'url';
 import { ConfigManager } from '../config-manager';
 import { WindowItem } from './window-item';
 import { LogManager } from '../log-manager';
+import { LoginSubject } from '../login-subject';
 
 const DEBUG_MODE = true;
 
@@ -32,10 +33,19 @@ export class WindowManager {
     }
   ];
 
-  constructor(private logger: LogManager, private configManager: ConfigManager) { }
+  constructor(
+    private logger: LogManager,
+    private configManager: ConfigManager,
+    private loginSubject: LoginSubject) { }
 
   public openLogin(): void {
     this.openWindow('login');
+    this.loginSubject.isLogined.asObservable().subscribe(isLogined => {
+      if (isLogined) {
+        this.logger.debug(`login success, close login window...`);
+        this.closeWindow('login');
+      }
+    });
   }
 
   private openWindow(windowName: string): void {
@@ -95,6 +105,17 @@ export class WindowManager {
       if (windowItem) {
         if (windowItem.window != null) {
           windowItem.window.hide();
+        }
+      }
+    }
+  }
+
+  public closeWindow(windowName: string): void {
+    if (windowName) {
+      const windowItem = this.windowPool.find((item) => item.name === windowName);
+      if (windowItem) {
+        if (windowItem.window != null) {
+          windowItem.window.close();
         }
       }
     }

@@ -20,10 +20,11 @@ export class TrayManager {
       {
         label: '結束',
         type: 'normal',
-        click() {
+        click: () => {
           // app.isQuiting = true;
+          this.logger.debug('tray trigger exit');
           app.quit();
-        },
+        }
       },
     ]);
     this.tray.setToolTip('uPtt');
@@ -40,10 +41,11 @@ export class TrayManager {
             {
               label: '結束',
               type: 'normal',
-              click() {
+              click: () => {
                 // app.isQuiting = true;
+                this.logger.debug('tray trigger exit');
                 app.quit();
-              },
+              }
             },
           ])
         );

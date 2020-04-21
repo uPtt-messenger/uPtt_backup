@@ -28,6 +28,14 @@ export class App {
         this.trayManager.initTray();
         this.windowManager.openLogin();
       });
+      app.on('window-all-closed', () => {
+        this.logger.debug('app window-all-closed');
+        // On OS X it is common for applications and their menu bar
+        // to stay active until the user quits explicitly with Cmd + Q
+        if (process.platform !== 'darwin') {
+          app.quit();
+        }
+      });
     }
   }
 
