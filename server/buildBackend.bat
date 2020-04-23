@@ -4,34 +4,16 @@ cls
 del /f uPtt.exe
 del /f uLauncher.exe
 
-rem nuitka --windows-disable-console --recurse-all src/uPtt.py
+python -m nuitka --standalone --windows-dependency-tool=pefile --experimental=use_pefile_recurse --experimental=use_pefile_fullrecurse src/uPtt.py
 
-rem pyinstaller -w --onefile --icon="..\client\src\assets\images\uptt.ico" .\src\uPtt.py
-rem pyinstaller -w --onefile .\src\uPtt.py
-rem pyinstaller -w --onefile .\src\uLauncher.py
-echo Build uPtt [Active]
-nuitka --windows-disable-console --recurse-all src/uPtt.py
-echo Build uPtt [Complete]
+rem echo Sign uLauncher [Active]
+rem signtool sign /a /tr http://timestamp.comodoca.com uLauncher.exe
+rem echo Sign uLauncher [Complete]
 
-echo Sign uPtt [Active]
-signtool sign /a /tr http://timestamp.comodoca.com uPtt.exe
-echo Sign uPtt [Complete]
+rem python zip.py
 
-echo Sign uLauncher [Active]
-nuitka --windows-disable-console --recurse-all src/uLauncher.py
-echo Build uLauncher [Complete]
-rem signtool sign /t http://timestamp.digicert.com /sha1 25eb809119b4052ebcbc106d163b6d5ff83116bb uLauncher.exe
-rem signtool sign /tr http://timestamp.digicert.com /td sha256 /fd sha256 /as /sha1 25eb809119b4052ebcbc106d163b6d5ff83116bb uLauncher.exe
-rem signtool sign /as /tr http://timestamp.comodoca.com /td sha256 /fd sha256 uLauncher.exe
-
-echo Sign uLauncher [Active]
-signtool sign /a /tr http://timestamp.comodoca.com uLauncher.exe
-echo Sign uLauncher [Complete]
-
-python zip.py
-
-move uPtt.zip package
-move uLauncher.zip package
+rem move uPtt.zip package
+rem move uLauncher.zip package
 
 :end
 echo Finish
