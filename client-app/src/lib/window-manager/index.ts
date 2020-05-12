@@ -19,12 +19,31 @@ export class WindowManager {
   private windowPool: WindowItem[] = [
     {
       name: 'login',
-      url: './resource/index.html',
+      url: {
+        pathname: './resource/index.html'
+      },
       window: null,
       options: {
         width: 400,
         height: 700,
         title: 'uPtt',
+        icon: 'resource/assets/images/uptt.ico',
+        webPreferences: {
+          nodeIntegration: true,
+        }
+      }
+    },
+    {
+      name: 'new-chat',
+      url: {
+        pathname: './resource/index.html',
+        hash: '/main-window/new-chat'
+      },
+      window: null,
+      options: {
+        width: 350,
+        height: 450,
+        title: 'uPtt - 丟水球',
         icon: 'resource/assets/images/uptt.ico',
         webPreferences: {
           nodeIntegration: true,
@@ -48,17 +67,22 @@ export class WindowManager {
     });
   }
 
+  public openNewChat(): void {
+    this.openWindow('new-chat');
+  }
+
   private openWindow(windowName: string): void {
     if (windowName) {
       const windowItem = this.windowPool.find((item) => item.name === windowName);
       if (windowItem) {
         if (windowItem.window === null) {
-          this.logger.debug(`window ${windowName} is null.`);
+          this.logger.debug(`window ${windowName} doesn't create yet, create window now...`);
           windowItem.window = new BrowserWindow(windowItem.options);
           windowItem.window.loadURL(url.format({
-            pathname: path.join(this.configManager.get('dirPath'), './resource/index.html'),
+            pathname: path.join(this.configManager.get('dirPath'), windowItem.url.pathname),
             protocol: 'file:',
             slashes: true,
+            hash: windowItem.url.hash
           }));
           // Open the DevTools.
           if (DEBUG_MODE) {
@@ -74,21 +98,6 @@ export class WindowManager {
           windowItem.window.on('close', (event: any) => {
             event.preventDefault();
             windowItem.window.hide();
-            // if (!app.isQuiting) {
-            // }
-            // 建立 System Tray
-            // const contextMenu = Menu.buildFromTemplate([
-            //   { label: '登入', type: 'normal', click: function (){
-            //     windowItem.window.show();
-            //   }},
-            //   { label: '關於', type: 'normal' },
-            //   { label: '結束', type: 'normal', click: function() {
-            //     app.isQuiting = true;
-            //     app.quit();
-            //   } }
-            // ])
-            // // TODO:
-            // tray.setContextMenu(contextMenu)
             return false;
           });
         } else {

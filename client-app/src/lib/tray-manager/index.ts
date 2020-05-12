@@ -1,6 +1,7 @@
 import { LogManager } from '../log-manager';
 import { LoginSubject } from '../login-subject';
 import { Tray, Menu, app, dialog } from 'electron';
+import { WindowManager } from '../window-manager';
 
 export class TrayManager {
 
@@ -9,7 +10,8 @@ export class TrayManager {
 
   constructor(
     private logger: LogManager,
-    private loginSubject: LoginSubject) { }
+    private loginSubject: LoginSubject,
+    private windowManager: WindowManager) { }
 
   public initTray(): void {
     this.logger.debug('init tray');
@@ -42,7 +44,13 @@ export class TrayManager {
       if (isLogined) {
         this.tray.setContextMenu(
           Menu.buildFromTemplate([
-            { label: '丟水球', type: 'normal' },
+            {
+              label: '丟水球',
+              type: 'normal',
+              click: () => {
+                this.windowManager.openNewChat();
+              }
+            },
             {
               label: '關於',
               type: 'normal',

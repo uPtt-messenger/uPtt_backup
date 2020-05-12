@@ -11,7 +11,7 @@ const configManager = new ConfigManager();
 const loginSubject = new LoginSubject();
 const windowManager = new WindowManager(logger, configManager, loginSubject);
 const ipcEventManager = new IpcEventManager(logger, loginSubject, windowManager);
-const trayManager = new TrayManager(logger, loginSubject);
+const trayManager = new TrayManager(logger, loginSubject, windowManager);
 
 const upttClient = new App(logger, configManager, windowManager, trayManager, ipcEventManager);
 upttClient.start();
