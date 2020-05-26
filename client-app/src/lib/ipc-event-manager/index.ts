@@ -50,6 +50,16 @@ export class IpcEventManager {
 
     ipcMain.on('login-success', (event, data) => {
       this.windowManager.hideWindow('login');
+      this.initPrivate();
+    });
+  }
+
+  private initPrivate(): void {
+    this.logger.debug('init private ipc');
+    ipcMain.on('new-chat', (event, data) => {
+      this.logger.debug('event: new-chat');
+      this.logger.debug(data);
+      this.windowManager.openChat(data.pttId);
     });
   }
 
