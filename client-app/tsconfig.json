@@ -6,7 +6,9 @@
     "outDir": "dist",
     "baseUrl": ".",
     "paths": {
-      "*": ["node_modules/*"]
+      "*": ["node_modules/*"],
+      "@uptt/util/*": ["src/lib/shared/util/*"],
+      "@uptt/window/*": ["src/lib/window-manager/*"],
     }
   },
   "include": [
