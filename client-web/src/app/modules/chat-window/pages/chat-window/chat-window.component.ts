@@ -24,18 +24,11 @@ export class ChatWindowComponent implements OnInit, AfterViewChecked {
   chatMsgLen = 0;
   chatForm: FormGroup;
 
-  chater: {
-    pttId: string
-  };
+  pttId: string;
 
   constructor(
-      private electronService: ElectronService,
       private route: ActivatedRoute,
       private fb: FormBuilder) {
-
-    const currentWindow: any = electronService.remote.getCurrentWindow();
-    this.chater = currentWindow.chater;
-
     this.chatForm = this.fb.group({
       chatMsg: []
     });
@@ -45,6 +38,8 @@ export class ChatWindowComponent implements OnInit, AfterViewChecked {
   }
 
   ngOnInit() {
+    this.pttId = this.route.snapshot.paramMap.get('pttId');
+    console.log('[chat-window] pttId: ' + this.pttId);
     this.scrollToBottom();
   }
 
