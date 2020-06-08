@@ -5,7 +5,6 @@ import { ConfigManager } from '../config-manager';
 import { WindowItem } from './window-item';
 import { LogManager } from '../log-manager';
 import { LoginSubject } from '../login-subject';
-import { WindowMap } from '@uptt/util/window-map';
 
 const DEBUG_MODE = true;
 
@@ -14,6 +13,10 @@ const DEBUG_MODE = true;
 //   // initWebsocket();
 //   // createWindow();
 // });
+
+export interface IHash {
+  [pttId: string]: WindowItem;
+}
 
 export class WindowManager {
 
@@ -53,7 +56,8 @@ export class WindowManager {
     }
   ];
 
-  private chatWindowPool: WindowMap = {};
+  private chatWindowPool: IHash = {};
+  // private chatWindowPool: WindowItem[] = [];
 
   constructor(
     private logger: LogManager,

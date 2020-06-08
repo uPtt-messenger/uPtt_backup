@@ -1,8 +1,7 @@
 import { LogManager } from '../log-manager';
 import { LoginSubject } from '../login-subject';
 import { Tray, Menu, app, dialog } from 'electron';
-import { WindowManager } from '@uptt/window/window-manager';
-
+import { WindowManager } from '../window-manager';
 
 export class TrayManager {
 

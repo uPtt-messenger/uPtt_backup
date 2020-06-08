@@ -3,7 +3,7 @@ import { LoginSubject } from '../login-subject';
 import { ipcMain } from 'electron';
 import { map } from 'rxjs/operators';
 import { webSocket, WebSocketSubject } from 'rxjs/webSocket';
-import { WindowManager } from '@uptt/window/window-manager';
+import { WindowManager } from '../window-manager';
 (global as any).WebSocket = require('ws');
 
 export class IpcEventManager {
