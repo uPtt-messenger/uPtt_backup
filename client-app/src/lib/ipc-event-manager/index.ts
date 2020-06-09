@@ -4,6 +4,7 @@ import { ipcMain } from 'electron';
 import { map } from 'rxjs/operators';
 import { webSocket, WebSocketSubject } from 'rxjs/webSocket';
 import { WindowManager } from '../window-manager';
+import { ChatIpc } from './chat-ipc';
 (global as any).WebSocket = require('ws');
 
 export class IpcEventManager {
@@ -13,7 +14,8 @@ export class IpcEventManager {
   constructor(
     private logger: LogManager,
     private loginSubject: LoginSubject,
-    private windowManager: WindowManager) {
+    private windowManager: WindowManager,
+    private chatIpc: ChatIpc) {
     this.publicWs = webSocket({ url: 'ws://localhost:50732/uptt/public' });
   }
 
@@ -27,10 +29,11 @@ export class IpcEventManager {
           (resp: any) => resp.operation === 'login'
         ).pipe(
           map((resp: any) => {
-            event.reply('login-resp', resp);
-            this.logger.debug('login-resp: ' + data);
+            // event.reply('login-resp', resp);
+            // this.logger.debug('login-resp: ' + data);
             if (resp.code === 0) {
               this.loginSubject.setUser({ pttId: data.pttId, token: resp.payload.token });
+              this.chatIpc.init();
               return resp;
             } else {
               throw resp;
