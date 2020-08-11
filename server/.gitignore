@@ -118,3 +118,4 @@ dist/
 /python36.dll
 */config.json
 test/
+*.dist/
