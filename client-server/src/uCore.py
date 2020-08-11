@@ -101,7 +101,7 @@ if __name__ == '__main__':
         log.show(
             'uCore',
             log.level.INFO,
-            'websocket server startup error'
+            'websocket app-server startup error'
         )
         for e in event_console.close:
             e()
