@@ -4,9 +4,8 @@ import { ChatWindowComponent } from './pages/chat-window/chat-window.component';
 
 const routes: Routes = [
   {
-    path: '',
+    path: ':pttId',
     component: ChatWindowComponent,
-    children: []
   }
 ];
 

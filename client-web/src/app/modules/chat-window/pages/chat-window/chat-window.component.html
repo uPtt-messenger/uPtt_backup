@@ -1,7 +1,7 @@
 <div class="header-container">
   <span class="user-profile">
     <img class="user-photo" src="assets/images/pic.png" />
-    <span>{{chater.pttId}}}</span>
+    <span *ngIf="pttId">{{pttId}}</span>
   </span>
 </div>
 <div class="message-box uptt-scrollbar thin" #messageBox>
