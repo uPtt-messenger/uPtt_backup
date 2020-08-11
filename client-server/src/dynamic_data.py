@@ -28,8 +28,7 @@ class DynamicData:
         log.show(
             'DynamicData',
             log.level.INFO,
-            '執行終止程序'
-        )
+            '執行終止程序')
 
         self.run_update = False
         self.update_thread.join()
@@ -37,8 +36,7 @@ class DynamicData:
         log.show(
             'DynamicData',
             log.level.INFO,
-            '終止程序完成'
-        )
+            '終止程序完成')
 
     def run(self):
 
@@ -57,8 +55,7 @@ class DynamicData:
         log.show(
             'DynamicData',
             log.level.INFO,
-            '開始更新資料'
-        )
+            '開始更新資料')
 
         if self.console.run_mode == 'dev':
             update_url = 'https://raw.githubusercontent.com/PttCodingMan/uPtt/develop/data/open_data.json'
@@ -85,8 +82,7 @@ class DynamicData:
             'DynamicData',
             log.level.INFO,
             '發布版本',
-            self.version
-        )
+            self.version)
 
         del_key_list = []
         for _, (hash_value, tag) in enumerate(self.tag_list.items()):

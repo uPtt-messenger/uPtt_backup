@@ -3,6 +3,7 @@ import websockets
 import traceback
 import time
 import threading
+import json
 
 import log
 from msg import Msg
@@ -40,10 +41,18 @@ async def consumer_handler(ws, path):
                 'WebSocket Server',
                 log.level.INFO,
                 '路徑',
-                path
-            )
+                path)
 
-            recv_msg = Msg(strobj=recv_msg_str)
+            try:
+                recv_msg = Msg(strobj=recv_msg_str)
+            except json.JSONDecodeError:
+                log.show_value(
+                    'WebSocket Server',
+                    log.level.INFO,
+                    '丟棄錯誤訊息',
+                    recv_msg_str)
+                run_session = False
+                break
 
             if 'token=' in path:
                 token = path[path.find('token=') + len('token='):]
