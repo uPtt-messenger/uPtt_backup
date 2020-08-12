@@ -1,8 +1,8 @@
 @echo off
 cls
 
-del /f uPtt.exe
-del /f uLauncher.exe
+RD /S /Q uPtt.build
+RD /S /Q uPtt.dist
 
 python -m nuitka --standalone --windows-dependency-tool=pefile --experimental=use_pefile_recurse --experimental=use_pefile_fullrecurse src/uPtt.py
 

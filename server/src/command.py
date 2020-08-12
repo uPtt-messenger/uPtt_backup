@@ -91,28 +91,24 @@ class Command:
             log.show(
                 'command',
                 log.level.INFO,
-                '執行終止程序'
-            )
+                '執行終止程序')
             for e in self.console.event.close:
                 e()
             log.show(
                 'command',
                 log.level.INFO,
-                '終止程序全數完成'
-            )
+                '終止程序全數完成')
 
         elif opt == 'sendwaterball':
             if not self.check_token(recv_msg):
                 log.show(
                     'command',
                     log.level.INFO,
-                    '權杖不相符'
-                )
+                    '權杖不相符')
                 res_msg = Msg(
                     operate=opt,
                     code=error_code.TokenNotMatch,
-                    msg='權杖不相符'
-                )
+                    msg='Token not match')
                 self.push(res_msg)
                 return
             waterball_id = recv_msg.get(Msg.key_payload)[Msg.key_ptt_id]
@@ -121,15 +117,13 @@ class Command:
             log.show(
                 'command',
                 log.level.INFO,
-                '執行丟水球程序'
-            )
+                '執行丟水球程序')
             for e in self.console.event.send_waterball:
                 e(waterball_id, waterball_content)
             log.show(
                 'command',
                 log.level.INFO,
-                '丟水球程序全數完成'
-            )
+                '丟水球程序全數完成')
 
         elif opt == 'getwaterballhistory':
 
@@ -137,13 +131,11 @@ class Command:
                 log.show(
                     'command',
                     log.level.INFO,
-                    '權杖不相符'
-                )
+                    'Token not match')
                 res_msg = Msg(
                     operate=opt,
                     code=error_code.TokenNotMatch,
-                    msg='權杖不相符'
-                )
+                    msg='Token not match')
                 self.push(res_msg)
                 return
 
@@ -159,8 +151,7 @@ class Command:
             current_res_msg = Msg(
                 operate=opt,
                 code=error_code.Success,
-                msg='取得歷史水球訊息成功'
-            )
+                msg='Get history waterball success')
 
             payload = Msg()
 
@@ -179,8 +170,7 @@ class Command:
             current_res_msg = Msg(
                 operate=opt,
                 code=error_code.Unsupported,
-                msg='Unsupported'
-            )
+                msg='Unsupported')
             self.push(current_res_msg)
 
     def push(self, push_msg):

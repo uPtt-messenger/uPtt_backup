@@ -22,8 +22,7 @@ class BlackList:
             block_msg = Msg(
                 operate=Msg.key_login,
                 code=error_code.BlackList,
-                msg='黑名單使用者'
-            )
+                msg='block user')
             return block_msg
         return None
 

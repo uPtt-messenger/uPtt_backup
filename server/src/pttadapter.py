@@ -148,7 +148,7 @@ class PTT_Adapter:
                         self.res_msg = Msg(
                             operate=Msg.key_login,
                             code=error_code.Success,
-                            msg='登入成功'
+                            msg='Login success'
                         )
 
                         letters = string.ascii_lowercase
@@ -177,19 +177,19 @@ class PTT_Adapter:
                         self.res_msg = Msg(
                             operate=Msg.key_login,
                             code=error_code.LoginFail,
-                            msg='登入失敗'
+                            msg='Login fail'
                         )
                     except PTT.exceptions.WrongIDorPassword:
                         self.res_msg = Msg(
                             operate=Msg.key_login,
                             code=error_code.LoginFail,
-                            msg='帳號密碼錯誤'
+                            msg='ID or PW error'
                         )
                     except PTT.exceptions.LoginTooOften:
                         self.res_msg = Msg(
                             operate=Msg.key_login,
                             code=error_code.LoginFail,
-                            msg='請稍等一下再登入'
+                            msg='Please wait a moment before login'
                         )
                     self.ptt_id = None
                     self.ptt_pw = None
@@ -208,7 +208,7 @@ class PTT_Adapter:
                         res_msg = Msg(
                             operate=Msg.key_logout,
                             code=error_code.Success,
-                            msg='登出成功'
+                            msg='Logout success'
                         )
 
                         self.console.command.push(res_msg)
@@ -246,19 +246,19 @@ class PTT_Adapter:
                                 res_msg = Msg(
                                     operate=Msg.key_sendwaterball,
                                     code=error_code.Success,
-                                    msg='丟水球成功'
+                                    msg='send waterball success'
                                 )
                             except PTT.exceptions.NoSuchUser:
                                 res_msg = Msg(
                                     operate=Msg.key_sendwaterball,
                                     code=error_code.NoSuchUser,
-                                    msg='無此使用者'
+                                    msg='No this user'
                                 )
                             except PTT.exceptions.UserOffline:
                                 res_msg = Msg(
                                     operate=Msg.key_sendwaterball,
                                     code=error_code.UserOffLine,
-                                    msg='使用者離線'
+                                    msg='User offline'
                                 )
                             self.console.command.push(res_msg)
 
@@ -287,7 +287,7 @@ class PTT_Adapter:
             # 慢速輪詢區
             log.show(
                 'PTTAdapter',
-                log.level.INFO,
+                log.level.DEBUG,
                 '慢速輪詢'
             )
 
@@ -297,7 +297,7 @@ class PTT_Adapter:
 
             log.show(
                 'PTTAdapter',
-                log.level.INFO,
+                log.level.DEBUG,
                 '取得水球'
             )
 
@@ -377,7 +377,7 @@ class PTT_Adapter:
                 self.has_new_mail = True
                 push_msg = Msg(
                     operate=Msg.key_notify)
-                push_msg.add(Msg.key_msg, f'您有 {new_mail} 封新信')
+                push_msg.add(Msg.key_msg, f'You have {new_mail} mails')
 
                 self.console.command.push(push_msg)
             else:
