@@ -47,8 +47,20 @@ app.ws('/uptt/public', function(ws, req) {
 
 app.ws('/uptt/private', function(ws, req) {
   console.log('[' + new Date().toUTCString() + '] Client connected private');
-  ws.on('message', function(msg) {
-    console.log(msg);
+  ws.on('message', function(reqDataString) {
+    console.log('[' + new Date().toUTCString() + '] ========= Request ========= ');
+    const reqData = JSON.parse(reqDataString);
+    console.log('[' + new Date().toUTCString() + '] operation = ' + reqData.operation);
+    console.log('[' + new Date().toUTCString() + '] payload = ' + JSON.stringify(reqData.payload));
+
+    // 丟水球
+    if (reqData.operation === 'sendwaterball') {
+      let resp = { operation: reqData.operation, code: 0, msg: 'successs sendwaterball' };
+      console.log('[' + new Date().toUTCString() + '] ========= Response ========= ');
+      console.log('[' + new Date().toUTCString() + '] resp = ' + JSON.stringify(resp));
+      ws.send(JSON.stringify(resp));
+    }
+
   });
   // console.log('socket', req.testing);
 });

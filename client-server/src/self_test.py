@@ -36,8 +36,7 @@ async def ws_send():
             '自我測試',
             log.level.INFO,
             '收到',
-            recv_msg_str
-        )
+            recv_msg_str)
         recv_msg = Msg(strobj=recv_msg_str)
 
 
@@ -50,8 +49,7 @@ def send(msg: Msg):
         log.show(
             '自我測試',
             log.level.INFO,
-            '連線關閉'
-        )
+            '連線關閉')
 
 
 def recv():

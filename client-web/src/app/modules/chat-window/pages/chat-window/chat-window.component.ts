@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, FormControl } from '@angular/forms';
 import { ChatMessage } from 'src/app/modules/core/models/chat-message';
 import { ActivatedRoute } from '@angular/router';
 import { ElectronService } from 'src/app/modules/shared/services/electron.service';
+import { ChatService } from '../../services/chat.service';
 
 @Component({
   selector: 'app-chat-window',
@@ -24,18 +25,12 @@ export class ChatWindowComponent implements OnInit, AfterViewChecked {
   chatMsgLen = 0;
   chatForm: FormGroup;
 
-  chater: {
-    pttId: string
-  };
+  pttId: string;
 
   constructor(
-      private electronService: ElectronService,
       private route: ActivatedRoute,
-      private fb: FormBuilder) {
-
-    const currentWindow: any = electronService.remote.getCurrentWindow();
-    this.chater = currentWindow.chater;
-
+      private fb: FormBuilder,
+      private chatService: ChatService) {
     this.chatForm = this.fb.group({
       chatMsg: []
     });
@@ -45,6 +40,8 @@ export class ChatWindowComponent implements OnInit, AfterViewChecked {
   }
 
   ngOnInit() {
+    this.pttId = this.route.snapshot.paramMap.get('pttId');
+    console.log('[chat-window] pttId: ' + this.pttId);
     this.scrollToBottom();
   }
 
@@ -56,9 +53,18 @@ export class ChatWindowComponent implements OnInit, AfterViewChecked {
     event.preventDefault();
     const chatMsg = this.chatForm.get('chatMsg').value;
     if (chatMsg) {
-      // TODO: call api
-      this.chatMsgList.push({ msgType: 1, msgTime: '2020/02/03 00:30:16', sender: 'mobi76', msgContent: chatMsg });
-      this.chatForm.reset();
+      this.chatService.postChat({ pttId: this.pttId, msgContent: chatMsg }).subscribe({
+        next: resp => {
+          // TODO: get API response
+          console.log('[submitMsg] get response ');
+          this.chatMsgList.push({ msgType: 1, msgTime: '2020/02/03 00:30:16', sender: this.pttId, msgContent: chatMsg });
+          this.chatForm.reset();
+        },
+        error: error => {
+          console.error('submitMsg error', error);
+          // TODO: handle error
+        }
+      });
     }
   }
 

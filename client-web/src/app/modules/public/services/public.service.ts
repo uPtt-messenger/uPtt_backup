@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Observable, throwError, Subject } from 'rxjs';
+import { Observable, throwError, Subject, BehaviorSubject } from 'rxjs';
 import { map,  } from 'rxjs/operators';
 import { ElectronService } from '../../shared/services/electron.service';
 
@@ -14,22 +14,37 @@ export class PublicService {
   constructor(private electronService: ElectronService) { }
 
   login(loginCredentials: { pttId: string, pwd: string }): Observable<any> {
-    const rtnSubject = new Subject<any>();
-    this.electronService.ipcRenderer.send('login', loginCredentials);
-    this.electronService.ipcRenderer.once('login-resp', (event, resp) => {
-      console.log(resp);
-      rtnSubject.next(resp);
-    });
-    return rtnSubject.asObservable().pipe(
-      map(resp => {
-        if (resp.code === 0) {
-          return resp.payload;
-        } else {
-          throw resp;
-        }
-      })
-    );
 
+    console.log('isElectron: ' + this.electronService.isElectron);
+
+    if (this.electronService.isElectron) {
+      const rtnSubject = new Subject<any>();
+      this.electronService.ipcRenderer.send('login', loginCredentials);
+      this.electronService.ipcRenderer.once('login-resp', (event, resp) => {
+        console.log(resp);
+        rtnSubject.next(resp);
+      });
+      return rtnSubject.asObservable().pipe(
+        map(resp => {
+          if (resp.code === 0) {
+            return resp.payload;
+          } else {
+            throw resp;
+          }
+        })
+      );
+    } else {
+      const rtnSubject = new BehaviorSubject<any>({ code: 0, payload: { token: 'test123' }});
+      return rtnSubject.asObservable().pipe(
+        map(resp => {
+          if (resp.code === 0) {
+            return resp.payload;
+          } else {
+            throw resp;
+          }
+        })
+      );
+    }
     // return this.ws.multiplex(
     //   () => ({ operation: 'login', payload: { pttId: loginCredentials.pttId, pwd: loginCredentials.pwd } }),
     //   () => ({ type: 'unsubscribe', tag: 'login' }),

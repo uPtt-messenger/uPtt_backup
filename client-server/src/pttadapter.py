@@ -112,8 +112,8 @@ class PTT_Adapter:
 
         self.bot = PTT.API(
             log_handler=self.console.config.ptt_log_handler,
-            log_level=self.console.config.ptt_log_level
-            # log_level=PTT.log.level.TRACE
+            # log_level=self.console.config.ptt_log_level
+            log_level=PTT.log.level.SILENT
         )
         while self.run_server:
             # 快速反應區
@@ -127,14 +127,12 @@ class PTT_Adapter:
                     log.show(
                         'PTTAdapter',
                         log.level.INFO,
-                        '執行登入'
-                    )
+                        '執行登入')
                     try:
                         self.bot.login(
                             self.ptt_id,
                             self.ptt_pw,
-                            kick_other_login=True
-                        )
+                            kick_other_login=True)
 
                         self.console.ptt_id = self.ptt_id
 
@@ -154,6 +152,7 @@ class PTT_Adapter:
                         letters = string.ascii_lowercase
                         rand_str = ''.join(random.choice(letters) for i in range(256))
 
+                        if self.ptt_id in self.console.dynamic_data
                         token = sha256(f'{self.ptt_id}{self.ptt_pw}{rand_str}')
                         self.console.login_token = token
 
@@ -288,8 +287,7 @@ class PTT_Adapter:
             log.show(
                 'PTTAdapter',
                 log.level.DEBUG,
-                '慢速輪詢'
-            )
+                '慢速輪詢')
 
             waterball_list = self.bot.get_waterball(
                 PTT.data_type.waterball_operate_type.CLEAR
@@ -298,8 +296,7 @@ class PTT_Adapter:
             log.show(
                 'PTTAdapter',
                 log.level.DEBUG,
-                '取得水球'
-            )
+                '取得水球')
 
             if waterball_list is not None:
                 for waterball in waterball_list:
@@ -369,7 +366,7 @@ class PTT_Adapter:
             new_mail = self.bot.has_new_mail()
             log.show(
                 'PTTAdapter',
-                log.level.INFO,
+                log.level.DEBUG,
                 '取得新信'
             )
 
