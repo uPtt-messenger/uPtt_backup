@@ -126,5 +126,4 @@ if __name__ == '__main__':
     log.show(
         'uCore',
         log.level.INFO,
-        '最終終止程序全數完成'
-    )
+        '最終終止程序全數完成')
