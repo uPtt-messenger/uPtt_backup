@@ -1,107 +1,116 @@
 import sys
-from time import gmtime, strftime
-
-# Log Handler
-Handler = None
+from time import strftime
 
 
-class level(object):
+class Logger:
     TRACE = 1
     DEBUG = 2
     INFO = 3
     SILENT = 4
 
-    MinValue = TRACE
-    MaxValue = SILENT
+    def __init__(self, prefix, level, handler=None):
+        self.prefix = prefix
+        self.level = level
+        self.handler = handler
 
+    def merge(self, msg) -> str:
+        if isinstance(msg, list):
+            msg = list(map(str, msg))
+            for i in range(len(msg)):
+                if len(msg[i]) == 0:
+                    continue
+                if msg[i][0].upper() != msg[i][0].lower() and i != 0:
+                    msg[i] = ' ' + msg[i].lstrip()
+                if (msg[i][-1].upper() != msg[i][-1].lower() and
+                        i != len(msg) - 1):
+                    msg[i] = msg[i].rstrip() + ' '
 
-Log_level = level.INFO
+            msg = ''.join(msg)
+        msg = str(msg)
+        msg = msg.replace('  ', ' ')
 
+        return msg
 
-def merge(msg) -> str:
-    if isinstance(msg, list):
-        for i in range(len(msg)):
-            if len(msg[i]) == 0:
-                continue
-            if msg[i][0].upper() != msg[i][0].lower() and i != 0:
-                msg[i] = ' ' + msg[i].lstrip()
-            if (msg[i][-1].upper() != msg[i][-1].lower() and
-                    i != len(msg) - 1):
-                msg[i] = msg[i].rstrip() + ' '
+    def show(self, current_log_level, msg):
 
-        msg = ''.join(msg)
-    msg = str(msg)
-    msg = msg.replace('  ', ' ')
+        if self.level > current_log_level:
+            return
+        if current_log_level == self.SILENT:
+            return
+        if not isinstance(msg, int) and len(msg) == 0:
+            return
 
-    return msg
+        msg = self.merge(msg)
 
+        total_message = '[' + strftime('%m%d %H%M%S') + ']'
 
-def show(prefix, current_log_level, msg):
-    global Log_level
+        # if current_log_level == level.DEBUG:
+        #     total_message += '[除錯]'
+        # elif current_log_level == level.INFO:
+        #     total_message += '[資訊]'
 
-    if Log_level > current_log_level:
-        return
-    if len(msg) == 0:
-        return
+        if self.prefix is not None:
+            total_message += '[' + self.prefix + ']'
+        total_message += ' ' + msg
 
-    msg = merge(msg)
+        try:
+            print(total_message.encode(
+                sys.stdin.encoding,
+                'replace'
+            ).decode(
+                sys.stdin.encoding
+            ))
+        except Exception:
+            print(total_message.encode('utf-8', "replace").decode('utf-8'))
 
-    total_message = '[' + strftime('%m%d %H%M%S') + ']'
+        if self.handler is not None:
+            self.handler(total_message)
 
-    # if current_log_level == level.DEBUG:
-    #     total_message += '[除錯]'
-    # elif current_log_level == level.INFO:
-    #     total_message += '[資訊]'
+    def show_value(self, current_log_level, des, value):
+        if self.level > current_log_level:
+            return
 
-    if prefix is not None:
-        total_message += '[' + prefix + ']'
-    total_message += ' ' + msg
+        if isinstance(value, list):
+            value = value.copy()
 
-    try:
-        print(total_message.encode(
-            sys.stdin.encoding,
-            'replace'
-        ).decode(
-            sys.stdin.encoding
-        ))
-    except Exception:
-        print(total_message.encode('utf-8', "replace").decode('utf-8'))
+        msg = self.merge(des)
+        value = self.merge(value)
+        if len(msg) == 0:
+            return
+        # if len(Value) == 0:
+        #     return
 
-    global Handler
-    if Handler is not None:
-        Handler(total_message)
+        total_message = []
+        total_message.append(msg)
+        total_message.append(' [')
+        total_message.append(value)
+        total_message.append(']')
 
+        self.show(current_log_level, ''.join(total_message))
 
-LastValue = None
+if __name__ == '__main__':
 
+    test_log_level = [
+        Logger.SILENT,
+        Logger.INFO,
+        Logger.DEBUG,
+        Logger.TRACE
+    ]
 
-def show_value(prefix, current_log_level, msg, value):
-    global Log_level
-    if Log_level > current_log_level:
-        return
-    global LastValue
+    for current_log_level in test_log_level:
 
-    if isinstance(value, list):
-        value = value.copy()
+        logger = Logger('test prefix', current_log_level)
 
-    msg = merge(msg)
+        logger.show(Logger.SILENT, 'SILENT')
+        logger.show(Logger.INFO, 'INFO')
+        logger.show(Logger.DEBUG, 'DEBUG')
+        logger.show(Logger.TRACE, 'TRACE')
 
-    value = merge(value)
-    if len(msg) == 0:
-        return
-    # if len(Value) == 0:
-    #     return
+        print('=================')
 
-    total_message = []
-    total_message.append(msg)
-    total_message.append(' [')
-    total_message.append(value)
-    total_message.append(']')
-
-    show(prefix, Log_level, ''.join(total_message))
-
-    LastValue = value
-
+    logger = Logger('test prefix', Logger.INFO)
+    logger.show_value(Logger.INFO, 'Test', 123)
+    logger.show_value(Logger.INFO, 'Test', [1, 2])
 #                        ____________
 #                       |            |
 #                       |            |
