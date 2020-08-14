@@ -3,7 +3,7 @@ import threading
 import time
 import urllib.request
 
-import log
+from util.src import log
 from config import Config
 
 

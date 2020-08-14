@@ -5,8 +5,8 @@ import time
 import threading
 import json
 
-import log
-from msg import Msg
+from util.src import log
+from util.src.msg import Msg
 
 run_session = True
 command = None

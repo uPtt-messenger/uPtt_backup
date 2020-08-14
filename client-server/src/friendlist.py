@@ -1,6 +1,3 @@
-import log
-
-
 class FriendList:
     def __init__(self):
         self.friendlist = []

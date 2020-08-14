@@ -1,8 +1,7 @@
 import threading
 import time
 
-import log
-from msg import Msg
+from util.src import log
 
 
 class Feedback:

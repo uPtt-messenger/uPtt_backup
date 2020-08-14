@@ -1,7 +1,7 @@
 import json
 import os
 
-import log
+from util.src import log
 
 
 def get_value_func(data, key):

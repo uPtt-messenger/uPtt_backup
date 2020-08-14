@@ -1,4 +1,4 @@
-from util import sha256
+from util.src.util import sha256
 
 
 class Tag:

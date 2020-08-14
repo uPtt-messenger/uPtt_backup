@@ -3,7 +3,7 @@ import sys
 import time
 import threading
 
-import log
+from util.src import log
 import websocketserver
 from config import Config
 from command import Command
@@ -36,6 +36,7 @@ def log_to_file(msg):
 
 
 if __name__ == '__main__':
+
 
     config_obj = Config()
 

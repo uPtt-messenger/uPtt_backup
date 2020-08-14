@@ -3,7 +3,7 @@ import base64
 
 from pyaes import *
 
-from msg import Msg
+from util.src.msg import Msg
 
 
 # https://pycryptodome.readthedocs.io/en/latest/src/introduction.html

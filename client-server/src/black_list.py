@@ -1,7 +1,7 @@
-from util import sha256
-from msg import Msg
-from errorcode import error_code
-import log
+from util.src.util import sha256
+from util.src.msg import Msg
+from util.src.errorcode import ErrorCode
+from util.src import log
 
 
 class BlackList:
@@ -21,7 +21,7 @@ class BlackList:
 
             block_msg = Msg(
                 operate=Msg.key_login,
-                code=error_code.BlackList,
+                code=ErrorCode.BlackList,
                 msg='block user')
             return block_msg
         return None

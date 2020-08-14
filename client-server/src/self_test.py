@@ -5,9 +5,9 @@ import json
 import time
 from PyPtt import PTT
 
-import log
+from util.src import log
 from config import Config
-from msg import Msg
+from util.src.msg import Msg
 
 msg_str = None
 recv_msg = None

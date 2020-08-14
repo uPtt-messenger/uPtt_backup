@@ -1,12 +1,10 @@
-import os
 from os import walk
 # from datetime import datetime
 # import json
 
-import log
-from msg import Msg
+from util.src import log
 from config import Config
-import aes
+from util.src.aes import *
 
 
 class Dialogue:
@@ -79,8 +77,7 @@ class Dialogue:
                         'Dialogue',
                         log.level.DEBUG,
                         '解密對話',
-                        decrypt_msg
-                    )
+                        decrypt_msg)
                     self.data[target_id].append(decrypt_msg)
 
             log.show(

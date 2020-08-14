@@ -6,11 +6,11 @@ import time
 
 from PyPtt import PTT
 
-import log
+from util.src import log
 from dialogue import Dialogue
-from errorcode import error_code
-from msg import Msg
-from util import sha256
+from util.src.errorcode import ErrorCode
+from util.src.msg import Msg
+from util.src.util import sha256
 
 
 class PTT_Adapter:
@@ -113,7 +113,7 @@ class PTT_Adapter:
         self.bot = PTT.API(
             log_handler=self.console.config.ptt_log_handler,
             # log_level=self.console.config.ptt_log_level
-            log_level=PTT.log.level.SILENT
+            log_level=log.level.SILENT
         )
         while self.run_server:
             # 快速反應區
@@ -145,14 +145,13 @@ class PTT_Adapter:
 
                         self.res_msg = Msg(
                             operate=Msg.key_login,
-                            code=error_code.Success,
+                            code=ErrorCode.Success,
                             msg='Login success'
                         )
 
                         letters = string.ascii_lowercase
                         rand_str = ''.join(random.choice(letters) for i in range(256))
 
-                        if self.ptt_id in self.console.dynamic_data
                         token = sha256(f'{self.ptt_id}{self.ptt_pw}{rand_str}')
                         self.console.login_token = token
 
@@ -175,19 +174,19 @@ class PTT_Adapter:
                     except PTT.exceptions.LoginError:
                         self.res_msg = Msg(
                             operate=Msg.key_login,
-                            code=error_code.LoginFail,
+                            code=ErrorCode.LoginFail,
                             msg='Login fail'
                         )
                     except PTT.exceptions.WrongIDorPassword:
                         self.res_msg = Msg(
                             operate=Msg.key_login,
-                            code=error_code.LoginFail,
+                            code=ErrorCode.LoginFail,
                             msg='ID or PW error'
                         )
                     except PTT.exceptions.LoginTooOften:
                         self.res_msg = Msg(
                             operate=Msg.key_login,
-                            code=error_code.LoginFail,
+                            code=ErrorCode.LoginFail,
                             msg='Please wait a moment before login'
                         )
                     self.ptt_id = None
@@ -206,7 +205,7 @@ class PTT_Adapter:
 
                         res_msg = Msg(
                             operate=Msg.key_logout,
-                            code=error_code.Success,
+                            code=ErrorCode.Success,
                             msg='Logout success'
                         )
 
@@ -244,19 +243,19 @@ class PTT_Adapter:
 
                                 res_msg = Msg(
                                     operate=Msg.key_sendwaterball,
-                                    code=error_code.Success,
+                                    code=ErrorCode.Success,
                                     msg='send waterball success'
                                 )
                             except PTT.exceptions.NoSuchUser:
                                 res_msg = Msg(
                                     operate=Msg.key_sendwaterball,
-                                    code=error_code.NoSuchUser,
+                                    code=ErrorCode.NoSuchUser,
                                     msg='No this user'
                                 )
                             except PTT.exceptions.UserOffline:
                                 res_msg = Msg(
                                     operate=Msg.key_sendwaterball,
-                                    code=error_code.UserOffLine,
+                                    code=ErrorCode.UserOffLine,
                                     msg='User offline'
                                 )
                             self.console.command.push(res_msg)
@@ -270,7 +269,7 @@ class PTT_Adapter:
                     #         user = self.bot.getUser(addfriend_id)
                     #
                     #         res_msg = Msg(
-                    #             error_code.Success,
+                    #             ErrorCode.Success,
                     #             '新增成功'
                     #         )
                     #

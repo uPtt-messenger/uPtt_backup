@@ -1,6 +1,6 @@
-import log
-from errorcode import error_code
-from msg import Msg
+from util.src import log
+from util.src.errorcode import ErrorCode
+from util.src.msg import Msg
 from tag import Tag
 
 
@@ -37,7 +37,7 @@ class Command:
         if opt == 'echo':
             current_res_msg = Msg(
                 operate=opt,
-                code=error_code.Success,
+                code=ErrorCode.Success,
                 msg=recv_msg.get(Msg.key_msg)
             )
             self.push(current_res_msg)
@@ -58,7 +58,7 @@ class Command:
                 current_res_msg = e(ptt_id, ptt_pass)
                 if current_res_msg is None:
                     continue
-                if current_res_msg.get(Msg.key_code) != error_code.Success:
+                if current_res_msg.get(Msg.key_code) != ErrorCode.Success:
                     self.push(current_res_msg)
                     log.show(
                         'command',
@@ -107,7 +107,7 @@ class Command:
                     '權杖不相符')
                 res_msg = Msg(
                     operate=opt,
-                    code=error_code.TokenNotMatch,
+                    code=ErrorCode.TokenNotMatch,
                     msg='Token not match')
                 self.push(res_msg)
                 return
@@ -134,7 +134,7 @@ class Command:
                     'Token not match')
                 res_msg = Msg(
                     operate=opt,
-                    code=error_code.TokenNotMatch,
+                    code=ErrorCode.TokenNotMatch,
                     msg='Token not match')
                 self.push(res_msg)
                 return
@@ -150,7 +150,7 @@ class Command:
 
             current_res_msg = Msg(
                 operate=opt,
-                code=error_code.Success,
+                code=ErrorCode.Success,
                 msg='Get history waterball success')
 
             payload = Msg()
@@ -169,7 +169,7 @@ class Command:
         else:
             current_res_msg = Msg(
                 operate=opt,
-                code=error_code.Unsupported,
+                code=ErrorCode.Unsupported,
                 msg='Unsupported')
             self.push(current_res_msg)
 
