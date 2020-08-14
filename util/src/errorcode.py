@@ -1,6 +1,6 @@
 
 
-class error_code:
+class ErrorCode:
     Success = 0
     WrongIDPW = 1
     LoginTooOften = 2
