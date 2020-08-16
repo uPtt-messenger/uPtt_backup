@@ -1,7 +1,7 @@
 import json
 import os
 
-from util.src import log
+from util.src.log import Logger
 
 
 def get_value_func(data, key):
@@ -48,7 +48,7 @@ class Config:
     update_cycle = 180
     port = 50732
     ptt_log_handler = None
-    ptt_log_level = log.level.INFO
+    ptt_log_level = Logger.INFO
 
     feedback_port = 57983
     feedback_frequency = 60
@@ -64,13 +64,13 @@ class Config:
 
         self.config_path = None
 
+        self.logger = Logger('Config', Logger.INFO)
+
         if os.name == 'nt':
-            log.show_value(
-                'Config',
-                log.level.INFO,
+            self.logger.show_value(
+                Logger.INFO,
                 '作業系統',
-                'Windows'
-            )
+                'Windows')
 
         self.config_path = os.path.abspath(os.getcwd())
 
@@ -90,17 +90,15 @@ class Config:
         self.user_data = dict()
         self.id = None
 
-        log.show_value(
-            'Config',
-            log.level.INFO,
+        self.logger.show_value(
+            Logger.INFO,
             '設定檔',
-            '初始化'
-        )
+            '初始化')
 
     def init_user(self, ptt_id):
-        log.show_value(
+        self.logger.show_value(
             'Config',
-            log.level.INFO,
+            Logger.INFO,
             '使用者空間初始化',
             ptt_id
         )
@@ -111,9 +109,9 @@ class Config:
 
             # init user config here
 
-        log.show_value(
+        self.logger.show_value(
             'Config',
-            log.level.INFO,
+            Logger.level.INFO,
             '使用者設定初始化',
             ptt_id
         )

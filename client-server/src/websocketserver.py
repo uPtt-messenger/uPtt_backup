@@ -5,7 +5,7 @@ import time
 import threading
 import json
 
-from util.src import log
+from util.src.log import Logger
 from util.src.msg import Msg
 
 run_session = True
@@ -117,6 +117,8 @@ async def handler(websocket, path):
 
 def server_setup():
     global start_error
+
+    logger = Logger()
 
     log.show_value(
         'WebSocket Server',

@@ -3,7 +3,7 @@ import sys
 import time
 import threading
 
-from util.src import log
+from util.src.log import Logger
 import websocketserver
 from config import Config
 from command import Command
@@ -43,32 +43,29 @@ if __name__ == '__main__':
     console_obj = Console()
     console_obj.config = config_obj
 
-    log.show_value(
-        'uCore',
-        log.level.INFO,
+    logger = Logger('Client-server', Logger.INFO)
+
+    logger.show_value(
+        Logger.INFO,
         'uPtt 版本',
-        config_obj.version
-    )
+        config_obj.version)
 
     if len(sys.argv) > 1:
         print(sys.argv)
 
     if '-debug' in sys.argv or '-trace' in sys.argv:
-        log.Handler = log_to_file
         config_obj.LogHandler = log_to_file
 
     if '-trace' in sys.argv:
-        config_obj.LogHandler = log.level.TRACE
+        config_obj.LogHandler = Logger.TRACE
 
     if '-dev' in sys.argv:
         console_obj.run_mode = 'dev'
 
-    log.show_value(
-        'uCore',
-        log.level.INFO,
+    logger.show_value(
+        Logger.INFO,
         '執行模式',
-        console_obj.run_mode
-    )
+        console_obj.run_mode)
 
     event_console = EventConsole()
     console_obj.event = event_console

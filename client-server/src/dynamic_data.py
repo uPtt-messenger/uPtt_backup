@@ -3,7 +3,7 @@ import threading
 import time
 import urllib.request
 
-from util.src import log
+from util.src.log import Logger
 from config import Config
 
 
@@ -11,6 +11,8 @@ class DynamicData:
     def __init__(self, console_obj, run=True):
         self.console = console_obj
         self.console.event.close.append(self.event_close)
+
+        self.logger = Logger('DynamicData', Logger.INFO)
 
         self.run_update = True
 
@@ -25,17 +27,15 @@ class DynamicData:
 
     def event_close(self):
 
-        log.show(
-            'DynamicData',
-            log.level.INFO,
+        self.logger.show(
+            Logger.INFO,
             '執行終止程序')
 
         self.run_update = False
         self.update_thread.join()
 
-        log.show(
-            'DynamicData',
-            log.level.INFO,
+        self.logger.show(
+            Logger.INFO,
             '終止程序完成')
 
     def run(self):
@@ -52,9 +52,8 @@ class DynamicData:
             self.update()
 
     def update(self):
-        log.show(
-            'DynamicData',
-            log.level.INFO,
+        self.logger.show(
+            Logger.INFO,
             '開始更新資料')
 
         if self.console.run_mode == 'dev':
@@ -64,11 +63,9 @@ class DynamicData:
         with urllib.request.urlopen(update_url) as url:
             self.data = json.loads(url.read().decode())
 
-        log.show(
-            'DynamicData',
-            log.level.INFO,
-            '更新資料完成'
-        )
+        self.logger.show(
+            Logger.INFO,
+            '更新資料完成')
 
         self.console.config.set_value(Config.level_USER, Config.key_version, self.data['version'])
 
@@ -78,9 +75,8 @@ class DynamicData:
         self.announce = self.data['announce']
         self.online_server = self.data['online_server']
 
-        log.show_value(
-            'DynamicData',
-            log.level.INFO,
+        self.logger.show_value(
+            Logger.INFO,
             '發布版本',
             self.version)
 
@@ -97,29 +93,24 @@ class DynamicData:
             del self.tag_list[del_key]
 
         for _, (hash_value, tag) in enumerate(self.tag_list.items()):
-            log.show_value(
-                'DynamicData',
-                log.level.INFO,
+            self.logger.show_value(
+                Logger.INFO,
                 'tag',
-                tag
-            )
+                tag)
 
         if self.black_list:
             for block_user in self.black_list:
-                log.show_value(
-                    'DynamicData',
-                    log.level.INFO,
+                self.logger.show_value(
+                    Logger.INFO,
                     'block_user',
                     block_user
                 )
         else:
-            log.show(
-                'DynamicData',
-                log.level.INFO,
+            self.logger.show(
+                Logger.INFO,
                 '無黑名單')
 
-        log.show_value(
-            'DynamicData',
-            log.level.INFO,
+        self.logger.show_value(
+            Logger.INFO,
             'online_server',
             self.online_server)
