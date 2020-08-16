@@ -33,13 +33,13 @@ async def consumer_handler(ws, path):
 
             log.show_value(
                 'WebSocket Server',
-                log.level.INFO,
+                Logger.INFO,
                 '收到字串',
                 recv_msg_str
             )
             log.show_value(
                 'WebSocket Server',
-                log.level.INFO,
+                Logger.INFO,
                 '路徑',
                 path)
 
@@ -48,7 +48,7 @@ async def consumer_handler(ws, path):
             except json.JSONDecodeError:
                 log.show_value(
                     'WebSocket Server',
-                    log.level.INFO,
+                    Logger.INFO,
                     '丟棄錯誤訊息',
                     recv_msg_str)
                 run_session = False
@@ -60,7 +60,7 @@ async def consumer_handler(ws, path):
                     token = token[:token.find('&')]
                 log.show_value(
                     'WebSocket Server',
-                    log.level.INFO,
+                    Logger.INFO,
                     '收到權杖',
                     token
                 )
@@ -118,11 +118,10 @@ async def handler(websocket, path):
 def server_setup():
     global start_error
 
-    logger = Logger()
+    logger = Logger('WS', Logger.INFO)
 
-    log.show_value(
-        'WebSocket Server',
-        log.level.INFO,
+    logger.show_value(
+        Logger.INFO,
         '啟動伺服器',
         f'ws://127.0.0.1:{config.port}'
     )
@@ -150,34 +149,30 @@ def server_setup():
 
     asyncio.get_event_loop().run_forever()
 
-    log.show(
-        'WebSocket Server',
-        log.level.INFO,
-        '關閉伺服器'
-    )
+    logger.show(
+        Logger.INFO,
+        '關閉伺服器')
 
 
 def start():
     global thread
     global start_error
+
+    logger = Logger('WS', Logger.INFO)
+
     thread = threading.Thread(
         target=server_setup,
-        daemon=True
-    )
+        daemon=True)
     thread.start()
     time.sleep(2)
     if start_error:
-        log.show(
-            'WebSocket Server',
-            log.level.INFO,
-            '啟動失敗'
-        )
+        logger.show(
+            Logger.INFO,
+            '啟動失敗')
     else:
-        log.show(
-            'WebSocket Server',
-            log.level.INFO,
-            '啟動成功'
-        )
+        logger.show(
+            Logger.INFO,
+            '啟動成功')
 
 
 def stop():
@@ -185,22 +180,20 @@ def stop():
     global run_session
     global thread
 
-    log.show(
-        'WebSocket Server',
-        log.level.INFO,
-        '執行終止程序'
-    )
+    logger = Logger('WS', Logger.INFO)
+
+    logger.show(
+        Logger.INFO,
+        '執行終止程序')
 
     while not server_start:
         time.sleep(0.1)
 
     run_session = False
     # thread.join()
-    log.show(
-        'WebSocket Server',
-        log.level.INFO,
-        '終止程序完成'
-    )
+    logger.show(
+        Logger.INFO,
+        '終止程序完成')
 
 
 if __name__ == '__main__':

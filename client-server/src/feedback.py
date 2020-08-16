@@ -1,12 +1,14 @@
 import threading
 import time
 
-from util.src import log
+from util.src.log import Logger
 
 
 class Feedback:
     def __init__(self, console_obj):
         self.console = console_obj
+        
+        self.logger = Logger('FeedBack', Logger.INFO)
 
         console_obj.event.close.append(self.event_close)
 
@@ -19,19 +21,15 @@ class Feedback:
         self.thread.start()
 
     def event_close(self):
-        log.show(
-            'Feedback',
-            log.level.INFO,
-            '執行終止程序'
-        )
+        self.logger.show(
+            Logger.INFO,
+            '執行終止程序')
         self.close = True
         self.thread.join()
 
-        log.show(
-            'Feedback',
-            log.level.INFO,
-            '終止程序完成'
-        )
+        self.logger.show(
+            Logger.INFO,
+            '終止程序完成')
         #
         # while True:
         #     if self.closed:
@@ -42,9 +40,8 @@ class Feedback:
 
         while not self.close:
 
-            log.show(
-                'Feedback',
-                log.level.INFO,
+            self.logger.show(
+                Logger.INFO,
                 '更新上線狀態')
 
             start_time = end_time = time.time()

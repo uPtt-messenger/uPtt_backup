@@ -6,7 +6,7 @@ import time
 
 from PyPtt import PTT
 
-from util.src import log
+from util.src.log import Logger
 from dialogue import Dialogue
 from util.src.errorcode import ErrorCode
 from util.src.msg import Msg
@@ -22,6 +22,8 @@ class PTT_Adapter:
         console_obj.event.close.append(self.event_logout)
         console_obj.event.close.append(self.event_close)
         console_obj.event.send_waterball.append(self.event_send_waterball)
+
+        self.logger = Logger('PTTAdapter', Logger.INFO)
 
         self.dialogue = None
 
@@ -66,19 +68,15 @@ class PTT_Adapter:
         self.recv_logout = True
 
     def event_close(self):
-        log.show(
-            'PTTAdapter',
-            log.level.INFO,
-            '執行終止程序'
-        )
+        self.logger.show(
+            Logger.INFO,
+            '執行終止程序')
         # self.logout()
         self.run_server = False
         self.thread.join()
-        log.show(
-            'PTTAdapter',
-            log.level.INFO,
-            '終止程序完成'
-        )
+        self.logger.show(
+            Logger.INFO,
+            '終止程序完成')
 
     def event_login(self, ptt_id, ptt_pw):
 
@@ -104,16 +102,14 @@ class PTT_Adapter:
 
     def run(self):
 
-        log.show(
-            'PTTAdapter',
-            log.level.INFO,
-            '啟動'
-        )
+        self.logger.show(
+            Logger.INFO,
+            '啟動')
 
         self.bot = PTT.API(
             log_handler=self.console.config.ptt_log_handler,
             # log_level=self.console.config.ptt_log_level
-            log_level=log.level.SILENT
+            log_level=Logger.SILENT
         )
         while self.run_server:
             # 快速反應區
@@ -124,9 +120,8 @@ class PTT_Adapter:
                     break
 
                 if (self.ptt_id, self.ptt_pw) != (None, None):
-                    log.show(
-                        'PTTAdapter',
-                        log.level.INFO,
+                    self.logger.show(
+                        Logger.INFO,
                         '執行登入')
                     try:
                         self.bot.login(
@@ -160,15 +155,13 @@ class PTT_Adapter:
 
                         self.res_msg.add(Msg.key_payload, payload)
 
-                        log.show(
-                            'PTTAdapter',
-                            log.level.INFO,
+                        self.logger.show(
+                            Logger.INFO,
                             '執行登入成功程序')
                         for e in self.console.event.login_success:
                             e()
-                        log.show(
-                            'PTTAdapter',
-                            log.level.INFO,
+                        self.logger.show(
+                            Logger.INFO,
                             '登入成功程序全數完成')
 
                     except PTT.exceptions.LoginError:
@@ -195,19 +188,16 @@ class PTT_Adapter:
                 if self.login:
 
                     if self.recv_logout:
-                        log.show(
-                            'PTTAdapter',
-                            log.level.INFO,
-                            '執行登出'
-                        )
+                        self.logger.show(
+                            Logger.INFO,
+                            '執行登出')
 
                         self.bot.logout()
 
                         res_msg = Msg(
                             operate=Msg.key_logout,
                             code=ErrorCode.Success,
-                            msg='Logout success'
-                        )
+                            msg='Logout success')
 
                         self.console.command.push(res_msg)
 
@@ -219,17 +209,13 @@ class PTT_Adapter:
                             waterball_id, waterball_content = self.send_waterball_list.pop()
 
                             try:
-                                log.show(
-                                    'PTTAdapter',
-                                    log.level.INFO,
-                                    '準備丟水球'
-                                )
+                                self.logger.show(
+                                    Logger.INFO,
+                                    '準備丟水球')
                                 self.bot.throw_waterball(waterball_id, waterball_content)
-                                log.show(
-                                    'PTTAdapter',
-                                    log.level.INFO,
-                                    '丟水球完畢，準備儲存'
-                                )
+                                self.logger.show(
+                                    Logger.INFO,
+                                    '丟水球完畢，準備儲存')
 
                                 current_dialogue_msg = Msg()
                                 current_dialogue_msg.add(Msg.key_ptt_id, waterball_id)
@@ -283,18 +269,16 @@ class PTT_Adapter:
                 continue
 
             # 慢速輪詢區
-            log.show(
-                'PTTAdapter',
-                log.level.DEBUG,
+            self.logger.show(
+                Logger.DEBUG,
                 '慢速輪詢')
 
             waterball_list = self.bot.get_waterball(
                 PTT.data_type.waterball_operate_type.CLEAR
             )
 
-            log.show(
-                'PTTAdapter',
-                log.level.DEBUG,
+            self.logger.show(
+                Logger.DEBUG,
                 '取得水球')
 
             if waterball_list is not None:
@@ -306,9 +290,9 @@ class PTT_Adapter:
                     waterball_content = waterball.content
                     waterball_date = waterball.date
 
-                    log.show_value(
+                    self.logger.show_value(
                         'PTTAdapter',
-                        log.level.INFO,
+                        Logger.INFO,
                         f'收到來自 {waterball_id} 的水球',
                         f'[{waterball_content}][{waterball_date}]'
                     )
@@ -363,11 +347,9 @@ class PTT_Adapter:
                     self.console.command.push(push_msg)
 
             new_mail = self.bot.has_new_mail()
-            log.show(
-                'PTTAdapter',
-                log.level.DEBUG,
-                '取得新信'
-            )
+            self.logger.show(
+                Logger.DEBUG,
+                '取得新信')
 
             if new_mail > 0 and not self.has_new_mail:
                 self.has_new_mail = True
@@ -379,7 +361,6 @@ class PTT_Adapter:
             else:
                 self.has_new_mail = False
 
-        log.show(
-            'PTTAdapter',
-            log.level.INFO,
+        self.logger.show(
+            Logger.INFO,
             '關閉成功')
