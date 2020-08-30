@@ -37,7 +37,6 @@ def log_to_file(msg):
 
 if __name__ == '__main__':
 
-
     config_obj = Config()
 
     console_obj = Console()
@@ -86,21 +85,23 @@ if __name__ == '__main__':
     websocketserver.command = comm_obj
 
     run_server = True
+
+
     def event_close():
         global run_server
         run_server = False
 
-    event_console.close.append(websocketserver.stop)
+    ws_server = websocketserver.WsServer(console_obj)
+
+    event_console.close.append(ws_server.stop)
     event_console.close.append(event_close)
 
-    websocketserver.start()
+    ws_server.start()
 
-    if websocketserver.start_error:
-        log.show(
-            'uCore',
-            log.level.INFO,
-            'websocket client-server startup error'
-        )
+    if ws_server.start_error:
+        logger.show(
+            Logger.INFO,
+            'websocket client-server startup error')
         for e in event_console.close:
             e()
     else:
@@ -112,16 +113,14 @@ if __name__ == '__main__':
                     e()
                 break
 
-    log.show(
-        'uCore',
-        log.level.INFO,
+    logger.show(
+        Logger.INFO,
         '執行最終終止程序')
 
     running = threading.Event()
     running.set()
     running.clear()
 
-    log.show(
-        'uCore',
-        log.level.INFO,
+    logger.show(
+        Logger.INFO,
         '最終終止程序全數完成')

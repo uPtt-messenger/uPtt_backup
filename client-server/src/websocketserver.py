@@ -8,192 +8,166 @@ import json
 from util.src.log import Logger
 from util.src.msg import Msg
 
-run_session = True
-command = None
-config = None
-console = None
-server_start = False
-start_error = False
-thread = None
 
+class WsServer:
 
-async def consumer_handler(ws, path):
-    global run_session
-    global command
-    global console
+    def __init__(self, console_obj):
 
-    while run_session:
-        try:
-            try:
-                recv_msg_str = await ws.recv()
-            except Exception as e:
-                print('Connection Close: recv fail')
-                run_session = False
-                break
+        self.console = console_obj
 
-            log.show_value(
-                'WebSocket Server',
+        self.logger = Logger('WS', Logger.INFO)
+        self.thread = None
+        self.start_error = False
+        self.run_session = True
+        self.server_start = False
+
+    def start(self):
+        self.thread = threading.Thread(
+            target=self.server_setup,
+            daemon=True)
+        self.thread.start()
+        time.sleep(2)
+        if self.start_error:
+            self.logger.show(
                 Logger.INFO,
-                '收到字串',
-                recv_msg_str
-            )
-            log.show_value(
-                'WebSocket Server',
+                '啟動失敗')
+        else:
+            self.logger.show(
                 Logger.INFO,
-                '路徑',
-                path)
+                '啟動成功')
 
+    def stop(self):
+
+        self.logger.show(
+            Logger.INFO,
+            '執行終止程序')
+
+        while not self.server_start:
+            time.sleep(0.1)
+
+        self.run_session = False
+        # thread.join()
+        self.logger.show(
+            Logger.INFO,
+            '終止程序完成')
+
+    async def consumer_handler(self, ws, path):
+
+        while self.run_session:
             try:
-                recv_msg = Msg(strobj=recv_msg_str)
-            except json.JSONDecodeError:
-                log.show_value(
+                try:
+                    recv_msg_str = await ws.recv()
+                except Exception as e:
+                    print('Connection Close: recv fail')
+                    run_session = False
+                    break
+
+                self.logger.show_value(
                     'WebSocket Server',
                     Logger.INFO,
-                    '丟棄錯誤訊息',
+                    '收到字串',
                     recv_msg_str)
-                run_session = False
-                break
-
-            if 'token=' in path:
-                token = path[path.find('token=') + len('token='):]
-                if '&' in token:
-                    token = token[:token.find('&')]
-                log.show_value(
+                self.logger.show_value(
                     'WebSocket Server',
                     Logger.INFO,
-                    '收到權杖',
-                    token
-                )
-                recv_msg.add(Msg.key_token, token)
+                    '路徑',
+                    path)
 
-            # print(str(recv_msg))
-            command.analyze(recv_msg)
-            # await ws.send(recv_msg)
-            # print(f'echo complete')
-        except Exception as e:
-            traceback.print_tb(e.__traceback__)
-            print(e)
-            print('Connection Close')
-            run_session = False
-            break
+                try:
+                    recv_msg = Msg(strobj=recv_msg_str)
+                except json.JSONDecodeError:
+                    self.logger.show_value(
+                        'WebSocket Server',
+                        Logger.INFO,
+                        '丟棄錯誤訊息',
+                        recv_msg_str)
+                    self.run_session = False
+                    break
 
+                if 'token=' in path:
+                    token = path[path.find('token=') + len('token='):]
+                    if '&' in token:
+                        token = token[:token.find('&')]
+                    self.logger.show_value(
+                        'WebSocket Server',
+                        Logger.INFO,
+                        '收到權杖',
+                        token)
+                    recv_msg.add(Msg.key_token, token)
 
-async def producer_handler(ws, path):
-    global run_session
-    global command
-
-    while run_session:
-        while command.push_msg:
-            push_msg = command.push_msg.pop()
-
-            print(f'push [{push_msg}]')
-            try:
-                await ws.send(push_msg)
-            except websockets.exceptions.ConnectionClosedOK:
-                print(f'push fail')
+                # print(str(recv_msg))
+                self.console.command.analyze(recv_msg)
+                # await ws.send(recv_msg)
+                # print(f'echo complete')
+            except Exception as e:
+                traceback.print_tb(e.__traceback__)
+                print(e)
+                print('Connection Close')
+                self.run_session = False
                 break
-        await asyncio.sleep(0.1)
 
+    async def producer_handler(self, ws, path):
 
+        while self.run_session:
+            while self.console.command.push_msg:
+                push_msg = self.console.command.push_msg.pop()
 
-async def handler(websocket, path):
-    global run_session
+                print(f'push [{push_msg}]')
+                try:
+                    await ws.send(push_msg)
+                except websockets.exceptions.ConnectionClosedOK:
+                    print(f'push fail')
+                    break
+            await asyncio.sleep(0.1)
 
-    run_session = True
-    while run_session:
-        consumer_task = asyncio.ensure_future(
-            consumer_handler(websocket, path))
+    async def handler(self, websocket, path):
 
-        producer_task = asyncio.ensure_future(
-            producer_handler(websocket, path))
+        while self.run_session:
+            consumer_task = asyncio.ensure_future(
+                self.consumer_handler(websocket, path))
 
-        _, pending = await asyncio.wait(
-            [consumer_task, producer_task],
-            return_when=asyncio.FIRST_COMPLETED,
+            producer_task = asyncio.ensure_future(
+                self.producer_handler(websocket, path))
+
+            _, pending = await asyncio.wait(
+                [consumer_task, producer_task],
+                return_when=asyncio.FIRST_COMPLETED)
+            for task in pending:
+                task.cancel()
+
+    def server_setup(self):
+        logger = Logger('WS', Logger.INFO)
+
+        logger.show_value(
+            Logger.INFO,
+            '啟動伺服器',
+            f'ws://127.0.0.1:{self.console.config.port}')
+
+        new_loop = asyncio.new_event_loop()
+        asyncio.set_event_loop(new_loop)
+
+        start_server = websockets.serve(
+            self.handler,
+            "localhost",
+            self.console.config.port,
+            # ssl=ssl_context
         )
-        for task in pending:
-            task.cancel()
 
+        try:
+            asyncio.get_event_loop().run_until_complete(start_server)
+        except OSError:
+            self.start_error = True
 
-def server_setup():
-    global start_error
+        if self.start_error:
+            return
 
-    logger = Logger('WS', Logger.INFO)
+        self.server_start = True
 
-    logger.show_value(
-        Logger.INFO,
-        '啟動伺服器',
-        f'ws://127.0.0.1:{config.port}'
-    )
+        asyncio.get_event_loop().run_forever()
 
-    new_loop = asyncio.new_event_loop()
-    asyncio.set_event_loop(new_loop)
-
-    start_server = websockets.serve(
-        handler,
-        "localhost",
-        config.port,
-        # ssl=ssl_context
-    )
-
-    try:
-        asyncio.get_event_loop().run_until_complete(start_server)
-    except OSError:
-        start_error = True
-
-    global server_start
-    server_start = True
-
-    if start_error:
-        return
-
-    asyncio.get_event_loop().run_forever()
-
-    logger.show(
-        Logger.INFO,
-        '關閉伺服器')
-
-
-def start():
-    global thread
-    global start_error
-
-    logger = Logger('WS', Logger.INFO)
-
-    thread = threading.Thread(
-        target=server_setup,
-        daemon=True)
-    thread.start()
-    time.sleep(2)
-    if start_error:
         logger.show(
             Logger.INFO,
-            '啟動失敗')
-    else:
-        logger.show(
-            Logger.INFO,
-            '啟動成功')
-
-
-def stop():
-    global server_start
-    global run_session
-    global thread
-
-    logger = Logger('WS', Logger.INFO)
-
-    logger.show(
-        Logger.INFO,
-        '執行終止程序')
-
-    while not server_start:
-        time.sleep(0.1)
-
-    run_session = False
-    # thread.join()
-    logger.show(
-        Logger.INFO,
-        '終止程序完成')
+            '關閉伺服器')
 
 
 if __name__ == '__main__':
