@@ -63,12 +63,10 @@ class WsServer:
                     break
 
                 self.logger.show_value(
-                    'WebSocket Server',
                     Logger.INFO,
                     '收到字串',
                     recv_msg_str)
                 self.logger.show_value(
-                    'WebSocket Server',
                     Logger.INFO,
                     '路徑',
                     path)

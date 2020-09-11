@@ -24,8 +24,7 @@ def log_to_file(msg):
             os.path.join(
                 os.environ['USERPROFILE']
             ),
-            'Desktop'
-        )
+            'Desktop')
 
         LogPath = f'{desktop}/uPttLog.txt'
 
