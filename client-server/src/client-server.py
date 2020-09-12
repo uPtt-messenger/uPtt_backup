@@ -69,6 +69,11 @@ if __name__ == '__main__':
     console_obj.event = event_console
 
     dynamic_data_obj = DynamicData(console_obj)
+    if not dynamic_data_obj.update_state:
+        logger.show(
+            Logger.INFO,
+            'Update dynamic data error')
+        sys.exit()
     console_obj.dynamic_data = dynamic_data_obj
 
     comm_obj = Command(console_obj)

@@ -15,6 +15,7 @@ class DynamicData:
         self.logger = Logger('DynamicData', Logger.INFO)
 
         self.run_update = True
+        self.update_state = False
 
         self.update()
 
@@ -67,7 +68,10 @@ class DynamicData:
             self.logger.show(
                 Logger.INFO,
                 '更新資料失敗')
+            self.update_state = False
             return
+
+        self.update_state = True
         self.logger.show(
             Logger.INFO,
             '更新資料完成')
