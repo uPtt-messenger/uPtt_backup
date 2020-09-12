@@ -19,6 +19,7 @@ class WsServer:
         self.thread = None
         self.start_error = False
         self.run_session = True
+        self.run = True
         self.server_start = False
 
     def start(self):
@@ -46,6 +47,7 @@ class WsServer:
             time.sleep(0.1)
 
         self.run_session = False
+        self.run = False
         # thread.join()
         self.logger.show(
             Logger.INFO,
@@ -59,8 +61,7 @@ class WsServer:
                     recv_msg_str = await ws.recv()
                 except Exception as e:
                     print('Connection Close: recv fail')
-                    run_session = False
-                    break
+                    raise ValueError('Connection Close: recv fail')
 
                 self.logger.show_value(
                     Logger.INFO,
@@ -75,7 +76,6 @@ class WsServer:
                     recv_msg = Msg(strobj=recv_msg_str)
                 except json.JSONDecodeError:
                     self.logger.show_value(
-                        'WebSocket Server',
                         Logger.INFO,
                         '丟棄錯誤訊息',
                         recv_msg_str)
@@ -87,7 +87,6 @@ class WsServer:
                     if '&' in token:
                         token = token[:token.find('&')]
                     self.logger.show_value(
-                        'WebSocket Server',
                         Logger.INFO,
                         '收到權杖',
                         token)
@@ -119,7 +118,6 @@ class WsServer:
             await asyncio.sleep(0.1)
 
     async def handler(self, websocket, path):
-
         while self.run_session:
             consumer_task = asyncio.ensure_future(
                 self.consumer_handler(websocket, path))
@@ -132,6 +130,8 @@ class WsServer:
                 return_when=asyncio.FIRST_COMPLETED)
             for task in pending:
                 task.cancel()
+
+        self.run_session = self.run
 
     def server_setup(self):
         logger = Logger('WS', Logger.INFO)
@@ -148,8 +148,8 @@ class WsServer:
             self.handler,
             "localhost",
             self.console.config.port,
-            # ssl=ssl_context
         )
+
 
         try:
             asyncio.get_event_loop().run_until_complete(start_server)
