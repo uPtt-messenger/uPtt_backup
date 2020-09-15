@@ -97,11 +97,9 @@ class Config:
 
     def init_user(self, ptt_id):
         self.logger.show_value(
-            'Config',
             Logger.INFO,
             '使用者空間初始化',
-            ptt_id
-        )
+            ptt_id)
         self.id = ptt_id
         self.user_config_path = f'{self.config_path}/{ptt_id}/{self.config_file_name}'
         if not os.path.exists(f'{self.config_path}/{ptt_id}'):
@@ -110,11 +108,9 @@ class Config:
             # init user config here
 
         self.logger.show_value(
-            'Config',
-            Logger.level.INFO,
+            Logger.INFO,
             '使用者設定初始化',
-            ptt_id
-        )
+            ptt_id)
 
         try:
             with open(self.user_config_path, encoding='utf8') as File:
