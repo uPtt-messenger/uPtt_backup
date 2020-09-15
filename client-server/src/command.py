@@ -21,7 +21,7 @@ class Command:
 
         self.console = console_obj
 
-        self.logger = Logger( Logger.INFO)
+        self.logger = Logger('Command', Logger.INFO)
 
     def check_token(self, msg):
         if msg is None:
@@ -94,7 +94,6 @@ class Command:
         elif opt == 'sendwaterball':
             if not self.check_token(recv_msg):
                 self.logger.show(
-                    
                     Logger.INFO,
                     '權杖不相符')
                 res_msg = Msg(

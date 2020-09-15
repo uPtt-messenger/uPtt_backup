@@ -15,6 +15,7 @@ class DynamicData:
         self.logger = Logger('DynamicData', Logger.INFO)
 
         self.run_update = True
+        self.update_state = False
 
         self.update()
 
@@ -60,12 +61,21 @@ class DynamicData:
             update_url = 'https://raw.githubusercontent.com/PttCodingMan/uPtt/develop/data/open_data.json'
         elif self.console.run_mode == 'release':
             update_url = 'https://raw.githubusercontent.com/PttCodingMan/uPtt/master/data/open_data.json'
-        with urllib.request.urlopen(update_url) as url:
-            self.data = json.loads(url.read().decode())
+        try:
+            with urllib.request.urlopen(update_url) as url:
+                data_temp = json.loads(url.read().decode())
+        except urllib.error.URLError:
+            self.logger.show(
+                Logger.INFO,
+                '更新資料失敗')
+            self.update_state = False
+            return
 
+        self.update_state = True
         self.logger.show(
             Logger.INFO,
             '更新資料完成')
+        self.data = data_temp
 
         self.console.config.set_value(Config.level_USER, Config.key_version, self.data['version'])
 
@@ -103,8 +113,7 @@ class DynamicData:
                 self.logger.show_value(
                     Logger.INFO,
                     'block_user',
-                    block_user
-                )
+                    block_user)
         else:
             self.logger.show(
                 Logger.INFO,

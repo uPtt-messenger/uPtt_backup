@@ -69,6 +69,11 @@ if __name__ == '__main__':
     console_obj.event = event_console
 
     dynamic_data_obj = DynamicData(console_obj)
+    if not dynamic_data_obj.update_state:
+        logger.show(
+            Logger.INFO,
+            'Update dynamic data error')
+        sys.exit()
     console_obj.dynamic_data = dynamic_data_obj
 
     comm_obj = Command(console_obj)
@@ -90,13 +95,14 @@ if __name__ == '__main__':
         global run_server
         run_server = False
 
+    ws_server = websocketserver.WsServer(console_obj)
 
-    event_console.close.append(websocketserver.stop)
+    event_console.close.append(ws_server.stop)
     event_console.close.append(event_close)
 
-    websocketserver.start()
+    ws_server.start()
 
-    if websocketserver.start_error:
+    if ws_server.start_error:
         logger.show(
             Logger.INFO,
             'websocket client-server startup error')
@@ -112,7 +118,6 @@ if __name__ == '__main__':
                 break
 
     logger.show(
-        'uCore',
         Logger.INFO,
         '執行最終終止程序')
 
@@ -121,6 +126,5 @@ if __name__ == '__main__':
     running.clear()
 
     logger.show(
-        'uCore',
         Logger.INFO,
         '最終終止程序全數完成')
