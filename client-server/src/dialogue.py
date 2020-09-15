@@ -1,10 +1,12 @@
-from os import walk
+#from os import walk
+import os
 # from datetime import datetime
 # import json
 
 from backend_util.src.log import Logger
 from config import Config
-from backend_util.src.aes import *
+from backend_util.src.msg import Msg
+from backend_util.src import aes
 
 
 class Dialogue:
@@ -31,7 +33,7 @@ class Dialogue:
                 '載入對話紀錄')
 
             dialogue_file_list = []
-            for (dirpath, dirnames, filenames) in walk(self.path):
+            for (dirpath, dirnames, filenames) in os.walk(self.path):
                 dialogue_file_list.extend(filenames)
                 break
 
@@ -39,11 +41,9 @@ class Dialogue:
 
             for dialogue_file in dialogue_file_list:
                 self.logger.show_value(
-                    'Dialogue',
                     Logger.INFO,
                     '載入對話紀錄',
-                    dialogue_file
-                )
+                    dialogue_file)
 
                 current_path = f'{self.path}/{dialogue_file}'
                 with open(current_path, 'r') as fp:
@@ -72,7 +72,6 @@ class Dialogue:
                         decrypt_msg = Msg(strobj=decrypt_data)
 
                     self.logger.show_value(
-                        'Dialogue',
                         Logger.DEBUG,
                         '解密對話',
                         decrypt_msg)
@@ -80,8 +79,7 @@ class Dialogue:
 
             self.logger.show(
                 Logger.INFO,
-                '對話紀錄載入完成'
-            )
+                '對話紀錄載入完成')
 
     def save(self, current_msg: Msg):
         target_id = current_msg.get(Msg.key_ptt_id)

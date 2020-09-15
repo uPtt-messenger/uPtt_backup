@@ -230,20 +230,17 @@ class PTT_Adapter:
                                 res_msg = Msg(
                                     operate=Msg.key_sendwaterball,
                                     code=ErrorCode.Success,
-                                    msg='send waterball success'
-                                )
+                                    msg='send waterball success')
                             except PTT.exceptions.NoSuchUser:
                                 res_msg = Msg(
                                     operate=Msg.key_sendwaterball,
                                     code=ErrorCode.NoSuchUser,
-                                    msg='No this user'
-                                )
+                                    msg='No this user')
                             except PTT.exceptions.UserOffline:
                                 res_msg = Msg(
                                     operate=Msg.key_sendwaterball,
                                     code=ErrorCode.UserOffLine,
-                                    msg='User offline'
-                                )
+                                    msg='User offline')
                             self.console.command.push(res_msg)
 
                         self.send_waterball_complete = True
@@ -291,11 +288,9 @@ class PTT_Adapter:
                     waterball_date = waterball.date
 
                     self.logger.show_value(
-                        'PTTAdapter',
                         Logger.INFO,
                         f'收到來自 {waterball_id} 的水球',
-                        f'[{waterball_content}][{waterball_date}]'
-                    )
+                        f'[{waterball_content}][{waterball_date}]')
 
                     # 01/07/2020 10:46:51
                     # 02/24/2020 15:40:34
