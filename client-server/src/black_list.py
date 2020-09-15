@@ -1,23 +1,22 @@
-from util.src.util import sha256
-from util.src.msg import Msg
-from util.src.errorcode import ErrorCode
-from util.src import log
+from backend_util.src.util import sha256
+from backend_util.src.msg import Msg
+from backend_util.src.errorcode import ErrorCode
+from backend_util.src.log import Logger
 
 
 class BlackList:
     def __init__(self, console_boj):
         self.console = console_boj
+        self.logger = Logger('BlackList', Logger.INFO)
 
         self.console.event.login.append(self.event_login)
 
     def event_login(self, ptt_id, ptt_pw):
         if self.is_black_user(ptt_id):
-            log.show_value(
-                'command',
-                log.level.INFO,
+            self.logger.show_value(
+                Logger.INFO,
                 '黑名單',
-                ptt_id
-            )
+                ptt_id)
 
             block_msg = Msg(
                 operate=Msg.key_login,

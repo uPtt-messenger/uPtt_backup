@@ -1,6 +1,6 @@
-from util.src import log
-from util.src.errorcode import ErrorCode
-from util.src.msg import Msg
+from backend_util.src.log import Logger
+from backend_util.src.errorcode import ErrorCode
+from backend_util.src.msg import Msg
 from tag import Tag
 
 
@@ -20,6 +20,8 @@ class Command:
         self.add_friend_id = None
 
         self.console = console_obj
+
+        self.logger = Logger( Logger.INFO)
 
     def check_token(self, msg):
         if msg is None:
@@ -47,11 +49,9 @@ class Command:
             ptt_pass = recv_msg.get(Msg.key_payload)[
                 Msg.key_ptt_pass]
 
-            log.show(
-                'command',
-                log.level.INFO,
-                '執行登入程序'
-            )
+            self.logger.show(
+                Logger.INFO,
+                '執行登入程序')
 
             res_msg = None
             for e in self.console.event.login:
@@ -60,50 +60,42 @@ class Command:
                     continue
                 if current_res_msg.get(Msg.key_code) != ErrorCode.Success:
                     self.push(current_res_msg)
-                    log.show(
-                        'command',
-                        log.level.INFO,
-                        '登入程序中斷'
-                    )
+                    self.logger.show(
+                        Logger.INFO,
+                        '登入程序中斷')
                     return
                 res_msg = current_res_msg
             self.push(res_msg)
 
-            log.show(
-                'command',
-                log.level.INFO,
-                '登入程序全數完成'
-            )
+            self.logger.show(
+                Logger.INFO,
+                '登入程序全數完成')
 
         elif opt == 'logout':
-            log.show(
-                'command',
-                log.level.INFO,
+            self.logger.show(
+                Logger.INFO,
                 '執行登出程序')
             for e in self.console.event.logout:
                 e()
-            log.show(
-                'command',
-                log.level.INFO,
+            self.logger.show(
+                Logger.INFO,
                 '登出程序全數完成')
 
         elif opt == 'close':
-            log.show(
-                'command',
-                log.level.INFO,
+            self.logger.show(
+                Logger.INFO,
                 '執行終止程序')
             for e in self.console.event.close:
                 e()
-            log.show(
-                'command',
-                log.level.INFO,
+            self.logger.show(
+                Logger.INFO,
                 '終止程序全數完成')
 
         elif opt == 'sendwaterball':
             if not self.check_token(recv_msg):
-                log.show(
-                    'command',
-                    log.level.INFO,
+                self.logger.show(
+                    
+                    Logger.INFO,
                     '權杖不相符')
                 res_msg = Msg(
                     operate=opt,
@@ -114,23 +106,20 @@ class Command:
             waterball_id = recv_msg.get(Msg.key_payload)[Msg.key_ptt_id]
             waterball_content = recv_msg.get(Msg.key_payload)[Msg.key_content]
 
-            log.show(
-                'command',
-                log.level.INFO,
+            self.logger.show(
+                Logger.INFO,
                 '執行丟水球程序')
             for e in self.console.event.send_waterball:
                 e(waterball_id, waterball_content)
-            log.show(
-                'command',
-                log.level.INFO,
+            self.logger.show(
+                Logger.INFO,
                 '丟水球程序全數完成')
 
         elif opt == 'getwaterballhistory':
 
             if not self.check_token(recv_msg):
-                log.show(
-                    'command',
-                    log.level.INFO,
+                self.logger.show(
+                    Logger.INFO,
                     'Token not match')
                 res_msg = Msg(
                     operate=opt,

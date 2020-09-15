@@ -1,7 +1,7 @@
 import json
 import os
 
-from util.src.log import Logger
+from backend_util.src.log import Logger
 
 
 def get_value_func(data, key):

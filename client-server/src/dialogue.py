@@ -2,9 +2,9 @@ from os import walk
 # from datetime import datetime
 # import json
 
-from util.src import log
+from backend_util.src.log import Logger
 from config import Config
-from util.src.aes import *
+from backend_util.src.aes import *
 
 
 class Dialogue:
@@ -13,24 +13,22 @@ class Dialogue:
         self.path = f'{self.console.config.config_path}/{self.console.ptt_id}/dialogue'
         self.data = dict()
 
+        self.logger = Logger('Dialogue', Logger.INFO)
+
         if not os.path.exists(self.path):
             os.makedirs(self.path)
             self.aes_key = None
         else:
             self.aes_key = self.console.config.get_value(Config.level_USER, Config.key_aes_key)
 
-            log.show_value(
-                'Dialogue',
-                log.level.DEBUG,
+            self.logger.show_value(
+                Logger.DEBUG,
                 '載入金鑰',
-                self.aes_key
-            )
+                self.aes_key)
 
-            log.show(
-                'Dialogue',
-                log.level.INFO,
-                '載入對話紀錄'
-            )
+            self.logger.show(
+                Logger.INFO,
+                '載入對話紀錄')
 
             dialogue_file_list = []
             for (dirpath, dirnames, filenames) in walk(self.path):
@@ -40,9 +38,9 @@ class Dialogue:
             dialogue_file_list = [x for x in dialogue_file_list if x.endswith('.txt')]
 
             for dialogue_file in dialogue_file_list:
-                log.show_value(
+                self.logger.show_value(
                     'Dialogue',
-                    log.level.INFO,
+                    Logger.INFO,
                     '載入對話紀錄',
                     dialogue_file
                 )
@@ -73,28 +71,26 @@ class Dialogue:
                         decrypt_data = aes.decrypt(self.aes_key, cipher_msg)
                         decrypt_msg = Msg(strobj=decrypt_data)
 
-                    log.show_value(
+                    self.logger.show_value(
                         'Dialogue',
-                        log.level.DEBUG,
+                        Logger.DEBUG,
                         '解密對話',
                         decrypt_msg)
                     self.data[target_id].append(decrypt_msg)
 
-            log.show(
-                'Dialogue',
-                log.level.INFO,
+            self.logger.show(
+                Logger.INFO,
                 '對話紀錄載入完成'
             )
 
     def save(self, current_msg: Msg):
         target_id = current_msg.get(Msg.key_ptt_id)
 
-        log.show_value(
-            'Dialogue',
-            log.level.INFO,
+        self.logger.show_value(
+            Logger.INFO,
             '儲存對話紀錄',
-            target_id
-        )
+            target_id)
+
         if target_id not in self.data:
             self.data[target_id] = []
 

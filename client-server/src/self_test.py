@@ -5,36 +5,36 @@ import json
 import time
 from PyPtt import PTT
 
-from util.src import log
+from backend_util.src.log import Logger
 from config import Config
-from util.src.msg import Msg
+from backend_util.src.msg import Msg
 
 msg_str = None
 recv_msg = None
 token = None
-
+logger = Logger('自我測試', Logger.INFO)
 
 async def ws_send():
     global msg_str
     global recv_msg
     global config
     global token
+
     if token is None:
         uri = f"ws://localhost:{config.port}"
     else:
         uri = f"ws://localhost:{config.port}?token={token}"
     async with websockets.connect(uri) as ws:
-        log.show_value(
+        logger.show_value(
             '自我測試',
-            log.level.INFO,
+            Logger.INFO,
             '準備送出',
-            msg_str
-        )
+            msg_str)
         await ws.send(msg_str)
         recv_msg_str = await ws.recv()
-        log.show_value(
+        logger.show_value(
             '自我測試',
-            log.level.INFO,
+            Logger.INFO,
             '收到',
             recv_msg_str)
         recv_msg = Msg(strobj=recv_msg_str)
@@ -46,9 +46,8 @@ def send(msg: Msg):
     try:
         asyncio.get_event_loop().run_until_complete(ws_send())
     except websockets.exceptions.ConnectionClosedOK:
-        log.show(
-            '自我測試',
-            log.level.INFO,
+        logger.show(
+            Logger.INFO,
             '連線關閉')
 
 
@@ -57,11 +56,9 @@ def recv():
     try:
         asyncio.get_event_loop().run_until_complete(ws_recv())
     except websockets.exceptions.ConnectionClosedOK:
-        log.show(
-            '自我測試',
-            log.level.INFO,
-            '連線關閉'
-        )
+        logger.show(
+            Logger.INFO,
+            '連線關閉')
         return None
     return recv_msg
 
@@ -82,12 +79,11 @@ def get_password(password_file):
 
 config = Config()
 
-log.show_value(
+logger.show_value(
     '自我測試',
-    log.level.INFO,
+    Logger.INFO,
     'uPtt 版本',
-    config.version
-)
+    config.version)
 
 ptt_id, ptt_pw = get_password('account.txt')
 
@@ -97,34 +93,27 @@ payload.add(Msg.key_ptt_pass, ptt_pw)
 
 push_msg = Msg(operate=Msg.key_login)
 
-log.show(
-    '自我測試',
-    log.level.INFO,
-    '開始登入'
-)
+logger.show(
+    Logger.INFO,
+    '開始登入')
 
 push_msg.add(Msg.key_payload, payload)
 send(push_msg)
 
 if recv_msg.data[Msg.key_code] != 0:
-    log.show(
-        '自我測試',
-        log.level.INFO,
-        '登入失敗'
-    )
+    logger.show(
+        Logger.INFO,
+        '登入失敗')
     sys.exit()
 
-log.show(
-    '自我測試',
-    log.level.INFO,
-    '登入成功'
-)
+logger.show(
+    Logger.INFO,
+    '登入成功')
 
 token = recv_msg.data['payload']['token']
 
-log.show_value(
-    '自我測試',
-    log.level.INFO,
+logger.show_value(
+    Logger.INFO,
     '收到權杖',
     token
 )
@@ -147,9 +136,8 @@ except PTT.exceptions.ConnectError:
     sys.exit()
 time.sleep(3)
 
-log.show(
-    '自我測試',
-    log.level.INFO,
+logger.show(
+    Logger.INFO,
     '準備丟水球'
 )
 
@@ -178,48 +166,39 @@ for waterball in waterball_list:
         test_send_waterball_result = True
 
 if test_send_waterball_result:
-    log.show(
-        '自我測試',
-        log.level.INFO,
-        '丟水球測試成功'
-    )
+    logger.show(
+        Logger.INFO,
+        '丟水球測試成功')
 else:
-    log.show(
-        '自我測試',
-        log.level.INFO,
-        '丟水球測試失敗'
-    )
+    logger.show(
+        Logger.INFO,
+        '丟水球測試失敗')
 
 #################################
 
 ptt_bot.logout()
 
-log.show(
-    '自我測試',
-    log.level.INFO,
-    '準備登出'
-)
+logger.show(
+    Logger.INFO,
+    '準備登出')
 
 logout_msg = Msg(operate=Msg.key_logout)
 send(logout_msg)
 
-log.show(
-    '自我測試',
-    log.level.INFO,
+logger.show(
+    Logger.INFO,
     '登出成功'
 )
 
-log.show(
-    '自我測試',
-    log.level.INFO,
+logger.show(
+    Logger.INFO,
     '準備關閉'
 )
 
 close_msg = Msg(operate=Msg.key_close)
 send(close_msg)
 
-log.show(
-    '自我測試',
-    log.level.INFO,
+logger.show(
+    Logger.INFO,
     '關閉成功'
 )

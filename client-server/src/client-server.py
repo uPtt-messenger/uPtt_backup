@@ -3,7 +3,7 @@ import sys
 import time
 import threading
 
-from util.src.log import Logger
+from backend_util.src.log import Logger
 import websocketserver
 from config import Config
 from command import Command
@@ -24,8 +24,7 @@ def log_to_file(msg):
             os.path.join(
                 os.environ['USERPROFILE']
             ),
-            'Desktop'
-        )
+            'Desktop')
 
         LogPath = f'{desktop}/uPttLog.txt'
 
@@ -36,7 +35,6 @@ def log_to_file(msg):
 
 
 if __name__ == '__main__':
-
 
     config_obj = Config()
 
@@ -86,9 +84,12 @@ if __name__ == '__main__':
     websocketserver.command = comm_obj
 
     run_server = True
+
+
     def event_close():
         global run_server
         run_server = False
+
 
     event_console.close.append(websocketserver.stop)
     event_console.close.append(event_close)
@@ -96,11 +97,9 @@ if __name__ == '__main__':
     websocketserver.start()
 
     if websocketserver.start_error:
-        log.show(
-            'uCore',
-            log.level.INFO,
-            'websocket client-server startup error'
-        )
+        logger.show(
+            Logger.INFO,
+            'websocket client-server startup error')
         for e in event_console.close:
             e()
     else:
@@ -112,16 +111,16 @@ if __name__ == '__main__':
                     e()
                 break
 
-    log.show(
+    logger.show(
         'uCore',
-        log.level.INFO,
+        Logger.INFO,
         '執行最終終止程序')
 
     running = threading.Event()
     running.set()
     running.clear()
 
-    log.show(
+    logger.show(
         'uCore',
-        log.level.INFO,
+        Logger.INFO,
         '最終終止程序全數完成')

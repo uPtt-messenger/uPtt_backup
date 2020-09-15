@@ -1,7 +1,7 @@
 import threading
 import time
 
-from util.src.log import Logger
+from backend_util.src.log import Logger
 
 
 class Feedback:

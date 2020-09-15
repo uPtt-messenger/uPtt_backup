@@ -3,7 +3,7 @@ import threading
 import time
 import urllib.request
 
-from util.src.log import Logger
+from backend_util.src.log import Logger
 from config import Config
 
 

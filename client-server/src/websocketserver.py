@@ -5,8 +5,8 @@ import time
 import threading
 import json
 
-from util.src.log import Logger
-from util.src.msg import Msg
+from backend_util.src.log import Logger
+from backend_util.src.msg import Msg
 
 run_session = True
 command = None
