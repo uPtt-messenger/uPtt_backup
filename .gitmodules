@@ -4,3 +4,6 @@
 [submodule "backend_util"]
 	path = backend_util
 	url = ../../uPttTeam/backend_util.git
+[submodule "client-server"]
+	path = client-server
+	url = https://github.com/uPttTeam/client-server.git
