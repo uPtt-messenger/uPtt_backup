@@ -1,3 +1,6 @@
 [submodule "server"]
 	path = server
 	url = https://github.com/uPttTeam/server.git
+[submodule "backend_util"]
+	path = backend_util
+	url = ../../uPttTeam/backend_util.git
