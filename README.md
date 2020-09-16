@@ -12,10 +12,10 @@
 #### 0.0.1 beta
 
 ## 取得
-#### 請至 [下載區](https://github.com/Truth0906/PTTPostman/releases) 下載 (近期釋出)
+#### 請至 [下載區](https://github.com/uPtt-team/uPtt/releases) 下載 (努力開發中)
 
 ## 回報問題
-#### 請開 [issue](https://github.com/Truth0906/PTTPostman/issues) 也可以直接找我們 [![chatroom icon](https://patrolavia.github.io/telegram-badge/chat.png)](https://t.me/uPtt_talk)
+#### 請開 [issue](https://github.com/uPtt-team/uPtt/issues) 也可以直接找我們 [![chatroom icon](https://patrolavia.github.io/telegram-badge/chat.png)](https://t.me/uPtt_talk)
 
 ## 成員
 (以加入順序排列)  
