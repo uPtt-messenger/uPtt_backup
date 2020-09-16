@@ -7,8 +7,6 @@
 
 ## uPtt, Upgrade PTT
 #### 讓 uPtt 把你的批踢踢升級!
-#### 原始碼
-#### github: https://github.com/PttCodingMan/uPtt
 
 ## 版本
 #### 0.0.1 beta
