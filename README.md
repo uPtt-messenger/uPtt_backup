@@ -17,6 +17,11 @@
 ## 回報問題
 #### 請開 [issue](https://github.com/uPtt-team/uPtt/issues) 也可以直接找我們 [![chatroom icon](https://patrolavia.github.io/telegram-badge/chat.png)](https://t.me/uPtt_talk)
 
+## 編譯
+#### 使用者後端請至 [client-server](https://github.com/uPtt-messenger/client-server)
+#### 使用者前端請至 [client-app](https://github.com/uPtt-messenger/client-app)
+#### 伺服器程式碼不開放
+
 ## 成員
 (以加入順序排列)  
 
