@@ -5,8 +5,8 @@
 [![chatroom icon](https://patrolavia.github.io/telegram-badge/chat.png)](https://t.me/uPtt_talk)
 [![Donate](https://img.shields.io/badge/Donate-PayPal-green.svg)](http://paypal.me/CodingMan)
 
-## uPtt, Upgrade PTT
-#### 讓 uPtt 把你的批踢踢升級!
+#### uPtt Messenger 是一個以 Ptt 為基礎的開源通訊軟體，幫你解決了 Ptt 水球指令繁複，多人聊天難以使用的問題。
+#### 是時候讓 uPtt Messenger 把你的批踢踢 UP UP 升級!
 
 ## 版本
 #### 0.0.1 beta
