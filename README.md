@@ -22,6 +22,10 @@
 #### 使用者前端請至 [client-app](https://github.com/uPtt-messenger/client-app)
 #### 伺服器程式碼不開放
 
+## 專案架構
+
+<img src="https://i.imgur.com/WgxdM7x.png" alt="drawing" width="400"/>
+
 ## 成員
 (以加入順序排列)  
 
