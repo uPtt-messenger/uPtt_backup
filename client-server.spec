@@ -4,7 +4,7 @@ block_cipher = None
 
 
 a = Analysis(['client-server\\src\\client-server.py'],
-             pathex=['D:\\Git\\uPtt'],
+             pathex=['.\\venv\\Lib\\site-packages', 'D:\\git\\uPtt'],
              binaries=[],
              datas=[],
              hiddenimports=[],
@@ -27,7 +27,7 @@ exe = EXE(pyz,
           debug=False,
           bootloader_ignore_signals=False,
           strip=False,
-          upx=True,
+          upx=False,
           upx_exclude=[],
           runtime_tmpdir=None,
           console=True )
