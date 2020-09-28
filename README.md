@@ -12,7 +12,7 @@
 #### 0.0.1 beta
 
 ## 取得
-#### 請至 [下載區](https://github.com/uPtt-team/uPtt/releases) 下載 (努力開發中)
+#### 努力開發中
 
 ## 回報問題
 #### 請開 [issue](https://github.com/uPtt-team/uPtt/issues) 也可以直接找我們 [![chatroom icon](https://patrolavia.github.io/telegram-badge/chat.png)](https://t.me/uPtt_talk)
@@ -20,7 +20,7 @@
 ## 編譯
 #### 使用者後端請至 [client-server](https://github.com/uPtt-messenger/client-server)
 #### 使用者前端請至 [client-app](https://github.com/uPtt-messenger/client-app)
-#### 伺服器程式碼不開放
+#### 伺服器請至 [server](https://github.com/uPtt-messenger/server/)
 
 ## 專案架構
 
@@ -34,8 +34,7 @@
 | [![](https://avatars2.githubusercontent.com/u/59732316?s=100)](https://github.com/PttCodingMan) | [![](https://avatars1.githubusercontent.com/u/13342737?s=100)](https://github.com/mobi76) | [![](https://avatars1.githubusercontent.com/u/59656236?s=100)](https://github.com/amber076) | [![](https://avatars1.githubusercontent.com/u/37679089?s=100)](https://github.com/Arkuyo) | [![](https://avatars1.githubusercontent.com/u/5162952?s=100)](https://github.com/desertblackeagle) | [![](https://avatars1.githubusercontent.com/u/36183322?s=100)](https://github.com/eyes8168) | [![](https://avatars1.githubusercontent.com/u/63843482?s=100)](https://github.com/kailin319) |
 
 ## 贊助
-#### 在這個 github 的小園地，用熱血的心為您打造在 PTT 翱翔的翅膀。
-#### 希望您可以贊助這雙翅膀，讓我們一起飛得更遠，
+#### 如果你覺得這個專案很棒，請支持我們可以繼續走下去
 ####
 #### [![Donate](https://img.shields.io/badge/Donate-PayPal-green.svg)](http://paypal.me/CodingMan)
 ####
