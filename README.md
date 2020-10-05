@@ -8,6 +8,7 @@
 #### uPtt Messenger 是一個以 Ptt 為基礎的開源通訊軟體，試圖解決長久以來 Ptt 水球指令繁複與多人聊天難以使用的問題。
 #### 更不需要為了等信與訊息一直不斷的看 PTT
 #### uPtt Messenger 讓這些事情都變得簡單
+#### 歡迎各位開發者實作出自己介面來接 uPtt server
 
 ## 版本
 #### 0.0.1 beta
@@ -19,7 +20,7 @@
 #### 請開 [issue](https://github.com/uPtt-team/uPtt/issues) 也可以直接找我們 [![chatroom icon](https://patrolavia.github.io/telegram-badge/chat.png)](https://t.me/uPtt_talk)
 
 ## 安全聲明
-#### 1. uPtt Messenger 並不會以任何形式儲存或傳輸使用者的 PTT 帳號密碼
+#### 1. uPtt Messenger 並不會以任何形式儲存或備份使用者的 PTT 帳號密碼
 #### 2. uPtt Messenger 所有對話皆經過點對點加密，安全與隱私是我們最在意的事情
 
 ## 編譯
