@@ -7,3 +7,6 @@
 [submodule "client-server"]
 	path = client-server
 	url = https://github.com/uPttTeam/client-server.git
+[submodule "server_data"]
+	path = server_data
+	url = git@github.com:uPtt-messenger/server_data.git
