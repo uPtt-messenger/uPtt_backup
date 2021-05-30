@@ -41,7 +41,7 @@
   "dependencies": {
     "electron-log": "^4.0.7",
     "rxjs": "^6.4.0",
-    "ws": "^7.2.3"
+    "ws": "^7.4.6"
   },
   "devDependencies": {
     "electron": "^8.0.3",
